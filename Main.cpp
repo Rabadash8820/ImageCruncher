@@ -32,7 +32,7 @@ bool hasExtension(std::string filePath, std::string extension) {
 	// Try to match the last characters of the filePath to the extension
 	int length = filePath.length();
 	int extLength = extension.length();
-	for (int c = extLength; extLength > 0; --c) {
+	for (int c = extLength; c > 0; --c) {
 		if (filePath[length - c] != extension[extLength - c])
 			return false;
 	}
@@ -96,9 +96,10 @@ int main(int argc, char* argv[]) {
 	// Save a new picture that is the watercolor-filtered copy of the original
 	std::cout << "Applying watercolor filter with " << sortMethodStr[sortMethod] << " and window-size of " << winSize << "..." << std::endl;
 	clock_t start = clock();
-	PictureFilter::watercolor(filePath, winSize, sortMethod);
+	//PictureFilter::watercolor(filePath, winSize, sortMethod);
 	clock_t finish = clock();
-	std::cout << "Operation completed in " << (finish - start) / CLOCKS_PER_SEC << " seconds." << std::endl
+	double seconds = (finish - start) / (double)CLOCKS_PER_SEC;
+	std::cout << "Operation completed in " << seconds << " seconds." << std::endl
 		      << "New image saved as " << filePath << "" << std::endl;
 
 	return 0;

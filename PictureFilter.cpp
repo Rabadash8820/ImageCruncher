@@ -36,8 +36,13 @@ void PictureFilter::watercolor(const char* filePath, const int winSize, SortMeth
 	for (int i = 0; i < height; ++i)
 		pixels[i] = new int[width];
 	picture.getline(lineArr, 1000);
-	while (std::getline(picture, lineStr)) {
-
+	for (int r = 0; r < height; ++r) {
+		std::getline(picture, lineStr);
+		for (int c = 0; c < width; ++c) {
+			int spacePos = lineStr.find(' ');
+			int pixel = std::stoi(lineStr.substr(0, spacePos));
+			pixels[r][c] = pixel;
+		}
 	}
 
 	// Apply the filter to the pixel array
