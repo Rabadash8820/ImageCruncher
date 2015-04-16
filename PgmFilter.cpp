@@ -1,4 +1,4 @@
-#include "PictureFilter.h"
+#include "PgmFilter.h"
 #include <string>
 
 // PROTECTED CONSTRUCTOR
