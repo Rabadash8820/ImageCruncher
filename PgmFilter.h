@@ -1,5 +1,5 @@
-#ifndef H_PICTURE_FILTER
-#define H_PICTURE_FILTER
+#ifndef H_PGM_FILTER
+#define H_PGM_FILTER
 
 #include <fstream>
 #include <string>
