@@ -82,7 +82,11 @@ void PictureFilter::watercolorFilter(int** pixels, int width, int height, int wi
 }
 int PictureFilter::median(int* window, int size, SortMethod sortMethod) {
 	// Sort the array according to the provided method
+<<<<<<< HEAD
 	void(*sort)(int*&, int);
+=======
+	void(*sort)(int*, int);
+>>>>>>> 5c842b969f632eee5a674527e6538a00a2b92c76
 	switch (sortMethod) {
 	case SortMethod::InsertionSort:
 		sort = &insertionSort;
@@ -91,7 +95,11 @@ int PictureFilter::median(int* window, int size, SortMethod sortMethod) {
 		sort = &quickSort;
 		break;
 	case SortMethod::BubbleSort:
+<<<<<<< HEAD
 		sort = &bubbleSort;
+=======
+		sort = bubbleSort;
+>>>>>>> 5c842b969f632eee5a674527e6538a00a2b92c76
 		break;
 	}
 	sort(window, size);
@@ -107,6 +115,7 @@ int PictureFilter::median(int* window, int size, SortMethod sortMethod) {
 		return (mid1 + mid2) / 2;
 	}
 }
+<<<<<<< HEAD
 void PictureFilter::insertionSort(int*& window, int size) {
 
 }
@@ -114,5 +123,14 @@ void PictureFilter::quickSort(int*& window, int size) {
 
 }
 void PictureFilter::bubbleSort(int*& window, int size) {
+=======
+void PictureFilter::insertionSort(int* window, int size) {
+
+}
+void PictureFilter::quickSort(int* window, int size) {
+
+}
+void PictureFilter::bubbleSort(int* window, int size) {
+>>>>>>> 5c842b969f632eee5a674527e6538a00a2b92c76
 
 }
