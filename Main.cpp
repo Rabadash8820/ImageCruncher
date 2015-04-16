@@ -7,27 +7,18 @@
 #include <ctime>
 
 // GLOBAL VARIABLES
-PictureFilter::SortMethod sortMethod[3] = {
-	PictureFilter::SortMethod::InsertionSort,
-	PictureFilter::SortMethod::QuickSort,
-	PictureFilter::SortMethod::BubbleSort,
+PgmFilter::SortMethod sortMethod[3] = {
+	PgmFilter::SortMethod::InsertionSort,
+	PgmFilter::SortMethod::QuickSort,
+	PgmFilter::SortMethod::BubbleSort,
 };
-std::map<PictureFilter::SortMethod, std::string> sortMethodStr {
-	{ PictureFilter::SortMethod::InsertionSort, "Insertion Sort"},
-	{ PictureFilter::SortMethod::QuickSort, "Quick Sort" },
-	{ PictureFilter::SortMethod::BubbleSort, "BubbleSort" },
+std::map<PgmFilter::SortMethod, std::string> sortMethodStr{
+	{ PgmFilter::SortMethod::InsertionSort, "Insertion Sort" },
+	{ PgmFilter::SortMethod::QuickSort, "Quick Sort" },
+	{ PgmFilter::SortMethod::BubbleSort, "BubbleSort" },
 };
 
 // HELPER FUNCTIONS
-std::string renameWithExtension(std::string filePath, std::string extension) {
-	// Try to match the last characters of the filePath to the extension
-	int length = filePath.length();
-	int extLength = extension.length();
-	for (int c = extLength; extLength > 0; --c) {
-		if (filePath[length - c] != extension[extLength - c])
-			return false;
-	}
-}
 bool hasExtension(std::string filePath, std::string extension) {
 	// Try to match the last characters of the filePath to the extension
 	int length = filePath.length();
@@ -38,7 +29,7 @@ bool hasExtension(std::string filePath, std::string extension) {
 	}
 	return true;
 }
-PictureFilter::SortMethod chosenMethod(const char* parameter) {
+PgmFilter::SortMethod chosenMethod(const char* parameter) {
 	int choice = atoi(parameter);
 	switch (choice) {
 	case 1:
@@ -47,7 +38,7 @@ PictureFilter::SortMethod chosenMethod(const char* parameter) {
 		return sortMethod[choice - 1];
 	default:
 		std::cout << "ERROR: Invalid sort method entered.  Using default method (insertion sort)." << std::endl;
-		return PictureFilter::SortMethod::InsertionSort;
+		return PgmFilter::SortMethod::InsertionSort;
 	}
 
 }
@@ -61,9 +52,9 @@ int main(int argc, char* argv[]) {
 		std::cerr << "The syntax of the command is incorrect." << std::endl;
 		std::cerr << "\nUsage: " << argv[0] << " <WINDOW_SIZE> <FILE_PATH> [SORT_METHOD]" << std::endl;
 		std::cerr << "Options for sort method:" << std::endl
-			<< "\t1 - " << sortMethodStr[PictureFilter::SortMethod::InsertionSort] << " (default)" << std::endl
-			<< "\t2 - " << sortMethodStr[PictureFilter::SortMethod::QuickSort] << std::endl
-			<< "\t3 - " << sortMethodStr[PictureFilter::SortMethod::BubbleSort] << std::endl;
+			<< "\t1 - " << sortMethodStr[PgmFilter::SortMethod::InsertionSort] << " (default)" << std::endl
+			<< "\t2 - " << sortMethodStr[PgmFilter::SortMethod::QuickSort] << std::endl
+			<< "\t3 - " << sortMethodStr[PgmFilter::SortMethod::BubbleSort] << std::endl;
 
 		return 1;
 	}
@@ -89,18 +80,18 @@ int main(int argc, char* argv[]) {
 	}
 
 	// Get the sort method (default is insertion sort)
-	PictureFilter::SortMethod sortMethod = PictureFilter::SortMethod::InsertionSort;
+	PgmFilter::SortMethod sortMethod = PgmFilter::SortMethod::InsertionSort;
 	if (argc == 4)
 		sortMethod = chosenMethod(argv[3]);
 
 	// Save a new picture that is the watercolor-filtered copy of the original
 	std::cout << "Applying watercolor filter with " << sortMethodStr[sortMethod] << " and window-size of " << winSize << "..." << std::endl;
 	clock_t start = clock();
-	//PictureFilter::watercolor(filePath, winSize, sortMethod);
+	//filePath = PgmFilter::watercolor(filePath, winSize, sortMethod);
 	clock_t finish = clock();
 	double seconds = (finish - start) / (double)CLOCKS_PER_SEC;
 	std::cout << "Operation completed in " << seconds << " seconds." << std::endl
-		      << "New image saved as " << filePath << "" << std::endl;
+		      << "Filtered image saved as " << filePath << std::endl;
 
 	return 0;
 }

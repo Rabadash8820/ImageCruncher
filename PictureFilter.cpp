@@ -2,56 +2,93 @@
 #include <string>
 
 // PROTECTED CONSTRUCTOR
-PictureFilter::PictureFilter() {}
+PgmFilter::PgmFilter() {}
 
 // INTERFACE FUNCTIONS
-void PictureFilter::watercolor(const std::string& filePath, const int winSize, SortMethod sortMethod) {
-	watercolor(filePath.c_str(), winSize, sortMethod);
+const char* PgmFilter::watercolor(const std::string& filePath, const int winSize, SortMethod sortMethod) {
+	return watercolor(filePath.c_str(), winSize, sortMethod);
 }
-void PictureFilter::watercolor(const char* filePath, const int winSize, SortMethod sortMethod) {
+const char* PgmFilter::watercolor(const char* filePath, const int winSize, SortMethod sortMethod) {
+	// Load data from the PGM file
+	int width, height;
+	int maxGrey;
+	int** pixels;
+	loadPgmData(filePath, width, height, maxGrey, pixels);
+
+	// Apply the filter to the pixel array just loaded
+	//watercolorFilter(pixels, width, height, winSize, sortMethod);
+
+	// Create a new PGM file with the filtered pixel array and return its path
+	const char* newFilePath = renameWithSuffix(filePath, "_watercolor");
+	createPgm(newFilePath, width, height, maxGrey, pixels);
+	return newFilePath;
+}
+void PgmFilter::loadPgmData(const char* filePath, int& width, int& height, int& maxGrey, int**& pixels) {
 	// Open the picture
 	std::ifstream picture(filePath);
 
 	// Skip the PGM identifier on the first line
-	char* lineArr;
-	picture.getline(lineArr, 1000);
-	
+	std::string lineStr;
+	std::getline(picture, lineStr);
+
 	// Get the image's dimensions (skipping over any comments)
-	picture.getline(lineArr, 1000);
-	while (lineArr[0] == '#')
-		picture.getline(lineArr, 1000);
-	std::string lineStr = lineArr;
+	std::getline(picture, lineStr);
+	while (lineStr[0] == '#')
+		std::getline(picture, lineStr);
 	int spacePos = lineStr.find(' ');
-	int width = std::stoi(lineStr.substr(0, spacePos - 1));
-	int height = std::stoi(lineStr.substr(spacePos + 1));
+	width = std::stoi(lineStr.substr(0, spacePos));
+	height = std::stoi(lineStr.substr(spacePos + 1));
 
 	// Get the image's max greyscale value (skipping over any comments
-	picture.getline(lineArr, 1000);
-	while (lineArr[0] == '#')
-		picture.getline(lineArr, 1000);
-	int maxGrey = std::atoi(lineArr);
+	std::getline(picture, lineStr);
+	while (lineStr[0] == '#')
+		std::getline(picture, lineStr);
+	maxGrey = std::stoi(lineStr);
 
 	// Store the actual pixel values into a 2D array
-	int** pixels = new int*[height];
+	pixels = new int*[height];
 	for (int i = 0; i < height; ++i)
 		pixels[i] = new int[width];
-	picture.getline(lineArr, 1000);
 	for (int r = 0; r < height; ++r) {
 		std::getline(picture, lineStr);
 		for (int c = 0; c < width; ++c) {
 			int spacePos = lineStr.find(' ');
 			int pixel = std::stoi(lineStr.substr(0, spacePos));
+			lineStr = lineStr.substr(spacePos + 1);
 			pixels[r][c] = pixel;
 		}
 	}
 
-	// Apply the filter to the pixel array
-	watercolorFilter(pixels, width, height, winSize, sortMethod);
-
-	// Create a new PGM file with the filtered pixel array
-	std::ofstream filteredPic;
+	// Close the picture
+	picture.close();
 }
-void PictureFilter::watercolorFilter(int** pixels, int width, int height, int winSize, SortMethod sortMethod) {
+void PgmFilter::createPgm(const char* filePath, int width, int height, int maxGrey, int**& pixels) {
+	// Open the picture
+	std::ofstream picture(filePath);
+
+	// Store header information into the new PGM file
+	picture << "P2" << std::endl
+			<< "# Generated programmatially on " << std::endl
+			<< width << " " << height << std::endl
+			<< maxGrey << std::endl;
+
+	// Store filtered pixel values into the file
+	for (int r = 0; r < height; ++r) {
+		for (int c = 0; c < width; ++c)
+			picture << pixels[r][c] << " ";
+		picture << std::endl;
+	}
+
+	// Close the picture
+	picture.close();
+}
+const char* PgmFilter::renameWithSuffix(const char* oldFilePath, const std::string& suffix) {
+	std::string filePathStr(oldFilePath);
+	size_t periodPos = filePathStr.find('.');
+	filePathStr.insert(periodPos, suffix);
+	return filePathStr.c_str();
+}
+void PgmFilter::watercolorFilter(int** pixels, int width, int height, int winSize, SortMethod sortMethod) {
 	// Make a new array to hold the filtered pixels
 	int** fPixels = new int*[height];
 	for (int i = 0; i < height; ++i)
@@ -85,7 +122,7 @@ void PictureFilter::watercolorFilter(int** pixels, int width, int height, int wi
 			pixels[r][c] = fPixels[r][c];
 	}
 }
-int PictureFilter::median(int* window, int size, SortMethod sortMethod) {
+int PgmFilter::median(int* window, int size, SortMethod sortMethod) {
 	// Sort the array according to the provided method
 	void(*sort)(int*&, int);
 	switch (sortMethod) {
@@ -112,12 +149,12 @@ int PictureFilter::median(int* window, int size, SortMethod sortMethod) {
 		return (mid1 + mid2) / 2;
 	}
 }
-void PictureFilter::insertionSort(int*& window, int size) {
+void PgmFilter::insertionSort(int*& window, int size) {
 
 }
-void PictureFilter::quickSort(int*& window, int size) {
+void PgmFilter::quickSort(int*& window, int size) {
 
 }
-void PictureFilter::bubbleSort(int*& window, int size) {
+void PgmFilter::bubbleSort(int*& window, int size) {
 
 }

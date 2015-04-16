@@ -4,7 +4,7 @@
 #include <fstream>
 #include <string>
 
-class PictureFilter {
+class PgmFilter {
 public:
 	// ENUMERATIONS
 	enum class SortMethod {
@@ -15,15 +15,18 @@ public:
 
 protected:
 	// PROTECTED CONSTRUCTOR
-	PictureFilter();
+	PgmFilter();
 
 public:
 	// INTERFACE FUNCTIONS
-	static void watercolor(const std::string&, const int, SortMethod);
-	static void watercolor(const char*, const int, SortMethod);
+	static const char* watercolor(const std::string&, const int, SortMethod);
+	static const char* watercolor(const char*, const int, SortMethod);
 
 private:
-	//HElPER FUNCTIONS
+	// FILE MANIPULATION FUNCTIONS
+	static void loadPgmData(const char*, int&, int&, int&, int**&);
+	static void createPgm(const char*, int, int, int, int**&);
+	static const char* renameWithSuffix(const char*, const std::string&);
 	static void watercolorFilter(int**, int, int, int, SortMethod);
 	static int median(int*, int, SortMethod);
 	static void insertionSort(int*&, int);
