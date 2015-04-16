@@ -1,14 +1,18 @@
-﻿Build started 4/10/2015 10:48:49 PM.
-     1>Project "C:\Users\Owner\Google Drive\Class Stuff\Data Structures\DataStructures_FinalProject2\DataStructures_FinalProject\DataStructures_FinalProject.vcxproj" on node 2 (Build target(s)).
+﻿Build started 4/16/2015 10:03:52 AM.
+     1>Project "C:\Users\kjedresk\Documents\Visual Studio 2013\Projects\Data Structure Term\DataStructures_FinalProject.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp PictureFilter.cpp
+         PictureFilter.cpp
          Main.cpp
+         Generating Code...
+     1>c:\users\kjedresk\documents\visual studio 2013\projects\data structure term\main.cpp(46): warning C4715: 'renameWithExtension' : not all control paths return a value
+     1>c:\users\kjedresk\documents\visual studio 2013\projects\data structure term\picturefilter.cpp(36): warning C4700: uninitialized local variable 'lineArr' used
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Owner\Google Drive\Class Stuff\Data Structures\DataStructures_FinalProject2\Debug\DataStructures_FinalProject.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Owner\Google Drive\Class Stuff\Data Structures\DataStructures_FinalProject2\Debug\DataStructures_FinalProject.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Owner\Google Drive\Class Stuff\Data Structures\DataStructures_FinalProject2\Debug\DataStructures_FinalProject.lib" /MACHINE:X86 Debug\Main.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\kjedresk\Documents\Visual Studio 2013\Projects\Data Structure Term\Debug\DataStructures_FinalProject.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\kjedresk\Documents\Visual Studio 2013\Projects\Data Structure Term\Debug\DataStructures_FinalProject.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\kjedresk\Documents\Visual Studio 2013\Projects\Data Structure Term\Debug\DataStructures_FinalProject.lib" /MACHINE:X86 Debug\Main.obj
          Debug\PictureFilter.obj
-         DataStructures_FinalProject.vcxproj -> C:\Users\Owner\Google Drive\Class Stuff\Data Structures\DataStructures_FinalProject2\Debug\DataStructures_FinalProject.exe
-     1>Done Building Project "C:\Users\Owner\Google Drive\Class Stuff\Data Structures\DataStructures_FinalProject2\DataStructures_FinalProject\DataStructures_FinalProject.vcxproj" (Build target(s)).
+         DataStructures_FinalProject.vcxproj -> C:\Users\kjedresk\Documents\Visual Studio 2013\Projects\Data Structure Term\Debug\DataStructures_FinalProject.exe
+     1>Done Building Project "C:\Users\kjedresk\Documents\Visual Studio 2013\Projects\Data Structure Term\DataStructures_FinalProject.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:03.85
+Time Elapsed 00:00:02.12
