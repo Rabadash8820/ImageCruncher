@@ -5,6 +5,24 @@
 #include <string>
 #include <map>
 #include <ctime>
+/* TODO:
+To help me understand your code more,
+make a variable table that shows what your variables does in Each file.
+Also make a function table by table i just mean
+in comments:
+var bla - does this and that
+var ra - does a little bit of this and that
+
+and so on.
+
+Also in comments if you could maybe in a paragraph or 2
+summarize each step of the program, from main to pgmfilter
+
+Thanks
+
+Kevin
+
+*/
 
 // GLOBAL VARIABLES
 PgmFilter::SortMethod sortMethod[3] = {
