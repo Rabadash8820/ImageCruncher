@@ -5,9 +5,9 @@ Usage: Program.exe < WINDOW_SIZE > < FILE_PATH > [SORT_METHOD]
 * __< WINDOW_SIZE >__  The window size to use in the watercolor-filter algorithm, required
 * __< FILE_PATH >__  The path to the PGM image to be watercolor-filtered, required
 * __[SORT_METHOD]__  The sorting algorithm to be used when calculating medians in the watercolor-filter algorithm, optional
-  * 1 - Insertion Sort (the default)
-  * 2 - Quick Sort
-  * 3 - Bubble Sort
+  1. Insertion Sort (the default)
+  2. Quick Sort
+  3. Bubble Sort
 
 The job of Main.cpp is to parse the command line arguments, return the appropriate error codes if any arguments were invalid,
 and initiate the watercolor-filter process if everything was entered correctly.  Command-line arguments are all passed into a 
@@ -60,12 +60,7 @@ the values to create a new PGM file (note that the original image is unchanged).
 The new PGM will have the same name as the original PGM but with the suffix "_watercolor" applied (this is accomplished with
 the renameWithSuffix() function), and will have a comment saying when it was generated.
 
-__******** THESE FUNCTIONS STILL LARGELY IN PROGRESS ********__
-
-The loadPgmData() and createPgm() functions are pretty self explanatory.  They use ifstream and ofstream objects, respectively,
-to read data from a PGM file or write data to it.
-
-__******** THESE FUNCTIONS STILL LARGELY IN PROGRESS ********__
+The loadPgmData() and createPgm() functions are pretty self explanatory.  They use ifstream and ofstream objects, respectively, to read data from a PGM file or write data to one.
 
 The waterColorFilter() defines a new 2D array that will hold filtered pixel values (so the original array is unchanged).
 The function loops through each row and each column of the original pixel-value array.
