@@ -5,9 +5,9 @@ Usage: Program.exe < WINDOW_SIZE > < FILE_PATH > [SORT_METHOD]
 * __< WINDOW_SIZE >__  The window size to use in the watercolor-filter algorithm, required
 * __< FILE_PATH >__  The path to the PGM image to be watercolor-filtered, required
 * __[SORT_METHOD]__  The sorting algorithm to be used when calculating medians in the watercolor-filter algorithm, optional
-  1. Insertion Sort (the default)
-  2. Quick Sort
-  3. Bubble Sort
+1. Insertion Sort (the default)
+2. Quick Sort
+3. Bubble Sort
 
 The job of Main.cpp is to parse the command line arguments, return the appropriate error codes if any arguments were invalid,
 and initiate the watercolor-filter process if everything was entered correctly.  Command-line arguments are all passed into a 
