@@ -29,9 +29,9 @@ enum ErrorState {
 bool hasExtension(const char* filePath, std::string extension) {
 	// Try to match the last characters of the filePath to the extension
 	std::string filePathStr(filePath);
-	int length = filePathStr.length();
-	int extLength = extension.length();
-	for (int c = extLength; c > 0; --c) {
+	size_t length = filePathStr.length();
+	size_t extLength = extension.length();
+	for (size_t c = extLength; c > 0; --c) {
 		if (filePathStr[length - c] != extension[extLength - c])
 			return false;
 	}
@@ -85,15 +85,17 @@ ErrorState loadCommLineArgs(int argc, char* argv[], int& winSize, const char*& f
 	return ErrorFree;
 }
 void runFilter(const char* filePath, int winSize, PgmFilter::SortMethod sortMethod) {
-	// Save a new picture that is the watercolor-filtered copy of the original
+	// Save a new picture that is the watercolor-filtered copy of the original, and record the time it took
 	std::cout << "Applying watercolor filter with " << sortMethodStr[sortMethod] << " and window-size of " << winSize << "..." << std::endl;
 	clock_t start = clock();
 	filePath = PgmFilter::watercolor(filePath, winSize, sortMethod);
 	clock_t finish = clock();
 	double seconds = (finish - start) / (double)CLOCKS_PER_SEC;
-	std::cout << "Operation completed in " << seconds << " seconds." << std::endl
-		<< "Filtered image saved as " << filePath << std::endl;
 
+	// Inform the user of the operation's completion
+	std::cout << std::endl
+			  << "Operation completed in " << seconds << " seconds." << std::endl
+			  << "Filtered image saved as " << filePath << std::endl;
 }
 
 // MAIN FUNCTION

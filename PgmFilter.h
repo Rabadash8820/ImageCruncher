@@ -25,9 +25,12 @@ public:
 private:
 	// FILE MANIPULATION FUNCTIONS
 	static void loadPgmData(const char*, int&, int&, int&, int**&);
-	static void createPgm(const char*, int, int, int, int**&);
+	static const char* createPgm(const char*, int, int, int, int**&);
 	static const char* renameWithSuffix(const char*, const std::string&);
-	static void watercolorFilter(int**, int, int, int, SortMethod);
+	static const char* currentDateTime();
+
+	// FILTER ALGORITHM FUNCTIONS
+	static void watercolorFilter(int**&, int, int, int, SortMethod);
 	static int median(int*, int, SortMethod);
 	static void insertionSort(int*&, int);
 	static void quickSort(int*&, int);
