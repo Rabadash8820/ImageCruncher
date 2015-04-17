@@ -1,7 +1,6 @@
 #ifndef H_PGM_FILTER
 #define H_PGM_FILTER
 
-#include <fstream>
 #include <string>
 
 class PgmFilter {

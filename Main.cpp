@@ -1,7 +1,6 @@
 #include "PgmFilter.h"
 #include <iostream>
 #include <fstream>
-#include <cstdlib>
 #include <string>
 #include <map>
 #include <ctime>

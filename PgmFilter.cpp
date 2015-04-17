@@ -1,4 +1,5 @@
 #include "PgmFilter.h"
+#include <fstream>
 #include <string>
 #include <ctime>
 
