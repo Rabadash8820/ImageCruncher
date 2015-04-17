@@ -2,9 +2,9 @@
 
 ## Main.cpp
 Usage: Program.exe <WINDOW_SIZE> <FILE_PATH> [SORT_METHOD]
-* <WINDOW_SIZE>  The window size to use in the watercolor-filter algorithm, required
-* <FILE_PATH>  The path to the PGM image to be watercolor-filtered, required
-* [SORT_METHOD]  The sorting algorithm to be used when calculating medians in the watercolor-filter algorithm, optional
+* __< WINDOW_SIZE >__  The window size to use in the watercolor-filter algorithm, required
+* __< FILE_PATH >__  The path to the PGM image to be watercolor-filtered, required
+* __[SORT_METHOD]__  The sorting algorithm to be used when calculating medians in the watercolor-filter algorithm, optional
   * 1 - Insertion Sort (the default)
   * 2 - Quick Sort
   * 3 - Bubble Sort
@@ -19,10 +19,10 @@ number of command line arguments), the showCorrectSyntax() function is called, w
 see above.  In the latter, error-free case, the runFilter() function is called.
 
 Within loadCommLineArgs(), each possible error is checked:
-* Syntax error: incorrect number of command line arguments psased
-* WindowSizeError: window size was even or less than 3
-* PgmFormatError: the image file did not have a .pgm extension
-* FileOpenError: the image file could not be opened for whatever reason
+* __Syntax error__: incorrect number of command line arguments psased
+* __WindowSizeError__: window size was even or less than 3
+* __PgmFormatError__: the image file did not have a .pgm extension
+* __FileOpenError__: the image file could not be opened for whatever reason
 If no errors occur, then the ErrorFree enum is returned.  The hasExtension() function is used to see if the image file had the
 .pgm extension, and the chosenMethod() function is used to get the SortMethod enumeration corresponding to the user's choice.
 
