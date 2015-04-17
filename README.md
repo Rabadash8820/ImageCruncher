@@ -61,7 +61,8 @@ The new PGM will have the same name as the original PGM but with the suffix "_wa
 the renameWithSuffix() function), and will have a comment saying when it was generated.
 
 The loadPgmData() and createPgm() functions are pretty self explanatory.  They use ifstream and ofstream objects, respectively,
-to read data from a PGM file or write data to it.  ******** THESE FUNCTIONS STILL LARGELY IN PROGRESS ********
+to read data from a PGM file or write data to it.
+__******** THESE FUNCTIONS STILL LARGELY IN PROGRESS ********__
 
 The waterColorFilter() defines a new 2D array that will hold filtered pixel values (so the original array is unchanged).
 The function loops through each row and each column of the original pixel-value array.
