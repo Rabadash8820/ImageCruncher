@@ -2,12 +2,12 @@
 
 ## Main.cpp
 Usage: Program.exe <WINDOW_SIZE> <FILE_PATH> [SORT_METHOD]
-*<WINDOW_SIZE>  The window size to use in the watercolor-filter algorithm, required
-*<FILE_PATH>  The path to the PGM image to be watercolor-filtered, required
-*[SORT_METHOD]  The sorting algorithm to be used when calculating medians in the watercolor-filter algorithm, optional
-  *1 - Insertion Sort (the default)
-  *2 - Quick Sort
-  *3 - Bubble Sort
+* <WINDOW_SIZE>  The window size to use in the watercolor-filter algorithm, required
+* <FILE_PATH>  The path to the PGM image to be watercolor-filtered, required
+* [SORT_METHOD]  The sorting algorithm to be used when calculating medians in the watercolor-filter algorithm, optional
+  * 1 - Insertion Sort (the default)
+  * 2 - Quick Sort
+  * 3 - Bubble Sort
 
 The job of Main.cpp is to parse the command line arguments, return the appropriate error codes if any arguments were invalid,
 and initiate the watercolor-filter process if everything was entered correctly.  Command-line arguments are all passed into a 
@@ -19,10 +19,10 @@ number of command line arguments), the showCorrectSyntax() function is called, w
 see above.  In the latter, error-free case, the runFilter() function is called.
 
 Within loadCommLineArgs(), each possible error is checked:
-*Syntax error: incorrect number of command line arguments psased
-*WindowSizeError: window size was even or less than 3
-*PgmFormatError: the image file did not have a .pgm extension
-*FileOpenError: the image file could not be opened for whatever reason
+* Syntax error: incorrect number of command line arguments psased
+* WindowSizeError: window size was even or less than 3
+* PgmFormatError: the image file did not have a .pgm extension
+* FileOpenError: the image file could not be opened for whatever reason
 If no errors occur, then the ErrorFree enum is returned.  The hasExtension() function is used to see if the image file had the
 .pgm extension, and the chosenMethod() function is used to get the SortMethod enumeration corresponding to the user's choice.
 
@@ -42,7 +42,6 @@ on the console.
 times before and after the filter is applied are stored, and used to determine how long the operation took.
 
 ## PgmFilter.h
-### Overview
 Like all class header files, PgmFilter.h just describes the interface for this class.  Its only public method is an
 overloaded function called watercolor(), which can accept the file path to a PGM image either as a string or a char array (the
 string overload just converts the string to a char array and calls that overload).  All the other functions are private
@@ -67,11 +66,11 @@ to read data from a PGM file or write data to it.  ******** THESE FUNCTIONS STIL
 The waterColorFilter() defines a new 2D array that will hold filtered pixel values (so the original array is unchanged).
 The function loops through each row and each column of the original pixel-value array.
 For each pixel:
-*A new 1D array called "window" is defined and populated with all pixel values in a winSize x winSize box around the pixel
-  *Note, the abstract window is a 2D array, but the actual window stored in memory is a 1D array
-  *Positions that would be outside of the original pixel array are simply not added to this data structure.
-*The median of pixel values in the window is calculated with the median() function
-*That median value is stored into the same position of the filtered pixel 2D array
+* A new 1D array called "window" is defined and populated with all pixel values in a winSize x winSize box around the pixel
+  * Note, the abstract window is a 2D array, but the actual window stored in memory is a 1D array
+  * Positions that would be outside of the original pixel array are simply not added to this data structure.
+* The median of pixel values in the window is calculated with the median() function
+* That median value is stored into the same position of the filtered pixel 2D array
 Finally, the filtered values are stored back into the original array (which, remember, was passed by reference) and the
 filtered pixel array's memory is deallocated.  The original array passed in thus holds the "return" values afterward.
 
