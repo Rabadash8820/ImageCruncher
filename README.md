@@ -1,7 +1,7 @@
 # Group-DS
 
 ## Main.cpp
-Usage: Program.exe <WINDOW_SIZE> <FILE_PATH> [SORT_METHOD]
+Usage: Program.exe < WINDOW_SIZE > < FILE_PATH > [SORT_METHOD]
 * __< WINDOW_SIZE >__  The window size to use in the watercolor-filter algorithm, required
 * __< FILE_PATH >__  The path to the PGM image to be watercolor-filtered, required
 * __[SORT_METHOD]__  The sorting algorithm to be used when calculating medians in the watercolor-filter algorithm, optional
