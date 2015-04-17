@@ -21,6 +21,8 @@ const char* PgmFilter::watercolor(const char* filePath, const int winSize, SortM
 	// Create a new PGM file with the filtered pixel array and return its path
 	const char* newFilePath = renameWithSuffix(filePath, "_watercolor");
 	createPgm(newFilePath, width, height, maxGrey, pixels);
+	
+
 	return newFilePath;
 }
 void PgmFilter::loadPgmData(const char* filePath, int& width, int& height, int& maxGrey, int**& pixels) {
@@ -72,12 +74,15 @@ void PgmFilter::createPgm(const char* filePath, int width, int height, int maxGr
 			<< width << " " << height << std::endl
 			<< maxGrey << std::endl;
 
-	// Store filtered pixel values into the file
+	// Store filtered pixel values into the file then delete them
 	for (int r = 0; r < height; ++r) {
 		for (int c = 0; c < width; ++c)
 			picture << pixels[r][c] << " ";
 		picture << std::endl;
 	}
+	for (int i = 0; i < height; ++i)
+		delete[] pixels[i];
+	delete[] pixels;
 
 	// Close the picture
 	picture.close();
