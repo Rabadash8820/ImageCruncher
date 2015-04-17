@@ -116,11 +116,13 @@ void PgmFilter::watercolorFilter(int** pixels, int width, int height, int winSiz
 		}
 	}
 
-	// Store the array of filtered pixels back into the original array
+	// Store the array of filtered pixels back into the original array and delete the former
 	for (int r = 0; r < height; ++r) {
 		for (int c = 0; c < width; ++c)
 			pixels[r][c] = fPixels[r][c];
+		delete[] fPixels[r];
 	}
+	delete[] fPixels;
 }
 int PgmFilter::median(int* window, int size, SortMethod sortMethod) {
 	// Sort the array according to the provided method
