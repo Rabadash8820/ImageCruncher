@@ -7,11 +7,6 @@
 #include <ctime>
 
 // GLOBAL DATA
-PgmFilter::SortMethod sortMethod[3] = {
-	PgmFilter::SortMethod::InsertionSort,
-	PgmFilter::SortMethod::QuickSort,
-	PgmFilter::SortMethod::BubbleSort,
-};
 std::map<PgmFilter::SortMethod, std::string> sortMethodStr{
 	{ PgmFilter::SortMethod::InsertionSort, "Insertion Sort" },
 	{ PgmFilter::SortMethod::QuickSort, "Quick Sort" },
@@ -41,9 +36,11 @@ PgmFilter::SortMethod chosenMethod(const char* parameter) {
 	int choice = atoi(parameter);
 	switch (choice) {
 	case 1:
+		return PgmFilter::SortMethod::InsertionSort;
 	case 2:
+		return PgmFilter::SortMethod::QuickSort;
 	case 3:
-		return sortMethod[choice - 1];
+		return PgmFilter::SortMethod::BubbleSort;
 	default:
 		std::cout << "ERROR: Invalid sort method entered.  Using default method (insertion sort)." << std::endl;
 		return PgmFilter::SortMethod::InsertionSort;

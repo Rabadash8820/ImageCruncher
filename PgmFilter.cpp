@@ -22,6 +22,8 @@ const char* PgmFilter::watercolor(const char* filePath, const int winSize, SortM
 	// Create a new PGM file with the filtered pixel array and return its path
 	return createPgm(filePath, width, height, maxGrey, pixels);
 }
+
+// FILE MANIPULATION FUNCTIONS
 void PgmFilter::loadPgmData(const char* filePath, int& width, int& height, int& maxGrey, int**& pixels) {
 	// Open the picture
 	std::ifstream picture(filePath);
@@ -115,6 +117,8 @@ const char* PgmFilter::currentDateTime() {
 	strftime(str, 80, "%m-%d-%Y at %I:%M:%S", nowLocal);
 	return str;
 }
+
+// FILTER ALGORITHM FUNCTIONS
 void PgmFilter::watercolorFilter(int**& pixels, int width, int height, int winSize, SortMethod sortMethod) {
 	// Make a new array to hold the filtered pixels
 	int** fPixels = new int*[height];
