@@ -211,5 +211,20 @@ void PgmFilter::quickSort(int*& window, int size) {
 
 }
 void PgmFilter::bubbleSort(int*& window, int size) {
-
+      bool swapped = true;
+      int j = 0;
+      int tmp;
+      while (swapped) {
+            swapped = false;
+            j++;
+            for (int i = 0; i < size - j; i++) {
+                  if (window[i] > window[i + 1]) {
+                        tmp = window[i];
+                        window[i] = window[i + 1];
+                        window[i + 1] = tmp;
+                        swapped = true;
+                  }
+            }
+      }
+}
 }
