@@ -184,11 +184,47 @@ int PgmFilter::median(int* window, int size, SortMethod sortMethod) {
 	}
 }
 void PgmFilter::insertionSort(int*& window, int size) {
-
+nt i, j, key;
+     for(j = 1; j < size; j++)    // Start with 1 (not 0)
+    {
+           key = window[j];
+           for(i = j - 1; (i >= 0) && (window[i] < key); i--)   // Smaller values move up
+          {
+                 window[i+1] = window[i];
+          }
+         window[i+1] = key;    //Put key into its proper location
+     }
+     return;
 }
 void PgmFilter::quickSort(int*& window, int size) {
+	/* starting point
+	int pivotElement;
+ 
+    if(first < last)
+    {
+        pivotElement = pivot(a, first, last);
+        quickSort(a, first, pivotElement-1);
+        quickSort(a, pivotElement+1, last);
+    }
+	
+	*/
 
 }
 void PgmFilter::bubbleSort(int*& window, int size) {
-
+      bool swapped = true;
+      int j = 0;
+      int tmp;
+      while (swapped) {
+            swapped = false;
+            j++;
+            for (int i = 0; i < size - j; i++) {
+                  if (window[i] > window[i + 1]) {
+                        tmp = window[i];
+                        window[i] = window[i + 1];
+                        window[i + 1] = tmp;
+                        swapped = true;
+                  }
+            }
+      }
+}
 }
