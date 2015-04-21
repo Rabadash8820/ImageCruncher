@@ -184,7 +184,7 @@ int PgmFilter::median(int* window, int size, SortMethod sortMethod) {
 	}
 }
 void PgmFilter::insertionSort(int*& window, int size) {
-nt i, j, key;
+int i, j, key;
      for(j = 1; j < size; j++)    // Start with 1 (not 0)
     {
            key = window[j];
