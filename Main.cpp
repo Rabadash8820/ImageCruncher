@@ -108,12 +108,16 @@ int main(int argc, char* argv[]) {
 	switch (errState) {
 	case SyntaxError:
 		showCorrectSyntax(argv[0]);
+		break;
 	case WindowSizeError:
 		std::cerr << "ERROR: Window size must be an odd number greater than or equal to 3" << std::endl;
+		break;
 	case PgmFormatError:
 		std::cerr << "ERROR: File " << filePath << " is not in PGM format." << std::endl;
+		break;
 	case FileOpenError:
-		std::cerr << "ERROR: Could not open file " << filePath << std::endl;
+		std::cerr << "ERROR: Could not open file at path " << filePath << std::endl;
+		break;
 	default:
 		runFilter(filePath, winSize, sortMethod);
 	}

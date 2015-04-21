@@ -111,7 +111,8 @@ const char* PgmFilter::currentDateTime() {
 	// Get the current local date/time
 	time_t* now = new time_t;
 	time(now);
-	tm* nowLocal = localtime(now);
+	tm* nowLocal = new tm;
+	localtime_s(nowLocal, now);
 
 	// Format the date/time in a char array and return it
 	static char str[80];
@@ -169,6 +170,9 @@ int PgmFilter::median(int* window, int size, SortMethod sortMethod) {
 	case SortMethod::BubbleSort:
 		sort = &bubbleSort;
 		break;
+	default:
+		sort = &insertionSort;
+		break;
 	}
 	sort(window, size);
 
@@ -211,5 +215,19 @@ void PgmFilter::quickSort(int*& window, int size) {
 
 }
 void PgmFilter::bubbleSort(int*& window, int size) {
-
+      bool swapped = true;
+      int j = 0;
+      int tmp;
+      while (swapped) {
+            swapped = false;
+            j++;
+            for (int i = 0; i < size - j; i++) {
+                  if (window[i] > window[i + 1]) {
+                        tmp = window[i];
+                        window[i] = window[i + 1];
+                        window[i + 1] = tmp;
+                        swapped = true;
+                  }
+            }
+      }
 }
