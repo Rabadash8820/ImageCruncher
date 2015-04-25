@@ -49,6 +49,7 @@ PgmFilter::SortMethod chosenMethod(const char* parameter) {
 void showCorrectSyntax(const char* exePath) {
 	std::cerr << "The syntax of the command is incorrect." << std::endl;
 	std::cerr << "\nUsage: " << exePath << " <WINDOW_SIZE> <FILE_PATH> [SORT_METHOD]" << std::endl;
+	std::cerr << "Image file is assumed to be in the current directory." << std::endl;
 	std::cerr << "Options for sort method:" << std::endl
 		<< "\t1 - " << sortMethodStr[PgmFilter::SortMethod::InsertionSort] << " (default)" << std::endl
 		<< "\t2 - " << sortMethodStr[PgmFilter::SortMethod::QuickSort] << std::endl

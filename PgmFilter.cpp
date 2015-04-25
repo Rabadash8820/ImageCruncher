@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <ctime>
+#include <iostream>
 
 // PROTECTED CONSTRUCTOR
 PgmFilter::PgmFilter() {}
@@ -77,13 +78,14 @@ void PgmFilter::loadPgmData(const char* filePath, int& width, int& height, int& 
 }
 const char* PgmFilter::createPgm(const char* filePath, int width, int height, int maxGrey, int**& pixels) {
 	// Open an image at a new path
-	static const char* newFilePath = renameWithSuffix(filePath, "_watercolor");
+	std::string suffix("_watercolor_");
+	suffix += currentTimeStr();
+	static const char* newFilePath = renameWithSuffix(filePath, suffix);
 	std::ofstream picture(newFilePath);
 
 	// Store header information into the new PGM file
 	picture << "P2" << std::endl
-			<< "# This is " << filePath << " with a watercolor filter applied" << std::endl
-			<< "# Generated programatically on " << currentDateTime() << std::endl
+			<< "# Created by IrfanView" << std::endl
 			<< width << " " << height << std::endl
 			<< maxGrey << std::endl;
 
@@ -107,7 +109,7 @@ const char* PgmFilter::renameWithSuffix(const char* oldFilePath, const std::stri
 	filePathStr.insert(periodPos, suffix);
 	return filePathStr.c_str();
 }
-const char* PgmFilter::currentDateTime() {
+const char* PgmFilter::currentTimeStr() {
 	// Get the current local date/time
 	time_t* now = new time_t;
 	time(now);
@@ -116,7 +118,7 @@ const char* PgmFilter::currentDateTime() {
 
 	// Format the date/time in a char array and return it
 	static char str[80];
-	strftime(str, 80, "%m-%d-%Y at %I:%M:%S", nowLocal);
+	strftime(str, 80, "%I-%M-%S", nowLocal);
 	return str;
 }
 
@@ -131,7 +133,7 @@ void PgmFilter::watercolorFilter(int**& pixels, int width, int height, int winSi
 	for (int row = 0; row < height; ++row) {
 		for (int col = 0; col < width; ++col) {
 			// Create a window around this pixel
-			int i = -1;
+			int numWinPixels = 0;
 			int bound = winSize / 2;
 			int* window = new int[winSize * winSize];
 			for (int rOffset = -bound; rOffset <= bound; ++rOffset) {
@@ -139,12 +141,15 @@ void PgmFilter::watercolorFilter(int**& pixels, int width, int height, int winSi
 					int r = row + rOffset;
 					int c = col + cOffset;
 					if ((0 <= r && r < height) && (0 <= c && c < width))
-						window[++i] = pixels[r][c];
+						window[numWinPixels++] = pixels[r][c];
 				}
 			}
 
 			// Set the value of the filtered pixel at this position to the median value of the window
-			int med = median(window, winSize * winSize, sortMethod);
+			int med = median(window, numWinPixels, sortMethod);
+#if _DEBUG
+	std::cout << "Median at row " << row << ", column " << col << ": " << med << std::endl;
+#endif
 			fPixels[row][col] = med;
 		}
 	}
@@ -158,6 +163,13 @@ void PgmFilter::watercolorFilter(int**& pixels, int width, int height, int winSi
 	delete[] fPixels;
 }
 int PgmFilter::median(int* window, int size, SortMethod sortMethod) {
+#if _DEBUG
+	std::cout << "Unsorted: ";
+	for (int i = 0; i < size; ++i)
+		std::cout << window[i] << " ";
+	std::cout << std::endl;
+#endif
+
 	// Sort the array according to the provided method
 	void(*sort)(int*&, int);
 	switch (sortMethod) {
@@ -176,14 +188,21 @@ int PgmFilter::median(int* window, int size, SortMethod sortMethod) {
 	}
 	sort(window, size);
 
+#if _DEBUG
+	std::cout << "Sorted Window:   ";
+	for (int i = 0; i < size; ++i)
+		std::cout << window[i] << " ";
+	std::cout << std::endl;
+#endif
+
 	// Get the middle value if the size is odd
 	if (size % 2 != 0)
-		return window[size / 2 + 1];
+		return window[size / 2];
 
 	// Or the average of the 2 middle values if the size is even
 	else {
-		int mid1 = window[size / 2];
-		int mid2 = window[size / 2 + 1];
+		int mid1 = window[size / 2 - 1];
+		int mid2 = window[size / 2];
 		return (mid1 + mid2) / 2;
 	}
 }

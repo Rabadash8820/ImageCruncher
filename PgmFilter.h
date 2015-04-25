@@ -26,7 +26,7 @@ private:
 	static void loadPgmData(const char*, int&, int&, int&, int**&);
 	static const char* createPgm(const char*, int, int, int, int**&);
 	static const char* renameWithSuffix(const char*, const std::string&);
-	static const char* currentDateTime();
+	static const char* currentTimeStr();
 
 	// FILTER ALGORITHM FUNCTIONS
 	static void watercolorFilter(int**&, int, int, int, SortMethod);
