@@ -34,6 +34,8 @@ private:
 	static void insertionSort(int*&, int);
 	static void quickSort(int*&, int);
 	static void bubbleSort(int*&, int);
+	static void quickSortRecurs(int*, int, int);
+	static void swap(int*, int*);
 };
 
 #endif

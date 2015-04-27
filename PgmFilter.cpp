@@ -220,19 +220,34 @@ int i, j, key;
      return;
 }
 void PgmFilter::quickSort(int*& window, int size) {
-	/* starting point
-	int pivotElement;
- 
-    if(first < last)
-    {
-        pivotElement = pivot(a, first, last);
-        quickSort(a, first, pivotElement-1);
-        quickSort(a, pivotElement+1, last);
-    }
-	
-	*/
-
+	quickSortRecurs(window, 0, size - 1);
 }
+void PgmFilter::quickSortRecurs(int* a, int lo, int hi) {
+	if (lo >= hi)
+		return;
+	int pivot = a[hi];
+	int i = lo - 1;
+	int j = hi;
+
+	while (i < j) {
+		while (a[++i] < pivot);
+		while (j >= lo && a[--j] > pivot);
+		if (i < j)
+			swap(&a[i], &a[j]);
+	}
+	swap(&a[i], &a[hi]);
+	quickSortRecurs(a, lo, i - 1);
+	quickSortRecurs(a, i + 1, hi);
+}
+void PgmFilter::swap(int *a, int *n) {
+	int temp = *a;
+	*a = *n;
+	*n = temp;
+}
+
+
+
+
 void PgmFilter::bubbleSort(int*& window, int size) {
       bool swapped = true;
       int j = 0;
