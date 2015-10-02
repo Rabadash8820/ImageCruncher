@@ -4,30 +4,33 @@
 #include <string>
 
 class ImageFilter {
-protected:
-	// PROTECTED CONSTRUCTOR
+	// CONSTRUCTORS
+public:
 	ImageFilter();
+	ImageFilter(std::string, bool = false);
 
 public:
-	// INTERFACE FUNCTIONS
-	static const char* watercolor(const std::string&, const int);
-	static const char* watercolor(const char*, const int);
+	// INTERFACE
+	std::string filePath;
+	bool showOutput;
+	const char* watercolor(const int);
 
 private:
 	// FILE MANIPULATION FUNCTIONS
-	static void loadPgmData(const char*, int&, int&, int&, int**&);
-	static const char* createPgm(const char*, int, int, int, int**&);
-	static const char* renameWithSuffix(const char*, const std::string&);
-	static const char* currentTimeStr();
+	void loadPgmData(const char*, int&, int&, int&, int**&);
+	const char* createPgm(const char*, int, int, int, int**&);
+	const char* renameWithSuffix(const char*, const std::string&);
 
 	// FILTER ALGORITHM FUNCTIONS
-	static void watercolorFilter(int**&, int, int, int);
-	static int median(int*, int);
-	static void insertionSort(int*&, int);
-	static void quickSort(int*&, int);
-	static void bubbleSort(int*&, int);
-	static void quickSortRecurs(int*, int, int);
-	static void swap(int*, int*);
+	void watercolorFilter(int**&, int, int, int);
+
+	// HELPER FUNCTIONS
+	void reset(std::string, bool);
+	const char* currentTimeStr();
+	void swap(int*, int*);
+	int median(int*, int);
+	void quickSort(int*&, int);
+	void quickSortRecurs(int*, int, int);
 };
 
 #endif

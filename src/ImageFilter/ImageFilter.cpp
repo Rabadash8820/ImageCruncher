@@ -5,24 +5,26 @@
 #include <iostream>
 
 // PROTECTED CONSTRUCTOR
-ImageFilter::ImageFilter() {}
+ImageFilter::ImageFilter() {
+	reset(nullptr, false);
+}
+ImageFilter::ImageFilter(std::string filePath, bool showOutput) {
+	reset(filePath, showOutput);
+}
 
 // INTERFACE FUNCTIONS
-const char* ImageFilter::watercolor(const std::string& filePath, const int winSize) {
-	return watercolor(filePath.c_str(), winSize);
-}
-const char* ImageFilter::watercolor(const char* filePath, const int winSize) {
+const char* ImageFilter::watercolor(const int winSize) {
 	// Load data from the PGM file
 	int width, height;
 	int maxGrey;
 	int** pixels;
-	loadPgmData(filePath, width, height, maxGrey, pixels);
+	loadPgmData(filePath.c_str(), width, height, maxGrey, pixels);
 
 	// Apply the filter to the pixel array just loaded
 	watercolorFilter(pixels, width, height, winSize);
 
 	// Create a new PGM file with the filtered pixel array and return its path
-	return createPgm(filePath, width, height, maxGrey, pixels);
+	return createPgm(filePath.c_str(), width, height, maxGrey, pixels);
 }
 
 // FILE MANIPULATION FUNCTIONS
@@ -109,18 +111,6 @@ const char* ImageFilter::renameWithSuffix(const char* oldFilePath, const std::st
 	filePathStr.insert(periodPos, suffix);
 	return filePathStr.c_str();
 }
-const char* ImageFilter::currentTimeStr() {
-	// Get the current local date/time
-	time_t* now = new time_t;
-	time(now);
-	tm* nowLocal = new tm;
-	localtime_s(nowLocal, now);
-
-	// Format the date/time in a char array and return it
-	static char str[80];
-	strftime(str, 80, "%I-%M-%S", nowLocal);
-	return str;
-}
 
 // FILTER ALGORITHM FUNCTIONS
 void ImageFilter::watercolorFilter(int**& pixels, int width, int height, int winSize) {
@@ -147,9 +137,8 @@ void ImageFilter::watercolorFilter(int**& pixels, int width, int height, int win
 
 			// Set the value of the filtered pixel at this position to the median value of the window
 			int med = median(window, numWinPixels);
-#if _DEBUG
-	std::cout << "Median at row " << row << ", column " << col << ": " << med << std::endl;
-#endif
+			if (showOutput)
+				std::cout << "Median at row " << row << ", column " << col << ": " << med << std::endl;
 			fPixels[row][col] = med;
 		}
 	}
@@ -162,23 +151,29 @@ void ImageFilter::watercolorFilter(int**& pixels, int width, int height, int win
 	}
 	delete[] fPixels;
 }
+
+// HELPER FUNCTIONS
+void ImageFilter::reset(std::string file, bool output) {
+	filePath = file;
+	showOutput = output;
+}
 int ImageFilter::median(int* window, int size) {
-#if _DEBUG
-	std::cout << "Unsorted: ";
-	for (int i = 0; i < size; ++i)
-		std::cout << window[i] << " ";
-	std::cout << std::endl;
-#endif
+	if (showOutput) {
+		std::cout << "Unsorted: ";
+		for (int i = 0; i < size; ++i)
+			std::cout << window[i] << " ";
+		std::cout << std::endl;
+	}
 
 	// Sort the array using the QuickSort algorithm
 	quickSort(window, size);
 
-#if _DEBUG
-	std::cout << "Sorted Window:   ";
-	for (int i = 0; i < size; ++i)
-		std::cout << window[i] << " ";
-	std::cout << std::endl;
-#endif
+	if (showOutput) {
+		std::cout << "Sorted Window:   ";
+		for (int i = 0; i < size; ++i)
+			std::cout << window[i] << " ";
+		std::cout << std::endl;
+	}
 
 	// Get the middle value if the size is odd
 	if (size % 2 != 0)
@@ -215,4 +210,16 @@ void ImageFilter::swap(int *a, int *n) {
 	int temp = *a;
 	*a = *n;
 	*n = temp;
+}
+const char* ImageFilter::currentTimeStr() {
+	// Get the current local date/time
+	time_t* now = new time_t;
+	time(now);
+	tm* nowLocal = new tm;
+	localtime_s(nowLocal, now);
+
+	// Format the date/time in a char array and return it
+	static char str[80];
+	strftime(str, 80, "%I-%M-%S", nowLocal);
+	return str;
 }
