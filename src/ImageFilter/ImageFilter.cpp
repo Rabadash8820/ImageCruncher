@@ -1,17 +1,17 @@
-#include "PgmFilter.h"
+#include "ImageFilter.h"
 #include <fstream>
 #include <string>
 #include <ctime>
 #include <iostream>
 
 // PROTECTED CONSTRUCTOR
-PgmFilter::PgmFilter() {}
+ImageFilter::ImageFilter() {}
 
 // INTERFACE FUNCTIONS
-const char* PgmFilter::watercolor(const std::string& filePath, const int winSize, SortMethod sortMethod) {
+const char* ImageFilter::watercolor(const std::string& filePath, const int winSize, SortMethod sortMethod) {
 	return watercolor(filePath.c_str(), winSize, sortMethod);
 }
-const char* PgmFilter::watercolor(const char* filePath, const int winSize, SortMethod sortMethod) {
+const char* ImageFilter::watercolor(const char* filePath, const int winSize, SortMethod sortMethod) {
 	// Load data from the PGM file
 	int width, height;
 	int maxGrey;
@@ -26,7 +26,7 @@ const char* PgmFilter::watercolor(const char* filePath, const int winSize, SortM
 }
 
 // FILE MANIPULATION FUNCTIONS
-void PgmFilter::loadPgmData(const char* filePath, int& width, int& height, int& maxGrey, int**& pixels) {
+void ImageFilter::loadPgmData(const char* filePath, int& width, int& height, int& maxGrey, int**& pixels) {
 	// Open the picture
 	std::ifstream picture(filePath);
 
@@ -76,7 +76,7 @@ void PgmFilter::loadPgmData(const char* filePath, int& width, int& height, int& 
 	// Close the picture
 	picture.close();
 }
-const char* PgmFilter::createPgm(const char* filePath, int width, int height, int maxGrey, int**& pixels) {
+const char* ImageFilter::createPgm(const char* filePath, int width, int height, int maxGrey, int**& pixels) {
 	// Open an image at a new path
 	std::string suffix("_watercolor_");
 	suffix += currentTimeStr();
@@ -103,13 +103,13 @@ const char* PgmFilter::createPgm(const char* filePath, int width, int height, in
 	picture.close();
 	return newFilePath;
 }
-const char* PgmFilter::renameWithSuffix(const char* oldFilePath, const std::string& suffix) {
+const char* ImageFilter::renameWithSuffix(const char* oldFilePath, const std::string& suffix) {
 	static std::string filePathStr(oldFilePath);	// Must be static so memory won't be deallocated after function returns
 	size_t periodPos = filePathStr.find('.');
 	filePathStr.insert(periodPos, suffix);
 	return filePathStr.c_str();
 }
-const char* PgmFilter::currentTimeStr() {
+const char* ImageFilter::currentTimeStr() {
 	// Get the current local date/time
 	time_t* now = new time_t;
 	time(now);
@@ -123,7 +123,7 @@ const char* PgmFilter::currentTimeStr() {
 }
 
 // FILTER ALGORITHM FUNCTIONS
-void PgmFilter::watercolorFilter(int**& pixels, int width, int height, int winSize, SortMethod sortMethod) {
+void ImageFilter::watercolorFilter(int**& pixels, int width, int height, int winSize, SortMethod sortMethod) {
 	// Make a new array to hold the filtered pixels
 	int** fPixels = new int*[height];
 	for (int i = 0; i < height; ++i)
@@ -162,7 +162,7 @@ void PgmFilter::watercolorFilter(int**& pixels, int width, int height, int winSi
 	}
 	delete[] fPixels;
 }
-int PgmFilter::median(int* window, int size, SortMethod sortMethod) {
+int ImageFilter::median(int* window, int size, SortMethod sortMethod) {
 #if _DEBUG
 	std::cout << "Unsorted: ";
 	for (int i = 0; i < size; ++i)
@@ -206,7 +206,7 @@ int PgmFilter::median(int* window, int size, SortMethod sortMethod) {
 		return (mid1 + mid2) / 2;
 	}
 }
-void PgmFilter::insertionSort(int*& window, int size) {
+void ImageFilter::insertionSort(int*& window, int size) {
 int i, j, key;
      for(j = 1; j < size; j++)    // Start with 1 (not 0)
     {
@@ -219,10 +219,10 @@ int i, j, key;
      }
      return;
 }
-void PgmFilter::quickSort(int*& window, int size) {
+void ImageFilter::quickSort(int*& window, int size) {
 	quickSortRecurs(window, 0, size - 1);
 }
-void PgmFilter::quickSortRecurs(int* a, int lo, int hi) {
+void ImageFilter::quickSortRecurs(int* a, int lo, int hi) {
 	if (lo >= hi)
 		return;
 	int pivot = a[hi];
@@ -239,7 +239,7 @@ void PgmFilter::quickSortRecurs(int* a, int lo, int hi) {
 	quickSortRecurs(a, lo, i - 1);
 	quickSortRecurs(a, i + 1, hi);
 }
-void PgmFilter::swap(int *a, int *n) {
+void ImageFilter::swap(int *a, int *n) {
 	int temp = *a;
 	*a = *n;
 	*n = temp;
@@ -248,7 +248,7 @@ void PgmFilter::swap(int *a, int *n) {
 
 
 
-void PgmFilter::bubbleSort(int*& window, int size) {
+void ImageFilter::bubbleSort(int*& window, int size) {
       bool swapped = true;
       int j = 0;
       int tmp;

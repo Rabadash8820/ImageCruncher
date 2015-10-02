@@ -3,7 +3,7 @@
 
 #include <string>
 
-class PgmFilter {
+class ImageFilter {
 public:
 	// ENUMERATIONS
 	enum class SortMethod {
@@ -14,7 +14,7 @@ public:
 
 protected:
 	// PROTECTED CONSTRUCTOR
-	PgmFilter();
+	ImageFilter();
 
 public:
 	// INTERFACE FUNCTIONS

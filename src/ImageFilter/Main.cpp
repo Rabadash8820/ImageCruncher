@@ -1,4 +1,4 @@
-#include "PgmFilter.h"
+#include "ImageFilter.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -6,10 +6,10 @@
 #include <ctime>
 
 // GLOBAL DATA
-std::map<PgmFilter::SortMethod, std::string> sortMethodStr{
-	{ PgmFilter::SortMethod::InsertionSort, "Insertion Sort" },
-	{ PgmFilter::SortMethod::QuickSort, "Quick Sort" },
-	{ PgmFilter::SortMethod::BubbleSort, "BubbleSort" },
+std::map<ImageFilter::SortMethod, std::string> sortMethodStr{
+	{ ImageFilter::SortMethod::InsertionSort, "Insertion Sort" },
+	{ ImageFilter::SortMethod::QuickSort, "Quick Sort" },
+	{ ImageFilter::SortMethod::BubbleSort, "BubbleSort" },
 };
 enum ErrorState {
 	ErrorFree = 0,
@@ -31,18 +31,18 @@ bool hasExtension(const char* filePath, std::string extension) {
 	}
 	return true;
 }
-PgmFilter::SortMethod chosenMethod(const char* parameter) {
+ImageFilter::SortMethod chosenMethod(const char* parameter) {
 	int choice = atoi(parameter);
 	switch (choice) {
 	case 1:
-		return PgmFilter::SortMethod::InsertionSort;
+		return ImageFilter::SortMethod::InsertionSort;
 	case 2:
-		return PgmFilter::SortMethod::QuickSort;
+		return ImageFilter::SortMethod::QuickSort;
 	case 3:
-		return PgmFilter::SortMethod::BubbleSort;
+		return ImageFilter::SortMethod::BubbleSort;
 	default:
 		std::cout << "ERROR: Invalid sort method entered.  Using default method (insertion sort)." << std::endl;
-		return PgmFilter::SortMethod::InsertionSort;
+		return ImageFilter::SortMethod::InsertionSort;
 	}
 
 }
@@ -51,11 +51,11 @@ void showCorrectSyntax(const char* exePath) {
 	std::cerr << "\nUsage: " << exePath << " <WINDOW_SIZE> <FILE_PATH> [SORT_METHOD]" << std::endl;
 	std::cerr << "Image file is assumed to be in the current directory." << std::endl;
 	std::cerr << "Options for sort method:" << std::endl
-		<< "\t1 - " << sortMethodStr[PgmFilter::SortMethod::InsertionSort] << " (default)" << std::endl
-		<< "\t2 - " << sortMethodStr[PgmFilter::SortMethod::QuickSort] << std::endl
-		<< "\t3 - " << sortMethodStr[PgmFilter::SortMethod::BubbleSort] << std::endl;
+		<< "\t1 - " << sortMethodStr[ImageFilter::SortMethod::InsertionSort] << " (default)" << std::endl
+		<< "\t2 - " << sortMethodStr[ImageFilter::SortMethod::QuickSort] << std::endl
+		<< "\t3 - " << sortMethodStr[ImageFilter::SortMethod::BubbleSort] << std::endl;
 }
-ErrorState loadCommLineArgs(int argc, char* argv[], int& winSize, const char*& filePath, PgmFilter::SortMethod& sortMethod) {
+ErrorState loadCommLineArgs(int argc, char* argv[], int& winSize, const char*& filePath, ImageFilter::SortMethod& sortMethod) {
 	// If an incorrect number of parameters was passed, then explain the proper usage
 	if (argc != 3 && argc != 4)
 		return ErrorState::SyntaxError;
@@ -75,17 +75,17 @@ ErrorState loadCommLineArgs(int argc, char* argv[], int& winSize, const char*& f
 		return FileOpenError;
 
 	// Get the sort method (default is insertion sort)
-	sortMethod = PgmFilter::SortMethod::InsertionSort;
+	sortMethod = ImageFilter::SortMethod::InsertionSort;
 	if (argc == 4)
 		sortMethod = chosenMethod(argv[3]);
 
 	return ErrorFree;
 }
-void runFilter(const char* filePath, int winSize, PgmFilter::SortMethod sortMethod) {
+void runFilter(const char* filePath, int winSize, ImageFilter::SortMethod sortMethod) {
 	// Save a new picture that is the watercolor-filtered copy of the original, and record the time it took
 	std::cout << "Applying watercolor filter with " << sortMethodStr[sortMethod] << " and window-size of " << winSize << "..." << std::endl;
 	clock_t start = clock();
-	filePath = PgmFilter::watercolor(filePath, winSize, sortMethod);
+	filePath = ImageFilter::watercolor(filePath, winSize, sortMethod);
 	clock_t finish = clock();
 	double seconds = (finish - start) / (double)CLOCKS_PER_SEC;
 
@@ -102,7 +102,7 @@ int main(int argc, char* argv[]) {
 	// Load command line arguments into type-specific variables
 	int winSize;
 	const char* filePath;
-	PgmFilter::SortMethod sortMethod;
+	ImageFilter::SortMethod sortMethod;
 	ErrorState errState = loadCommLineArgs(argc, argv, winSize, filePath, sortMethod);
 
 	// Output the appropriate error or success messages to the console
