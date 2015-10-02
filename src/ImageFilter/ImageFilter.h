@@ -4,22 +4,14 @@
 #include <string>
 
 class ImageFilter {
-public:
-	// ENUMERATIONS
-	enum class SortMethod {
-		QuickSort,
-		InsertionSort,
-		BubbleSort
-	};
-
 protected:
 	// PROTECTED CONSTRUCTOR
 	ImageFilter();
 
 public:
 	// INTERFACE FUNCTIONS
-	static const char* watercolor(const std::string&, const int, SortMethod);
-	static const char* watercolor(const char*, const int, SortMethod);
+	static const char* watercolor(const std::string&, const int);
+	static const char* watercolor(const char*, const int);
 
 private:
 	// FILE MANIPULATION FUNCTIONS
@@ -29,8 +21,8 @@ private:
 	static const char* currentTimeStr();
 
 	// FILTER ALGORITHM FUNCTIONS
-	static void watercolorFilter(int**&, int, int, int, SortMethod);
-	static int median(int*, int, SortMethod);
+	static void watercolorFilter(int**&, int, int, int);
+	static int median(int*, int);
 	static void insertionSort(int*&, int);
 	static void quickSort(int*&, int);
 	static void bubbleSort(int*&, int);

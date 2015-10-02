@@ -8,10 +8,10 @@
 ImageFilter::ImageFilter() {}
 
 // INTERFACE FUNCTIONS
-const char* ImageFilter::watercolor(const std::string& filePath, const int winSize, SortMethod sortMethod) {
-	return watercolor(filePath.c_str(), winSize, sortMethod);
+const char* ImageFilter::watercolor(const std::string& filePath, const int winSize) {
+	return watercolor(filePath.c_str(), winSize);
 }
-const char* ImageFilter::watercolor(const char* filePath, const int winSize, SortMethod sortMethod) {
+const char* ImageFilter::watercolor(const char* filePath, const int winSize) {
 	// Load data from the PGM file
 	int width, height;
 	int maxGrey;
@@ -19,7 +19,7 @@ const char* ImageFilter::watercolor(const char* filePath, const int winSize, Sor
 	loadPgmData(filePath, width, height, maxGrey, pixels);
 
 	// Apply the filter to the pixel array just loaded
-	watercolorFilter(pixels, width, height, winSize, sortMethod);
+	watercolorFilter(pixels, width, height, winSize);
 
 	// Create a new PGM file with the filtered pixel array and return its path
 	return createPgm(filePath, width, height, maxGrey, pixels);
@@ -123,7 +123,7 @@ const char* ImageFilter::currentTimeStr() {
 }
 
 // FILTER ALGORITHM FUNCTIONS
-void ImageFilter::watercolorFilter(int**& pixels, int width, int height, int winSize, SortMethod sortMethod) {
+void ImageFilter::watercolorFilter(int**& pixels, int width, int height, int winSize) {
 	// Make a new array to hold the filtered pixels
 	int** fPixels = new int*[height];
 	for (int i = 0; i < height; ++i)
@@ -146,7 +146,7 @@ void ImageFilter::watercolorFilter(int**& pixels, int width, int height, int win
 			}
 
 			// Set the value of the filtered pixel at this position to the median value of the window
-			int med = median(window, numWinPixels, sortMethod);
+			int med = median(window, numWinPixels);
 #if _DEBUG
 	std::cout << "Median at row " << row << ", column " << col << ": " << med << std::endl;
 #endif
@@ -162,7 +162,7 @@ void ImageFilter::watercolorFilter(int**& pixels, int width, int height, int win
 	}
 	delete[] fPixels;
 }
-int ImageFilter::median(int* window, int size, SortMethod sortMethod) {
+int ImageFilter::median(int* window, int size) {
 #if _DEBUG
 	std::cout << "Unsorted: ";
 	for (int i = 0; i < size; ++i)
@@ -170,23 +170,8 @@ int ImageFilter::median(int* window, int size, SortMethod sortMethod) {
 	std::cout << std::endl;
 #endif
 
-	// Sort the array according to the provided method
-	void(*sort)(int*&, int);
-	switch (sortMethod) {
-	case SortMethod::InsertionSort:
-		sort = &insertionSort;
-		break;
-	case SortMethod::QuickSort:
-		sort = &quickSort;
-		break;
-	case SortMethod::BubbleSort:
-		sort = &bubbleSort;
-		break;
-	default:
-		sort = &insertionSort;
-		break;
-	}
-	sort(window, size);
+	// Sort the array using the QuickSort algorithm
+	quickSort(window, size);
 
 #if _DEBUG
 	std::cout << "Sorted Window:   ";
@@ -205,19 +190,6 @@ int ImageFilter::median(int* window, int size, SortMethod sortMethod) {
 		int mid2 = window[size / 2];
 		return (mid1 + mid2) / 2;
 	}
-}
-void ImageFilter::insertionSort(int*& window, int size) {
-int i, j, key;
-     for(j = 1; j < size; j++)    // Start with 1 (not 0)
-    {
-           key = window[j];
-           for(i = j - 1; (i >= 0) && (window[i] < key); i--)   // Smaller values move up
-          {
-                 window[i+1] = window[i];
-          }
-         window[i+1] = key;    //Put key into its proper location
-     }
-     return;
 }
 void ImageFilter::quickSort(int*& window, int size) {
 	quickSortRecurs(window, 0, size - 1);
@@ -243,25 +215,4 @@ void ImageFilter::swap(int *a, int *n) {
 	int temp = *a;
 	*a = *n;
 	*n = temp;
-}
-
-
-
-
-void ImageFilter::bubbleSort(int*& window, int size) {
-      bool swapped = true;
-      int j = 0;
-      int tmp;
-      while (swapped) {
-            swapped = false;
-            j++;
-            for (int i = 0; i < size - j; i++) {
-                  if (window[i] > window[i + 1]) {
-                        tmp = window[i];
-                        window[i] = window[i + 1];
-                        window[i + 1] = tmp;
-                        swapped = true;
-                  }
-            }
-      }
 }
