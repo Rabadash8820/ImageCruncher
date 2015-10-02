@@ -1,25 +1,24 @@
 # Group-DS
 
 ## Main.cpp
-Usage: Program.exe < WINDOW_SIZE > < FILE_PATH > [SORT_METHOD]
-* __< WINDOW_SIZE >__  The window size to use in the watercolor-filter algorithm, required
-* __< FILE_PATH >__  The path to the PGM image to be watercolor-filtered, required
-* __[SORT_METHOD]__  The sorting algorithm to be used when calculating medians in the watercolor-filter algorithm, optional
-1. Insertion Sort (the default)
-2. Quick Sort
-3. Bubble Sort
+Usage: ImageFilter.exe [options] < window_size > < file_path >
+* __< window_size >__  The window size to use in the watercolor-filter algorithm, required
+* __< file_path >__  The path to the PGM image to be watercolor-filtered, required
+* __Options:__
+* -o   Show output for debugging purposes
 
 The job of Main.cpp is to parse the command line arguments, return the appropriate error codes if any arguments were invalid,
-and initiate the watercolor-filter process if everything was entered correctly.  Command-line arguments are all passed into a 
+and initiate the selected filter process if everything was entered correctly.  Command-line arguments are all passed into a 
 C++ program as char arrays, so main defines some type-specific variables to hold the arguments, passes them by reference to
 the loadCommLineArgs() function wherein they get set. This function returns an enum for the error state of the program, which
 main then switches over.  Based on the error state, either an error message is redirected to std::cerr, or the parsed
-arguments are passed to the PgmFilter class to perform the watercolor filter.  In the case of a syntax error (incorrect
+arguments are passed to the ImageFilter class to perform the watercolor filter.  In the case of a syntax error (incorrect
 number of command line arguments), the showCorrectSyntax() function is called, which displays something similar to what you
 see above.  In the latter, error-free case, the runFilter() function is called.
 
 Within loadCommLineArgs(), each possible error is checked:
-* __Syntax error__: incorrect number of command line arguments psased
+* __SyntaxError__: incorrect number of command line arguments psased
+* __InvalidOptionError__: an undefined command-line option was set
 * __WindowSizeError__: window size was even or less than 3
 * __PgmFormatError__: the image file did not have a .pgm extension
 * __FileOpenError__: the image file could not be opened for whatever reason
@@ -34,18 +33,18 @@ SortMethod enumeration.  Note that, if this argument was not passed on the comma
 (cause I think its usually the fastest algorithm).  If an invalid number was passed on the command line, then an error message
 is displayed, but execution continues with insertion sort.
 
-The runFilter() function passes the command line variables to the PgmFilter class, which expected type-specific arguments,
+The runFilter() function passes the command line variables to the ImageFilter class, which expected type-specific arguments,
 hence the need for all this validation.  The CPU clock time is recorded at the start and finish of filtering, and
 used to calculate how long the operation took.  This information, along with where the filtered image was saved, is all displayed
 on the console.
 
-## PgmFilter.h
-Like all class header files, PgmFilter.h just describes the interface for this class.  Its only public method is an
+## ImageFilter.h
+Like all class header files, ImageFilter.h just describes the interface for this class.  Its only public method is an
 overloaded function called watercolor(), which can accept the file path to a PGM image either as a string or a char array (the
 string overload just converts the string to a char array and calls that overload).  All the other functions are private, transparent to the calling code.
 
-## PgmFilter.cpp
-Like all class implementation files, PgmFilter.cpp defines the functions declared in PgmFilter.h.
+## ImageFilter.cpp
+Like all class implementation files, ImageFilter.cpp defines the functions declared in ImageFilter.h.
 
 The overloaded function called watercolor() is the only public function, which can accept the file path to a PGM image either
 as a string or a char array (the string overload just converts the string to a char array and calls that overload).
@@ -70,7 +69,6 @@ For each pixel:
 Finally, the filtered values are stored back into the original array (which, remember, was passed by reference) and the
 filtered pixel array's memory is deallocated.  The original array passed in thus holds the "return" values afterward.
 
-The median() function defines a function pointer that sorts a 1D array of numbers.  Based on the SortMethod enum passed in,
-it points this sort function to the address of the insertionSort, quickSort, or bubbleSort functions.  Each of these sort
+The median() function sorts a 1D array of numbers using the quickSort() functions.  This sort
 functions will accept a reference pointer to the 1D array representing the window, and sort it.  Median() assumes that after
-the appropriate sort function is called, the window array has been sorted.  At this point, it returns the median value based on whether the window size is odd or even.
+the quickSort() is called, the window array has been sorted.  At this point, it returns the median value based on whether the window size is odd or even.
