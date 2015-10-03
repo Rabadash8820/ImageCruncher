@@ -1,12 +1,10 @@
 #pragma once
 
-#include "EXPORT.h"
-
 #include <string>
 
 namespace Kernel {
 
-	class KERNEL_API ImageFilter {
+	class ImageFilter {
 		// CONSTRUCTORS
 	public:
 		ImageFilter();
@@ -14,7 +12,7 @@ namespace Kernel {
 
 	public:
 		// INTERFACE
-		std::string filePath;
+		System::String filePath;
 		bool showOutput;
 		const char* watercolor(const int);
 

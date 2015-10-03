@@ -9,6 +9,7 @@ namespace GuiShell {
 
     public partial class MainForm : Form {
         // ENCAPSULATED FIELDS
+        
 
         // CONSTRUCTOR
         public MainForm() {
