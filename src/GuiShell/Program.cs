@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using Kernel;
+
 namespace GuiShell {
+
     static class Program {
         /// <summary>
         /// The main entry point for the application.
@@ -13,7 +13,14 @@ namespace GuiShell {
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            ImageWrapper = new ImageWrapper();
+
             Application.Run(new MainForm());
         }
+
+        public static ImageWrapper ImageWrapper { get; private set; }
+
     }
+
 }

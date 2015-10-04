@@ -1,6 +1,12 @@
-﻿namespace Kernel {
+﻿using System.Drawing;
+
+namespace Kernel {
 
     public class ImageWrapper {
+        // ENCAPSULATED FIELDS
+        private string _filePath;
+        private Bitmap _image;
+
         // CONSTRUCTORS
         public ImageWrapper() {
             reset(null, false);
@@ -10,9 +16,28 @@
         }
 
         // INTERFACE
-        public string FilePath { get; set; }
+        public string FilePath {
+            get {
+                return _filePath;
+            }
+            set {
+                _filePath = value;
+                _image = null;
+            }
+        }
+        public Bitmap BitmapImage {
+            get {
+                if (_image != null)
+                    return _image;
+                if (FilePath != null) {
+                    _image = new Bitmap(FilePath);
+                    return _image;
+                }
+                return null;
+            }
+        }
         public bool ShowOutput { get; set; }
-        public void watercolor(int winSize) {
+        public void Watercolor(int winSize) {
             
         }
 

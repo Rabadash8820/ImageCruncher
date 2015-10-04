@@ -34,6 +34,8 @@
             this.ImgPicBox = new System.Windows.Forms.PictureBox();
             this.MainTblLayout = new System.Windows.Forms.TableLayoutPanel();
             this.MainPanel = new System.Windows.Forms.Panel();
+            this.OutputLbl = new System.Windows.Forms.Label();
+            this.CloseFileBtn = new System.Windows.Forms.Button();
             this.MainToolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImgPicBox)).BeginInit();
             this.MainTblLayout.SuspendLayout();
@@ -47,6 +49,7 @@
             // 
             // ImgBrowseBtn
             // 
+            this.ImgBrowseBtn.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ImgBrowseBtn.Location = new System.Drawing.Point(292, 5);
             this.ImgBrowseBtn.Name = "ImgBrowseBtn";
             this.ImgBrowseBtn.Size = new System.Drawing.Size(75, 23);
@@ -58,17 +61,20 @@
             // ImgLabel
             // 
             this.ImgLabel.AutoSize = true;
+            this.ImgLabel.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ImgLabel.Location = new System.Drawing.Point(3, 10);
             this.ImgLabel.Name = "ImgLabel";
-            this.ImgLabel.Size = new System.Drawing.Size(55, 13);
+            this.ImgLabel.Size = new System.Drawing.Size(59, 13);
             this.ImgLabel.TabIndex = 1;
             this.ImgLabel.Text = "Image File";
             // 
             // ImgTxt
             // 
+            this.ImgTxt.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ImgTxt.Location = new System.Drawing.Point(64, 7);
             this.ImgTxt.Name = "ImgTxt";
-            this.ImgTxt.Size = new System.Drawing.Size(222, 20);
+            this.ImgTxt.ReadOnly = true;
+            this.ImgTxt.Size = new System.Drawing.Size(222, 22);
             this.ImgTxt.TabIndex = 2;
             // 
             // MainToolStrip
@@ -107,7 +113,7 @@
             this.ImgPicBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ImgPicBox.Location = new System.Drawing.Point(3, 43);
             this.ImgPicBox.Name = "ImgPicBox";
-            this.ImgPicBox.Size = new System.Drawing.Size(667, 190);
+            this.ImgPicBox.Size = new System.Drawing.Size(667, 389);
             this.ImgPicBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ImgPicBox.TabIndex = 5;
             this.ImgPicBox.TabStop = false;
@@ -124,11 +130,13 @@
             this.MainTblLayout.RowCount = 2;
             this.MainTblLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.MainTblLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.MainTblLayout.Size = new System.Drawing.Size(673, 236);
+            this.MainTblLayout.Size = new System.Drawing.Size(673, 435);
             this.MainTblLayout.TabIndex = 6;
             // 
             // MainPanel
             // 
+            this.MainPanel.Controls.Add(this.CloseFileBtn);
+            this.MainPanel.Controls.Add(this.OutputLbl);
             this.MainPanel.Controls.Add(this.ImgLabel);
             this.MainPanel.Controls.Add(this.ImgBrowseBtn);
             this.MainPanel.Controls.Add(this.ImgTxt);
@@ -138,13 +146,35 @@
             this.MainPanel.Size = new System.Drawing.Size(667, 34);
             this.MainPanel.TabIndex = 6;
             // 
+            // OutputLbl
+            // 
+            this.OutputLbl.AutoSize = true;
+            this.OutputLbl.ForeColor = System.Drawing.Color.Red;
+            this.OutputLbl.Location = new System.Drawing.Point(406, 10);
+            this.OutputLbl.Name = "OutputLbl";
+            this.OutputLbl.Size = new System.Drawing.Size(0, 13);
+            this.OutputLbl.TabIndex = 3;
+            // 
+            // CloseFileBtn
+            // 
+            this.CloseFileBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.CloseFileBtn.AutoSize = true;
+            this.CloseFileBtn.Location = new System.Drawing.Point(579, 5);
+            this.CloseFileBtn.Name = "CloseFileBtn";
+            this.CloseFileBtn.Size = new System.Drawing.Size(79, 23);
+            this.CloseFileBtn.TabIndex = 4;
+            this.CloseFileBtn.Text = "Close Image";
+            this.CloseFileBtn.UseVisualStyleBackColor = true;
+            this.CloseFileBtn.Click += new System.EventHandler(this.CloseFileBtn_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(673, 261);
+            this.ClientSize = new System.Drawing.Size(673, 460);
             this.Controls.Add(this.MainTblLayout);
             this.Controls.Add(this.MainToolStrip);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "MainForm";
             this.ShowIcon = false;
             this.Text = "Image Cruncher";
@@ -171,6 +201,8 @@
         private System.Windows.Forms.PictureBox ImgPicBox;
         private System.Windows.Forms.TableLayoutPanel MainTblLayout;
         private System.Windows.Forms.Panel MainPanel;
+        private System.Windows.Forms.Label OutputLbl;
+        private System.Windows.Forms.Button CloseFileBtn;
     }
 }
 
