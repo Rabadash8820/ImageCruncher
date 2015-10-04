@@ -18,7 +18,7 @@ namespace GuiShell.Forms {
         public MainForm() {
             InitializeComponent();
 
-            _imageBS = new BindingSource(Program.ImageWrapper, null);
+            _imageBS = new BindingSource(new ImageWrapper(), null);
             
             setDataBindings();
         }
@@ -38,7 +38,7 @@ namespace GuiShell.Forms {
         private void ImgFileDialog_FileOk(object sender, CancelEventArgs e) {
             // Reset the private BindingSource
             string filePath = ImgFileDialog.FileName;
-            _imageBS.DataSource = new ImageWrapper(filePath);
+            changeImage(new ImageWrapper(filePath));
         }
         private void ImgPicBox_Paint(object sender, PaintEventArgs e) {
             if (_rollingBallRegion.HasValue) {
@@ -48,16 +48,16 @@ namespace GuiShell.Forms {
             }
         }
         private void WatercolorBtn_Click(object sender, EventArgs e) {
-            WatercolorForm form = new WatercolorForm();
+            WatercolorForm form = new WatercolorForm(_imageBS.DataSource as ImageWrapper);
             form.WatercolorCompleted += WatercolorForm_WatercolorCompleted;
             form.ShowDialog();
         }
-        void WatercolorForm_WatercolorCompleted(object sender, WatercolorCompletedEventArgs e) {
+        private void WatercolorForm_WatercolorCompleted(object sender, WatercolorCompletedEventArgs e) {
             clearOrnaments();
-            _imageBS.DataSource = e.ImageWrapper;
+            changeImage(e.ImageWrapper);
         }
         private void RollingBallBtn_Click(object sender, EventArgs e) {
-            RollingBallForm form = new RollingBallForm();
+            RollingBallForm form = new RollingBallForm(_imageBS.DataSource as ImageWrapper);
             form.RollingBallCompleted += RollingBallForm_RollingBallCompleted;
             form.ShowDialog();
         }
@@ -71,7 +71,7 @@ namespace GuiShell.Forms {
         }
         private void CloseFileBtn_Click(object sender, EventArgs e) {
             clearOrnaments();
-            _imageBS.DataSource = new ImageWrapper();
+            changeImage(new ImageWrapper());
         }
 
         // HELPER FUNCTIONS
@@ -114,7 +114,15 @@ namespace GuiShell.Forms {
         private void clearOrnaments() {
             _rollingBallRegion = null;
         }
-        
+        private void changeImage(ImageWrapper img) {
+            ImageWrapper currImg = _imageBS.DataSource as ImageWrapper;
+            if (currImg.FilePath != null) {
+                Bitmap b;
+            }
+
+            _imageBS.DataSource = img;
+        }
+
     }
 
 }

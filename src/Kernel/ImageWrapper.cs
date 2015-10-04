@@ -1,6 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Drawing;
 using System.ComponentModel;
+using System.Drawing.Imaging;
+
+using Kernel.Properties;
 
 namespace Kernel {
 
@@ -22,26 +26,23 @@ namespace Kernel {
 
         // INTERFACE
         public string FilePath {
-            get {
-                return _filePath;
-            }
-            set {
-                _filePath = value;
-                _image = null;
-            }
+            get { return _filePath; }
         }
         public Bitmap BitmapImage {
             get {
                 if (_image != null)
                     return _image;
-                if (FilePath != null) {
-                    _image = new Bitmap(FilePath);
+                if (_filePath != null) {
+                    _image = new Bitmap(_filePath);
                     return _image;
                 }
                 return null;
             }
         }
         public void ApplyFilter(Filter filter, object args, BackgroundWorker worker = null, DoWorkEventArgs e = null) {
+            if (_filePath == null)
+                return;
+
             // BackgroundWorker and DoWorkEventArgs must be both null or both non-null
             if ((worker != null) ^ (e != null)) {
                 throw new ArgumentException(
@@ -62,7 +63,10 @@ namespace Kernel {
             _worker = null;
             _doWorkEventArgs = null;
         }
-        public void PerformOperation(Operation op, object args, BackgroundWorker worker, DoWorkEventArgs e) {
+        public void PerformOperation(Operation op, object args, BackgroundWorker worker = null, DoWorkEventArgs e = null) {
+            if (_filePath == null)
+                return;
+
             // BackgroundWorker and DoWorkEventArgs must be both null or both non-null
             if ((worker != null) ^ (e != null)) {
                 throw new ArgumentException(
@@ -91,9 +95,6 @@ namespace Kernel {
         private string createPgm(string filePath, int width, int height, int maxGrey, int[][] pixels) {
             return "";
         }
-        private string renameWithSuffix(string oldFilePath, string suffix) {
-            return "";
-        }
 
         // ALGORITHMS
         private ImageWrapper filterResult(Filter filter, object args) {
@@ -102,7 +103,7 @@ namespace Kernel {
             switch (filter) {
                 case Filter.Watercolor:
                     WatercolorArgs wa = (WatercolorArgs)args;
-                    result = watercolorFilter(new int[1][], 5, 5, wa.WindowSize, wa.SaveUnfiltered);
+                    result = watercolorFilter(wa.WindowSize, wa.SaveUnfiltered);
                     break;
 
                 default:
@@ -115,10 +116,12 @@ namespace Kernel {
         private object operationResult(Operation op, object args) {
             // Perform the requested operation by passing it the provided arguments
             object result = null;
+            int width = this.BitmapImage.Width;
+            int height = this.BitmapImage.Height;
             switch (op) {
                 case Operation.RollingBall:
                     RollingBallArgs rba = (RollingBallArgs)args;
-                    result = rollingBall(new int[1][], 5, 5, rba.WindowSize);
+                    result = rollingBall(rba.WindowSize);
                     break;
 
                 default:
@@ -128,14 +131,28 @@ namespace Kernel {
             // Return the result of that operation, where applicable
             return result;
         }
-        private ImageWrapper watercolorFilter(int[][] pixels, int width, int height, int winSize, bool saveUnfiltered) {
+        private ImageWrapper watercolorFilter(int winSize, bool saveUnfiltered) {
+            // Define the Bitmap to be manipulated (either the current image or a copy)
+            string newPath = newFilePath(_filePath, Resources.WatercolorFileAppend);
+            if (saveUnfiltered)
+                File.Copy(_filePath, newPath);
+            Bitmap bitmap = (saveUnfiltered ? Bitmap.FromFile(newPath) as Bitmap : this.BitmapImage);
+
+            int width = bitmap.Width;
+            int height = bitmap.Height;
+            Rectangle bounds = new Rectangle(0,0,width,height);
+            BitmapData data = bitmap.LockBits(bounds, ImageLockMode.ReadWrite, PixelFormat.DontCare);
+            
             for (int s = 0; s < winSize; ++s) {
                 System.Threading.Thread.Sleep(500);
                 adjustStatus(s + 1, winSize);
             }
-            return new ImageWrapper();
+
+            bitmap.UnlockBits(data);
+            ImageWrapper result = (saveUnfiltered ? new ImageWrapper(newPath) : this);
+            return result;
         }
-        private Rectangle rollingBall(int[][] pixels, int width, int height, int winSize) {
+        private Rectangle rollingBall(int winSize) {
             for (int s = 0; s < winSize; ++s) {
                 System.Threading.Thread.Sleep(500);
                 adjustStatus(s + 1, winSize);
@@ -145,7 +162,8 @@ namespace Kernel {
 
 		// HELPER FUNCTIONS
         private void reset(string filePath) {
-            FilePath = filePath;
+            _filePath = filePath;
+            _image = null;
         }
         private void adjustStatus(long currentSteps, long totalSteps) {
             if (!_statusAdjustable)
@@ -159,8 +177,14 @@ namespace Kernel {
             float percent = 100f * (float)currentSteps / (float)totalSteps;
             _worker.ReportProgress((int)percent);
         }
-        private string currentTimeStr() {
-            return "";
+        private string newFilePath(string oldFilePath, string appendToName) {
+            string dirName = Path.GetDirectoryName(oldFilePath);
+            string fileName = Path.GetFileNameWithoutExtension(oldFilePath);
+            string extension = Path.GetExtension(oldFilePath);
+            string newFileName = String.Format("{0}_{1}{2}", fileName, appendToName, extension);
+            string newPath = Path.Combine(dirName, newFileName);
+
+            return newPath;
         }
         private void swap(ref int a, ref int n) {
 

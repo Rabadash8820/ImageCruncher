@@ -8,8 +8,12 @@ using GuiShell.Events;
 namespace GuiShell.Forms {
 
     public partial class WatercolorForm : Form {
-        public WatercolorForm() {
+        private ImageWrapper _img;
+
+        public WatercolorForm(ImageWrapper img) {
             InitializeComponent();
+
+            _img = img;
         }
 
         // INTERFACE
@@ -31,7 +35,7 @@ namespace GuiShell.Forms {
         }
         private void WatercolorBgw_DoWork(object sender, DoWorkEventArgs e) {
             BackgroundWorker worker = sender as BackgroundWorker;
-            Program.ImageWrapper.ApplyFilter(
+            _img.ApplyFilter(
                 Filter.Watercolor, e.Argument, worker, e);
         }
         private void WatercolorBgw_ProgressChanged(object sender, ProgressChangedEventArgs e) {

@@ -14,13 +14,8 @@ namespace GuiShell {
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-            ImageWrapper = new ImageWrapper();
-
             Application.Run(new MainForm());
         }
-
-        public static ImageWrapper ImageWrapper { get; private set; }
 
     }
 

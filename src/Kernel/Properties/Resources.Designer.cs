@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GuiShell.Properties {
+namespace Kernel.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace GuiShell.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GuiShell.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Kernel.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,15 @@ namespace GuiShell.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to watercolor.
+        /// </summary>
+        internal static string WatercolorFileAppend {
+            get {
+                return ResourceManager.GetString("WatercolorFileAppend", resourceCulture);
             }
         }
     }

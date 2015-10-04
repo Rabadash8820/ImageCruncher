@@ -9,8 +9,12 @@ using GuiShell.Events;
 namespace GuiShell.Forms {
 
     public partial class RollingBallForm : Form {
-        public RollingBallForm() {
+        private ImageWrapper _img;
+
+        public RollingBallForm(ImageWrapper img) {
             InitializeComponent();
+
+            _img = img;
 
             // Configure progress bar to report percent progress
             MainProgress.Minimum = 0;
@@ -32,7 +36,7 @@ namespace GuiShell.Forms {
         }
         private void RollingBallBgw_DoWork(object sender, DoWorkEventArgs e) {
             BackgroundWorker worker = sender as BackgroundWorker;
-            Program.ImageWrapper.PerformOperation(
+            _img.PerformOperation(
                 Operation.RollingBall, e.Argument, worker, e);
         }
         private void RollingBallBgw_ProgressChanged(object sender, ProgressChangedEventArgs e) {
