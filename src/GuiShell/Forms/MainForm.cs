@@ -5,8 +5,9 @@ using System.ComponentModel;
 using System.Windows.Forms;
 
 using Kernel;
+using GuiShell.Events;
 
-namespace GuiShell {
+namespace GuiShell.Forms {
 
     public partial class MainForm : Form {
         // ENCAPSULATED FIELDS
@@ -48,14 +49,19 @@ namespace GuiShell {
         }
         private void WatercolorBtn_Click(object sender, EventArgs e) {
             WatercolorForm form = new WatercolorForm();
+            form.WatercolorCompleted += WatercolorForm_WatercolorCompleted;
             form.ShowDialog();
+        }
+        void WatercolorForm_WatercolorCompleted(object sender, WatercolorCompletedEventArgs e) {
+            clearOrnaments();
+            _imageBS.DataSource = e.ImageWrapper;
         }
         private void RollingBallBtn_Click(object sender, EventArgs e) {
             RollingBallForm form = new RollingBallForm();
             form.RollingBallCompleted += RollingBallForm_RollingBallCompleted;
             form.ShowDialog();
         }
-        private void RollingBallForm_RollingBallCompleted(object sender, RollingBallForm.RollingBallArgs e) {
+        private void RollingBallForm_RollingBallCompleted(object sender, RollingBallCompletedEventArgs e) {
             _rollingBallRegion = e.OptimalRegion;
             ImgPicBox.Refresh();
         }

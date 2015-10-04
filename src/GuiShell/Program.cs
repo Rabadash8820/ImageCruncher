@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 
 using Kernel;
+using GuiShell.Forms;
 
 namespace GuiShell {
 

@@ -1,4 +1,4 @@
-﻿namespace GuiShell {
+﻿namespace GuiShell.Forms {
     partial class MainForm {
         /// <summary>
         /// Required designer variable.
