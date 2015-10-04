@@ -37,8 +37,12 @@ namespace Kernel {
             }
         }
         public bool ShowOutput { get; set; }
+
         public void Watercolor(int winSize) {
             
+        }
+        public Rectangle RollingBall(int winSize) {
+            return new Rectangle(50, 50, 100, 100);
         }
 
         // HELPER FUNCTIONS

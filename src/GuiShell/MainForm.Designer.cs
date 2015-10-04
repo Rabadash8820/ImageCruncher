@@ -34,8 +34,9 @@
             this.ImgPicBox = new System.Windows.Forms.PictureBox();
             this.MainTblLayout = new System.Windows.Forms.TableLayoutPanel();
             this.MainPanel = new System.Windows.Forms.Panel();
-            this.OutputLbl = new System.Windows.Forms.Label();
+            this.ClearImgBtn = new System.Windows.Forms.Button();
             this.CloseFileBtn = new System.Windows.Forms.Button();
+            this.OutputLbl = new System.Windows.Forms.Label();
             this.MainToolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImgPicBox)).BeginInit();
             this.MainTblLayout.SuspendLayout();
@@ -45,7 +46,7 @@
             // ImgFileDialog
             // 
             this.ImgFileDialog.FileName = "openFileDialog1";
-            this.ImgFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.ImgFileDialog1_FileOk);
+            this.ImgFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.ImgFileDialog_FileOk);
             // 
             // ImgBrowseBtn
             // 
@@ -117,6 +118,7 @@
             this.ImgPicBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ImgPicBox.TabIndex = 5;
             this.ImgPicBox.TabStop = false;
+            this.ImgPicBox.Paint += new System.Windows.Forms.PaintEventHandler(this.ImgPicBox_Paint);
             // 
             // MainTblLayout
             // 
@@ -135,6 +137,7 @@
             // 
             // MainPanel
             // 
+            this.MainPanel.Controls.Add(this.ClearImgBtn);
             this.MainPanel.Controls.Add(this.CloseFileBtn);
             this.MainPanel.Controls.Add(this.OutputLbl);
             this.MainPanel.Controls.Add(this.ImgLabel);
@@ -146,14 +149,17 @@
             this.MainPanel.Size = new System.Drawing.Size(667, 34);
             this.MainPanel.TabIndex = 6;
             // 
-            // OutputLbl
+            // ClearImgBtn
             // 
-            this.OutputLbl.AutoSize = true;
-            this.OutputLbl.ForeColor = System.Drawing.Color.Red;
-            this.OutputLbl.Location = new System.Drawing.Point(406, 10);
-            this.OutputLbl.Name = "OutputLbl";
-            this.OutputLbl.Size = new System.Drawing.Size(0, 13);
-            this.OutputLbl.TabIndex = 3;
+            this.ClearImgBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ClearImgBtn.AutoSize = true;
+            this.ClearImgBtn.Location = new System.Drawing.Point(496, 5);
+            this.ClearImgBtn.Name = "ClearImgBtn";
+            this.ClearImgBtn.Size = new System.Drawing.Size(77, 23);
+            this.ClearImgBtn.TabIndex = 5;
+            this.ClearImgBtn.Text = "Clear Image";
+            this.ClearImgBtn.UseVisualStyleBackColor = true;
+            this.ClearImgBtn.Click += new System.EventHandler(this.ClearImgBtn_Click);
             // 
             // CloseFileBtn
             // 
@@ -166,6 +172,15 @@
             this.CloseFileBtn.Text = "Close Image";
             this.CloseFileBtn.UseVisualStyleBackColor = true;
             this.CloseFileBtn.Click += new System.EventHandler(this.CloseFileBtn_Click);
+            // 
+            // OutputLbl
+            // 
+            this.OutputLbl.AutoSize = true;
+            this.OutputLbl.ForeColor = System.Drawing.Color.Red;
+            this.OutputLbl.Location = new System.Drawing.Point(406, 10);
+            this.OutputLbl.Name = "OutputLbl";
+            this.OutputLbl.Size = new System.Drawing.Size(0, 13);
+            this.OutputLbl.TabIndex = 3;
             // 
             // MainForm
             // 
@@ -203,6 +218,7 @@
         private System.Windows.Forms.Panel MainPanel;
         private System.Windows.Forms.Label OutputLbl;
         private System.Windows.Forms.Button CloseFileBtn;
+        private System.Windows.Forms.Button ClearImgBtn;
     }
 }
 
