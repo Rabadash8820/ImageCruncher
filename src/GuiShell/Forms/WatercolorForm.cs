@@ -1,19 +1,21 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 using System.ComponentModel;
 
 using Kernel;
+using Kernel.Args;
 using GuiShell.Events;
 
 namespace GuiShell.Forms {
 
     public partial class WatercolorForm : Form {
-        private ImageWrapper _img;
+        private FileInfo _imgFile;
 
-        public WatercolorForm(ImageWrapper img) {
+        public WatercolorForm(FileInfo file) {
             InitializeComponent();
 
-            _img = img;
+            _imgFile = file;
         }
 
         // INTERFACE
@@ -25,6 +27,7 @@ namespace GuiShell.Forms {
             int winSize = (int)WinSizeUpDown.Value;
             bool save = CopyChk.Checked;
             WatercolorArgs args = new WatercolorArgs() {
+                Bitmap = Util.BitmapFromFile(_imgFile.FullName, false),
                 WindowSize = winSize,
                 SaveUnfiltered = save
             };
@@ -35,7 +38,7 @@ namespace GuiShell.Forms {
         }
         private void WatercolorBgw_DoWork(object sender, DoWorkEventArgs e) {
             BackgroundWorker worker = sender as BackgroundWorker;
-            _img.ApplyFilter(
+            ImageWrapper.ApplyFilter(
                 Filter.Watercolor, e.Argument as FilterArgs, worker, e);
         }
         private void WatercolorBgw_ProgressChanged(object sender, ProgressChangedEventArgs e) {
@@ -48,7 +51,7 @@ namespace GuiShell.Forms {
                 toggleControls(false);
             else {
                 toggleControls(false);
-                ImageWrapper img = (ImageWrapper)e.Result;
+                FileInfo img = e.Result as FileInfo;
                 OnCompleted(img);
 
                 this.Close();
@@ -56,14 +59,14 @@ namespace GuiShell.Forms {
         }
 
         // HELPER FUNCTIONS
-        private void OnCompleted(ImageWrapper img) {
+        private void OnCompleted(FileInfo file) {
             if (this.WatercolorCompleted == null)
                 return;
 
             Delegate[] subscribers = this.WatercolorCompleted.GetInvocationList();
             foreach (Delegate subscriber in subscribers) {
                 Control c = subscriber.Target as Control;
-                WatercolorCompletedEventArgs args = new WatercolorCompletedEventArgs() { ImageWrapper = img};
+                WatercolorCompletedEventArgs args = new WatercolorCompletedEventArgs() { FileInfo = file };
                 if (c != null && c.InvokeRequired)
                     c.BeginInvoke(subscriber, this, args);
                 else

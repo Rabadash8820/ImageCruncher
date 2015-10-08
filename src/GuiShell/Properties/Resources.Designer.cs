@@ -79,5 +79,14 @@ namespace GuiShell.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to watercolor.
+        /// </summary>
+        internal static string WatercolorFileAppend {
+            get {
+                return ResourceManager.GetString("WatercolorFileAppend", resourceCulture);
+            }
+        }
     }
 }

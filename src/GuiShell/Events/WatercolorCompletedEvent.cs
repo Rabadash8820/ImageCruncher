@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Drawing;
-
-using Kernel;
+using System.IO;
 
 namespace GuiShell.Events {
 
     public class WatercolorCompletedEventArgs : EventArgs {
-        public ImageWrapper ImageWrapper;
+        public FileInfo FileInfo;
     }
     public delegate void WatercolorCompletedEventHandler(object sender, WatercolorCompletedEventArgs e);
 

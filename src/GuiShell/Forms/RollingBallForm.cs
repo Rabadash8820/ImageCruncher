@@ -1,20 +1,22 @@
 ﻿using System;
+using System.IO;
 using System.Drawing;
 using System.Windows.Forms;
 using System.ComponentModel;
 
 using Kernel;
+using Kernel.Args;
 using GuiShell.Events;
 
 namespace GuiShell.Forms {
 
     public partial class RollingBallForm : Form {
-        private ImageWrapper _img;
+        private FileInfo _imgFile;
 
-        public RollingBallForm(ImageWrapper img) {
+        public RollingBallForm(FileInfo f) {
             InitializeComponent();
 
-            _img = img;
+            _imgFile = f;
 
             // Configure progress bar to report percent progress
             MainProgress.Minimum = 0;
@@ -28,7 +30,10 @@ namespace GuiShell.Forms {
         private void ApplyBtn_Click(object sender, EventArgs e) {
             toggleControls(true);
             int winSize = (int)WinSizeUpDown.Value;
-            RollingBallArgs args = new RollingBallArgs() { WindowSize = winSize };
+            RollingBallArgs args = new RollingBallArgs() {
+                Bitmap = Util.BitmapFromFile(_imgFile.FullName, false),
+                WindowSize = winSize
+            };
             RollingBallBgw.RunWorkerAsync(args);
         }
         private void CancelBtn_Click(object sender, EventArgs e) {
@@ -36,7 +41,7 @@ namespace GuiShell.Forms {
         }
         private void RollingBallBgw_DoWork(object sender, DoWorkEventArgs e) {
             BackgroundWorker worker = sender as BackgroundWorker;
-            _img.PerformOperation(
+            ImageWrapper.PerformOperation(
                 Operation.RollingBall, e.Argument, worker, e);
         }
         private void RollingBallBgw_ProgressChanged(object sender, ProgressChangedEventArgs e) {

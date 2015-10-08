@@ -59,14 +59,5 @@ namespace Kernel.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to watercolor.
-        /// </summary>
-        internal static string WatercolorFileAppend {
-            get {
-                return ResourceManager.GetString("WatercolorFileAppend", resourceCulture);
-            }
-        }
     }
 }

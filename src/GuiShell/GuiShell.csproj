@@ -106,6 +106,7 @@
     <Compile Include="Forms\WatercolorForm.Designer.cs">
       <DependentUpon>WatercolorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Util.cs" />
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

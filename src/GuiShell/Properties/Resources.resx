@@ -124,4 +124,7 @@
   <data name="watercolor" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\watercolor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="WatercolorFileAppend" xml:space="preserve">
+    <value>watercolor</value>
+  </data>
 </root>

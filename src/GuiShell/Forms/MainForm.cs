@@ -18,9 +18,7 @@ namespace GuiShell.Forms {
         public MainForm() {
             InitializeComponent();
 
-            _imageBS = new BindingSource(new ImageWrapper(), null);
-            
-            setDataBindings();
+            _imageBS = new BindingSource();
         }
 
         // EVENT HANDLERS
@@ -28,9 +26,9 @@ namespace GuiShell.Forms {
             string filePath = e.Value as string;
             e.Value = Path.GetFileName(filePath);
         }
-        private void EnabledPropertyBinding_Format(object sender, ConvertEventArgs e) {
+        private void PicBinding_Format(object sender, ConvertEventArgs e) {
             string filePath = e.Value as string;
-            e.Value = (filePath != null);
+            e.Value = Bitmap.FromFile(filePath);
         }
         private void ImgBrowseBtn_Click(object sender, EventArgs e) {
             ImgFileDialog.ShowDialog();
@@ -38,7 +36,7 @@ namespace GuiShell.Forms {
         private void ImgFileDialog_FileOk(object sender, CancelEventArgs e) {
             // Reset the private BindingSource
             string filePath = ImgFileDialog.FileName;
-            changeImage(new ImageWrapper(filePath));
+            changeImage(new FileInfo(filePath));
         }
         private void ImgPicBox_Paint(object sender, PaintEventArgs e) {
             if (_rollingBallRegion.HasValue) {
@@ -51,10 +49,10 @@ namespace GuiShell.Forms {
         }
         private void WatercolorForm_WatercolorCompleted(object sender, WatercolorCompletedEventArgs e) {
             clearOrnaments();
-            changeImage(e.ImageWrapper);
+            changeImage(e.FileInfo);
         }
         private void RollingBallBtn_Click(object sender, EventArgs e) {
-            RollingBallForm form = new RollingBallForm(_imageBS.DataSource as ImageWrapper);
+            RollingBallForm form = new RollingBallForm(_imageBS.DataSource as FileInfo);
             form.RollingBallCompleted += RollingBallForm_RollingBallCompleted;
             form.ShowDialog();
         }
@@ -70,16 +68,22 @@ namespace GuiShell.Forms {
         }
         private void CloseFileBtn_Click(object sender, EventArgs e) {
             clearOrnaments();
-            changeImage(new ImageWrapper());
+            changeImage(null);
         }
 
         // HELPER FUNCTIONS
-        private void setDataBindings() {
+        private void addDataBindings(FileInfo imageFile) {
+            // Reset the BindingSource, and just return if we've already added the bindings
+            bool bound = (_imageBS.DataSource != null);
+            _imageBS.DataSource = imageFile;
+            if (bound)
+                return;
+
             // Bind TextBox to the image's filename
             Binding textBinding = new Binding(
                 "Text",
                 _imageBS,
-                Util.GetPropertyName((ImageWrapper i) => i.FilePath),
+                "Name",
                 true,
                 DataSourceUpdateMode.Never);
             textBinding.Format += FileNameBinding_Format;
@@ -89,36 +93,39 @@ namespace GuiShell.Forms {
             Binding picBinding = new Binding(
                 "Image",
                 _imageBS,
-                Util.GetPropertyName((ImageWrapper i) => i.Bitmap),
-                true,
-                DataSourceUpdateMode.Never,
-                new Bitmap(1, 1));
-            ImgPicBox.DataBindings.Add(picBinding);
-
-            // Bind buttons to whether or not an image file has been selected
-            MainToolStrip.DataBindings.Add(enabledPropertyBinding());
-            CloseFileBtn.DataBindings.Add(enabledPropertyBinding());
-            ClearImgBtn.DataBindings.Add(enabledPropertyBinding());
-        }
-        private Binding enabledPropertyBinding() {
-            Binding b = new Binding(
-                "Enabled",
-                _imageBS,
-                Util.GetPropertyName((ImageWrapper i) => i.FilePath),
+                "FullName",
                 true,
                 DataSourceUpdateMode.Never);
-            b.Format += EnabledPropertyBinding_Format;
-            return b;
+            picBinding.Format += PicBinding_Format;
+            ImgPicBox.DataBindings.Add(picBinding);
+
+            // Now we've added bindings...
+            bound = true;
+        }
+        private void removeDataBindings() {
+            ImgTxt.DataBindings.Clear();
+            ImgPicBox.DataBindings.Clear();
+
+            _imageBS.DataSource = null;
+        }
+        private void enableControls(bool doIt) {
+            MainToolStrip.Enabled = doIt;
+            ClearImgBtn.Enabled = doIt;
+            CloseFileBtn.Enabled = doIt;
+        }
+        private void tearDownImage() {
+            ImgPicBox.Image = null;
+            ImgTxt.Text = "";
         }
         private void applyFilter(Filter filter) {
             // Release the handle on the currently open image
-            changeImage(new ImageWrapper());
+            //changeImage(null);
 
             // Define the appropriate form and subscribe to any events
             Form form;
             switch (filter) {
                 case Filter.Watercolor:
-                    form = new WatercolorForm(_imageBS.DataSource as ImageWrapper);
+                    form = new WatercolorForm(_imageBS.DataSource as FileInfo);
                     (form as WatercolorForm).WatercolorCompleted += WatercolorForm_WatercolorCompleted;
                     break;
 
@@ -134,12 +141,18 @@ namespace GuiShell.Forms {
 
             log("Image cleared.");
         }
-        private void changeImage(ImageWrapper img) {
-            ImageWrapper currImg = _imageBS.DataSource as ImageWrapper;
-            _imageBS.DataSource = img;
-
-            string msg = (img?.FilePath != null) ? $"Image set to {img.FilePath}." : "Image closed.";
-            log(msg);
+        private void changeImage(FileInfo imageFile) {
+            if (imageFile != null) {
+                enableControls(true);
+                addDataBindings(imageFile);
+                log($"Image set to {imageFile.FullName}");
+            }
+            else {
+                enableControls(false);
+                removeDataBindings();
+                tearDownImage();
+                log("Image closed.");
+            }
         }
         private Rectangle adjustedOrnament(Rectangle region) {
             // Reposition/resize the provided Rectangle to match the PictureBox image

@@ -28,7 +28,10 @@
             this.ImgLabel = new System.Windows.Forms.Label();
             this.ImgTxt = new System.Windows.Forms.TextBox();
             this.MainToolStrip = new System.Windows.Forms.ToolStrip();
+            this.FiltersLbl = new System.Windows.Forms.ToolStripLabel();
             this.WatercolorBtn = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.OperationsLbl = new System.Windows.Forms.ToolStripLabel();
             this.RollingBallBtn = new System.Windows.Forms.ToolStripButton();
             this.ImgPicBox = new System.Windows.Forms.PictureBox();
             this.MainTblLayout = new System.Windows.Forms.TableLayoutPanel();
@@ -37,9 +40,6 @@
             this.CloseFileBtn = new System.Windows.Forms.Button();
             this.MainSplit = new System.Windows.Forms.SplitContainer();
             this.OutputListbox = new System.Windows.Forms.ListBox();
-            this.FiltersLbl = new System.Windows.Forms.ToolStripLabel();
-            this.OperationsLbl = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.MainToolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImgPicBox)).BeginInit();
             this.MainTblLayout.SuspendLayout();
@@ -87,6 +87,7 @@
             // 
             // MainToolStrip
             // 
+            this.MainToolStrip.Enabled = false;
             this.MainToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.FiltersLbl,
             this.WatercolorBtn,
@@ -99,6 +100,12 @@
             this.MainToolStrip.TabIndex = 4;
             this.MainToolStrip.Text = "toolStrip1";
             // 
+            // FiltersLbl
+            // 
+            this.FiltersLbl.Name = "FiltersLbl";
+            this.FiltersLbl.Size = new System.Drawing.Size(38, 22);
+            this.FiltersLbl.Text = "Filters";
+            // 
             // WatercolorBtn
             // 
             this.WatercolorBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -108,6 +115,17 @@
             this.WatercolorBtn.Size = new System.Drawing.Size(23, 22);
             this.WatercolorBtn.Text = "Watercolor Filter";
             this.WatercolorBtn.Click += new System.EventHandler(this.WatercolorBtn_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // OperationsLbl
+            // 
+            this.OperationsLbl.Name = "OperationsLbl";
+            this.OperationsLbl.Size = new System.Drawing.Size(65, 22);
+            this.OperationsLbl.Text = "Operations";
             // 
             // RollingBallBtn
             // 
@@ -164,6 +182,7 @@
             // 
             this.ClearImgBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ClearImgBtn.AutoSize = true;
+            this.ClearImgBtn.Enabled = false;
             this.ClearImgBtn.Location = new System.Drawing.Point(684, 5);
             this.ClearImgBtn.Name = "ClearImgBtn";
             this.ClearImgBtn.Size = new System.Drawing.Size(77, 23);
@@ -176,6 +195,7 @@
             // 
             this.CloseFileBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.CloseFileBtn.AutoSize = true;
+            this.CloseFileBtn.Enabled = false;
             this.CloseFileBtn.Location = new System.Drawing.Point(767, 5);
             this.CloseFileBtn.Name = "CloseFileBtn";
             this.CloseFileBtn.Size = new System.Drawing.Size(79, 23);
@@ -214,23 +234,6 @@
             this.OutputListbox.ScrollAlwaysVisible = true;
             this.OutputListbox.Size = new System.Drawing.Size(851, 85);
             this.OutputListbox.TabIndex = 0;
-            // 
-            // FiltersLbl
-            // 
-            this.FiltersLbl.Name = "FiltersLbl";
-            this.FiltersLbl.Size = new System.Drawing.Size(38, 22);
-            this.FiltersLbl.Text = "Filters";
-            // 
-            // OperationsLbl
-            // 
-            this.OperationsLbl.Name = "OperationsLbl";
-            this.OperationsLbl.Size = new System.Drawing.Size(65, 22);
-            this.OperationsLbl.Text = "Operations";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // MainForm
             // 
