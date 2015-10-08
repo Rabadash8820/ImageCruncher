@@ -11,13 +11,8 @@ using GuiShell.Properties;
 namespace GuiShell {
 
     public static class Util {
-        private static Dictionary<Filter, string> _filterAppends;
-
         static Util() {
-            // Associate each filter with a string to append to file names
-            _filterAppends = new Dictionary<Filter, string>() {
-                { Filter.Watercolor, Resources.WatercolorFileAppend },
-            };
+
         }
 
         // HELPER FUNCTIONS
