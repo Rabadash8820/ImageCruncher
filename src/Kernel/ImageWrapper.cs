@@ -157,7 +157,7 @@ namespace Kernel {
                 System.Threading.Thread.Sleep(500);
                 adjustStatus(s + 1, winSize);
             }
-            return new Rectangle(50, 50, 100, 100);
+            return new Rectangle(435, 120, 30, 30);
         }
 
 		// HELPER FUNCTIONS

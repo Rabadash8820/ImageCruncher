@@ -42,9 +42,8 @@ namespace GuiShell.Forms {
         }
         private void ImgPicBox_Paint(object sender, PaintEventArgs e) {
             if (_rollingBallRegion.HasValue) {
-                using (Pen pen = new Pen(Color.Red, 2)) {
-                    e.Graphics.DrawRectangle(pen, _rollingBallRegion.Value);
-                }
+                Rectangle region = adjustedOrnament(_rollingBallRegion.Value);
+                e.Graphics.DrawRectangle(Pens.Red, region);
             }
         }
         private void WatercolorBtn_Click(object sender, EventArgs e) {
@@ -64,6 +63,8 @@ namespace GuiShell.Forms {
         private void RollingBallForm_RollingBallCompleted(object sender, RollingBallCompletedEventArgs e) {
             _rollingBallRegion = e.OptimalRegion;
             ImgPicBox.Refresh();
+            string msg = $"Optimal region is the rectangle {e.OptimalRegion}.";
+            log(msg);
         }
         private void ClearImgBtn_Click(object sender, EventArgs e) {
             clearOrnaments();
@@ -113,14 +114,46 @@ namespace GuiShell.Forms {
         }
         private void clearOrnaments() {
             _rollingBallRegion = null;
+
+            log("Image cleared.");
         }
         private void changeImage(ImageWrapper img) {
             ImageWrapper currImg = _imageBS.DataSource as ImageWrapper;
-            if (currImg.FilePath != null) {
-                Bitmap b;
-            }
-
             _imageBS.DataSource = img;
+
+            string msg = (img.FilePath != null) ? $"Image set to {img.FilePath}." : "Image closed.";
+            log(msg);
+        }
+        private Rectangle adjustedOrnament(Rectangle region) {
+            // Reposition/resize the provided Rectangle to match the PictureBox image
+            Rectangle imgRect = imageRectangle();
+            float ratio = (float)imgRect.Height / (float)ImgPicBox.Image.Height;
+            region.X = imgRect.X + (int)(region.X * ratio);
+            region.Y = imgRect.Y + (int)(region.Y * ratio);
+            region.Width = (int)(region.Width * ratio);
+            region.Height = (int)(region.Height * ratio);
+
+            return region;
+        }
+        private Rectangle imageRectangle() {
+            // Code basically copies what PictureBox already does (see PictureBox.ImageRectangleFromSizeMode reference at http://referencesource.microsoft.com/)
+            Rectangle c = ImgPicBox.ClientRectangle;
+            Rectangle result = new Rectangle();
+            Size i = ImgPicBox.Image.Size;
+            float ratio = Math.Min((float)c.Width / (float)i.Width, (float)c.Height / (float)i.Height);
+            result.Width = (int)(i.Width * ratio);
+            result.Height = (int)(i.Height * ratio);
+            result.X = (c.Width - result.Width) / 2;
+            result.Y = (c.Height - result.Height) / 2;
+
+            return result;
+        }
+        private void log(object msgObject) {
+            // Display the current date and time, followed by the provided data
+            DateTime now = DateTime.Now;
+            string msg = $"{now.ToShortDateString()} {now.ToLongTimeString()}>  {msgObject}";
+            OutputListbox.Items.Add(msg);
+            OutputListbox.TopIndex = OutputListbox.Items.Count - 1;
         }
 
     }

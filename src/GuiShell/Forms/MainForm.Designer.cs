@@ -36,11 +36,16 @@
             this.MainPanel = new System.Windows.Forms.Panel();
             this.ClearImgBtn = new System.Windows.Forms.Button();
             this.CloseFileBtn = new System.Windows.Forms.Button();
-            this.OutputLbl = new System.Windows.Forms.Label();
+            this.MainSplit = new System.Windows.Forms.SplitContainer();
+            this.OutputListbox = new System.Windows.Forms.ListBox();
             this.MainToolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImgPicBox)).BeginInit();
             this.MainTblLayout.SuspendLayout();
             this.MainPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MainSplit)).BeginInit();
+            this.MainSplit.Panel1.SuspendLayout();
+            this.MainSplit.Panel2.SuspendLayout();
+            this.MainSplit.SuspendLayout();
             this.SuspendLayout();
             // 
             // ImgFileDialog
@@ -85,7 +90,7 @@
             this.RollingBallBtn});
             this.MainToolStrip.Location = new System.Drawing.Point(0, 0);
             this.MainToolStrip.Name = "MainToolStrip";
-            this.MainToolStrip.Size = new System.Drawing.Size(673, 25);
+            this.MainToolStrip.Size = new System.Drawing.Size(861, 25);
             this.MainToolStrip.TabIndex = 4;
             this.MainToolStrip.Text = "toolStrip1";
             // 
@@ -112,9 +117,10 @@
             // ImgPicBox
             // 
             this.ImgPicBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ImgPicBox.Location = new System.Drawing.Point(3, 43);
+            this.ImgPicBox.Location = new System.Drawing.Point(0, 0);
             this.ImgPicBox.Name = "ImgPicBox";
-            this.ImgPicBox.Size = new System.Drawing.Size(667, 389);
+            this.ImgPicBox.Padding = new System.Windows.Forms.Padding(75, 50, 20, 33);
+            this.ImgPicBox.Size = new System.Drawing.Size(851, 239);
             this.ImgPicBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ImgPicBox.TabIndex = 5;
             this.ImgPicBox.TabStop = false;
@@ -124,36 +130,36 @@
             // 
             this.MainTblLayout.ColumnCount = 1;
             this.MainTblLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.MainTblLayout.Controls.Add(this.ImgPicBox, 0, 1);
             this.MainTblLayout.Controls.Add(this.MainPanel, 0, 0);
+            this.MainTblLayout.Controls.Add(this.MainSplit, 0, 1);
             this.MainTblLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainTblLayout.Location = new System.Drawing.Point(0, 25);
             this.MainTblLayout.Name = "MainTblLayout";
             this.MainTblLayout.RowCount = 2;
             this.MainTblLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.MainTblLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.MainTblLayout.Size = new System.Drawing.Size(673, 435);
+            this.MainTblLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.MainTblLayout.Size = new System.Drawing.Size(861, 382);
             this.MainTblLayout.TabIndex = 6;
             // 
             // MainPanel
             // 
             this.MainPanel.Controls.Add(this.ClearImgBtn);
             this.MainPanel.Controls.Add(this.CloseFileBtn);
-            this.MainPanel.Controls.Add(this.OutputLbl);
             this.MainPanel.Controls.Add(this.ImgLabel);
             this.MainPanel.Controls.Add(this.ImgBrowseBtn);
             this.MainPanel.Controls.Add(this.ImgTxt);
             this.MainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainPanel.Location = new System.Drawing.Point(3, 3);
             this.MainPanel.Name = "MainPanel";
-            this.MainPanel.Size = new System.Drawing.Size(667, 34);
+            this.MainPanel.Size = new System.Drawing.Size(855, 34);
             this.MainPanel.TabIndex = 6;
             // 
             // ClearImgBtn
             // 
             this.ClearImgBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ClearImgBtn.AutoSize = true;
-            this.ClearImgBtn.Location = new System.Drawing.Point(496, 5);
+            this.ClearImgBtn.Location = new System.Drawing.Point(684, 5);
             this.ClearImgBtn.Name = "ClearImgBtn";
             this.ClearImgBtn.Size = new System.Drawing.Size(77, 23);
             this.ClearImgBtn.TabIndex = 5;
@@ -165,7 +171,7 @@
             // 
             this.CloseFileBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.CloseFileBtn.AutoSize = true;
-            this.CloseFileBtn.Location = new System.Drawing.Point(579, 5);
+            this.CloseFileBtn.Location = new System.Drawing.Point(767, 5);
             this.CloseFileBtn.Name = "CloseFileBtn";
             this.CloseFileBtn.Size = new System.Drawing.Size(79, 23);
             this.CloseFileBtn.TabIndex = 4;
@@ -173,32 +179,60 @@
             this.CloseFileBtn.UseVisualStyleBackColor = true;
             this.CloseFileBtn.Click += new System.EventHandler(this.CloseFileBtn_Click);
             // 
-            // OutputLbl
+            // MainSplit
             // 
-            this.OutputLbl.AutoSize = true;
-            this.OutputLbl.ForeColor = System.Drawing.Color.Red;
-            this.OutputLbl.Location = new System.Drawing.Point(406, 10);
-            this.OutputLbl.Name = "OutputLbl";
-            this.OutputLbl.Size = new System.Drawing.Size(0, 13);
-            this.OutputLbl.TabIndex = 3;
+            this.MainSplit.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.MainSplit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MainSplit.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this.MainSplit.Location = new System.Drawing.Point(3, 43);
+            this.MainSplit.Name = "MainSplit";
+            this.MainSplit.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // MainSplit.Panel1
+            // 
+            this.MainSplit.Panel1.Controls.Add(this.ImgPicBox);
+            // 
+            // MainSplit.Panel2
+            // 
+            this.MainSplit.Panel2.Controls.Add(this.OutputListbox);
+            this.MainSplit.Panel2MinSize = 30;
+            this.MainSplit.Size = new System.Drawing.Size(855, 336);
+            this.MainSplit.SplitterDistance = 243;
+            this.MainSplit.TabIndex = 7;
+            // 
+            // OutputListbox
+            // 
+            this.OutputListbox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.OutputListbox.FormattingEnabled = true;
+            this.OutputListbox.Location = new System.Drawing.Point(0, 0);
+            this.OutputListbox.Name = "OutputListbox";
+            this.OutputListbox.ScrollAlwaysVisible = true;
+            this.OutputListbox.Size = new System.Drawing.Size(851, 85);
+            this.OutputListbox.TabIndex = 0;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(673, 460);
+            this.ClientSize = new System.Drawing.Size(861, 407);
             this.Controls.Add(this.MainTblLayout);
             this.Controls.Add(this.MainToolStrip);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MinimumSize = new System.Drawing.Size(570, 180);
             this.Name = "MainForm";
             this.ShowIcon = false;
             this.Text = "Image Cruncher";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.MainToolStrip.ResumeLayout(false);
             this.MainToolStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImgPicBox)).EndInit();
             this.MainTblLayout.ResumeLayout(false);
             this.MainPanel.ResumeLayout(false);
             this.MainPanel.PerformLayout();
+            this.MainSplit.Panel1.ResumeLayout(false);
+            this.MainSplit.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.MainSplit)).EndInit();
+            this.MainSplit.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -216,9 +250,10 @@
         private System.Windows.Forms.PictureBox ImgPicBox;
         private System.Windows.Forms.TableLayoutPanel MainTblLayout;
         private System.Windows.Forms.Panel MainPanel;
-        private System.Windows.Forms.Label OutputLbl;
         private System.Windows.Forms.Button CloseFileBtn;
         private System.Windows.Forms.Button ClearImgBtn;
+        private System.Windows.Forms.SplitContainer MainSplit;
+        private System.Windows.Forms.ListBox OutputListbox;
     }
 }
 
