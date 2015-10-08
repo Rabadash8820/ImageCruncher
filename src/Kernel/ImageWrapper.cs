@@ -69,20 +69,22 @@ namespace Kernel {
                 File.Copy(_filePath, newPath);
             Bitmap bmp = (args.SaveUnfiltered ? Image.FromFile(newPath) as Bitmap : this.Bitmap);
 
-            // Lock the image's bits and store its pixel data in an array
+            // Store the image's pixel data into a byte[] array
             Rectangle bounds = new Rectangle(0, 0, bmp.Width, bmp.Height);
             BitmapData data = bmp.LockBits(bounds, ImageLockMode.ReadWrite, bmp.PixelFormat);
             IntPtr ptr = data.Scan0;
-            int bytes  = Math.Abs(data.Stride) * bmp.Height;
-            byte[] rgbValues = new byte[bytes];
-            Marshal.Copy(ptr, rgbValues, 0, bytes);
+            int numBytes  = Math.Abs(data.Stride) * bmp.Height;
+            byte[] rgbValues = new byte[numBytes];
+            Marshal.Copy(ptr, rgbValues, 0, numBytes);
+            bmp.UnlockBits(data);
 
             // Perform the requested filter by passing it the byte array and arguments
             doApplyFilter(filter, rgbValues, args);
             
-            // Copy the RGB values back to the bitmap and unlock the image's bits
-            Marshal.Copy(rgbValues, 0, ptr, bytes);
-            bmp.UnlockBits(data);
+            // Copy the RGB values back to the bitmap
+            Marshal.Copy(rgbValues, 0, ptr, numBytes);
+            FileStream derp = new FileStream(newPath, FileMode.Create);
+            bmp.Save(derp, bmp.RawFormat);
             ImageWrapper result = (args.SaveUnfiltered ? new ImageWrapper(newPath) : this);
             _doWorkEventArgs.Result = result;
 
@@ -126,7 +128,7 @@ namespace Kernel {
             switch (filter) {
                 case Filter.Watercolor:
                     WatercolorArgs wa = args as WatercolorArgs;
-                    watercolorFilter(wa.WindowSize, wa.SaveUnfiltered);
+                    watercolorFilter(rgbValues, wa.WindowSize, wa.SaveUnfiltered);
                     break;
 
                 default:
@@ -149,11 +151,13 @@ namespace Kernel {
             // Return the result of that operation, where applicable
             return result;
         }
-        private void watercolorFilter(int winSize, bool saveUnfiltered) {
+        private void watercolorFilter(byte[] rgbValues, int winSize, bool saveUnfiltered) {
             // Process
-            for (int s = 0; s < winSize; ++s) {
-                System.Threading.Thread.Sleep(500);
-                adjustStatus(s + 1, winSize);
+            long length = rgbValues.LongLength;
+            for (long b = 0; b < length; ++b) {
+                rgbValues[b] = 200;
+                if (b % 1000 == 0)
+                    adjustStatus(b, length);
             }
         }
         private Rectangle rollingBall(int winSize) {
@@ -182,12 +186,22 @@ namespace Kernel {
             _worker.ReportProgress((int)percent);
         }
         private string newFilePath(string oldFilePath, string appendToName) {
+            // Get the parts of the old file path
             string dirName = Path.GetDirectoryName(oldFilePath);
             string fileName = Path.GetFileNameWithoutExtension(oldFilePath);
-            string extension = Path.GetExtension(oldFilePath);
-            string newFileName = String.Format("{0}_{1}{2}", fileName, appendToName, extension);
-            string newPath = Path.Combine(dirName, newFileName);
+            string extension = Path.GetExtension(oldFilePath);  // includes the dot
 
+            // Create a new unique path by adding numeric suffixes (e.g., "filename_append(3).ext")
+            int f=1;
+            string newFileName = $"{fileName}_{appendToName}";
+            string newPath = Path.Combine(dirName, $"{newFileName}{extension}");
+            while (File.Exists(newPath)) {
+                newFileName = $"{newFileName}({f})";
+                newPath = Path.Combine(dirName, $"{newFileName}{extension}");
+                ++f;
+            }
+
+            newPath = Path.Combine(dirName, $"{newFileName}{extension}");
             return newPath;
         }
         private void swap(ref int a, ref int n) {

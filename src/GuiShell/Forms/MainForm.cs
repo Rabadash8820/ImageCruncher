@@ -47,9 +47,7 @@ namespace GuiShell.Forms {
             }
         }
         private void WatercolorBtn_Click(object sender, EventArgs e) {
-            WatercolorForm form = new WatercolorForm(_imageBS.DataSource as ImageWrapper);
-            form.WatercolorCompleted += WatercolorForm_WatercolorCompleted;
-            form.ShowDialog();
+            applyFilter(Filter.Watercolor);
         }
         private void WatercolorForm_WatercolorCompleted(object sender, WatercolorCompletedEventArgs e) {
             clearOrnaments();
@@ -112,6 +110,25 @@ namespace GuiShell.Forms {
             b.Format += EnabledPropertyBinding_Format;
             return b;
         }
+        private void applyFilter(Filter filter) {
+            // Release the handle on the currently open image
+            changeImage(new ImageWrapper());
+
+            // Define the appropriate form and subscribe to any events
+            Form form;
+            switch (filter) {
+                case Filter.Watercolor:
+                    form = new WatercolorForm(_imageBS.DataSource as ImageWrapper);
+                    (form as WatercolorForm).WatercolorCompleted += WatercolorForm_WatercolorCompleted;
+                    break;
+
+                default:
+                    throw new NotImplementedException();
+            }
+
+            // Show the form
+            form.ShowDialog();
+        }
         private void clearOrnaments() {
             _rollingBallRegion = null;
 
@@ -121,7 +138,7 @@ namespace GuiShell.Forms {
             ImageWrapper currImg = _imageBS.DataSource as ImageWrapper;
             _imageBS.DataSource = img;
 
-            string msg = (img.FilePath != null) ? $"Image set to {img.FilePath}." : "Image closed.";
+            string msg = (img?.FilePath != null) ? $"Image set to {img.FilePath}." : "Image closed.";
             log(msg);
         }
         private Rectangle adjustedOrnament(Rectangle region) {
