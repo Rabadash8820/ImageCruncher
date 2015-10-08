@@ -23,7 +23,6 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.ImgFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.ImgBrowseBtn = new System.Windows.Forms.Button();
             this.ImgLabel = new System.Windows.Forms.Label();
@@ -38,6 +37,9 @@
             this.CloseFileBtn = new System.Windows.Forms.Button();
             this.MainSplit = new System.Windows.Forms.SplitContainer();
             this.OutputListbox = new System.Windows.Forms.ListBox();
+            this.FiltersLbl = new System.Windows.Forms.ToolStripLabel();
+            this.OperationsLbl = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.MainToolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImgPicBox)).BeginInit();
             this.MainTblLayout.SuspendLayout();
@@ -86,7 +88,10 @@
             // MainToolStrip
             // 
             this.MainToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.FiltersLbl,
             this.WatercolorBtn,
+            this.toolStripSeparator1,
+            this.OperationsLbl,
             this.RollingBallBtn});
             this.MainToolStrip.Location = new System.Drawing.Point(0, 0);
             this.MainToolStrip.Name = "MainToolStrip";
@@ -97,7 +102,7 @@
             // WatercolorBtn
             // 
             this.WatercolorBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.WatercolorBtn.Image = ((System.Drawing.Image)(resources.GetObject("WatercolorBtn.Image")));
+            this.WatercolorBtn.Image = global::GuiShell.Properties.Resources.watercolor;
             this.WatercolorBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.WatercolorBtn.Name = "WatercolorBtn";
             this.WatercolorBtn.Size = new System.Drawing.Size(23, 22);
@@ -107,7 +112,7 @@
             // RollingBallBtn
             // 
             this.RollingBallBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.RollingBallBtn.Image = ((System.Drawing.Image)(resources.GetObject("RollingBallBtn.Image")));
+            this.RollingBallBtn.Image = global::GuiShell.Properties.Resources.rolling_ball;
             this.RollingBallBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.RollingBallBtn.Name = "RollingBallBtn";
             this.RollingBallBtn.Size = new System.Drawing.Size(23, 22);
@@ -210,6 +215,23 @@
             this.OutputListbox.Size = new System.Drawing.Size(851, 85);
             this.OutputListbox.TabIndex = 0;
             // 
+            // FiltersLbl
+            // 
+            this.FiltersLbl.Name = "FiltersLbl";
+            this.FiltersLbl.Size = new System.Drawing.Size(38, 22);
+            this.FiltersLbl.Text = "Filters";
+            // 
+            // OperationsLbl
+            // 
+            this.OperationsLbl.Name = "OperationsLbl";
+            this.OperationsLbl.Size = new System.Drawing.Size(65, 22);
+            this.OperationsLbl.Text = "Operations";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -254,6 +276,9 @@
         private System.Windows.Forms.Button ClearImgBtn;
         private System.Windows.Forms.SplitContainer MainSplit;
         private System.Windows.Forms.ListBox OutputListbox;
+        private System.Windows.Forms.ToolStripLabel FiltersLbl;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripLabel OperationsLbl;
     }
 }
 
