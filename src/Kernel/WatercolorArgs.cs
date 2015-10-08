@@ -1,8 +1,7 @@
 ﻿namespace Kernel {
 
-    public struct WatercolorArgs {
+    public class WatercolorArgs : FilterArgs{
         public int WindowSize;
-        public bool SaveUnfiltered;
     }
 
 }

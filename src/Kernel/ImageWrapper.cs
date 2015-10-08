@@ -3,6 +3,8 @@ using System.IO;
 using System.Drawing;
 using System.ComponentModel;
 using System.Drawing.Imaging;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 using Kernel.Properties;
 
@@ -15,8 +17,15 @@ namespace Kernel {
         private bool _statusAdjustable;
         private BackgroundWorker _worker;
         private DoWorkEventArgs _doWorkEventArgs;
+        private static Dictionary<Filter, string> _filterAppends;
 
         // CONSTRUCTORS
+        static ImageWrapper() {
+            // Associate each filter with a string to append to file names
+            _filterAppends = new Dictionary<Filter, string>() {
+                { Filter.Watercolor, Resources.WatercolorFileAppend },
+            };
+        }
         public ImageWrapper() {
             reset(null);
         }
@@ -28,7 +37,7 @@ namespace Kernel {
         public string FilePath {
             get { return _filePath; }
         }
-        public Bitmap BitmapImage {
+        public Bitmap Bitmap {
             get {
                 if (_image != null)
                     return _image;
@@ -39,15 +48,13 @@ namespace Kernel {
                 return null;
             }
         }
-        public void ApplyFilter(Filter filter, object args, BackgroundWorker worker = null, DoWorkEventArgs e = null) {
+        public void ApplyFilter(Filter filter, FilterArgs args, BackgroundWorker worker = null, DoWorkEventArgs e = null) {
             if (_filePath == null)
                 return;
 
             // BackgroundWorker and DoWorkEventArgs must be both null or both non-null
-            if ((worker != null) ^ (e != null)) {
-                throw new ArgumentException(
-                    String.Format("{0} and {1} must be either both null or both non-null", "worker", "e"));
-            }
+            if ((worker != null) ^ (e != null))
+                throw new ArgumentException($"{nameof(worker)} and {nameof(e)} must be either both null or both non-null");
 
             // Set a flag for whether the filter operation will be able to adjust/report its status
             _statusAdjustable = (worker != null && e != null);
@@ -56,8 +63,27 @@ namespace Kernel {
                 _doWorkEventArgs = e;
             }
 
-            // Perform the requested filter by passing it the provided arguments
-            object result = filterResult(filter, args);
+            // Define the Bitmap to be manipulated (either the current image or a copy)
+            string newPath = newFilePath(_filePath, _filterAppends[Filter.Watercolor]);
+            if (args.SaveUnfiltered)
+                File.Copy(_filePath, newPath);
+            Bitmap bmp = (args.SaveUnfiltered ? Image.FromFile(newPath) as Bitmap : this.Bitmap);
+
+            // Lock the image's bits and store its pixel data in an array
+            Rectangle bounds = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            BitmapData data = bmp.LockBits(bounds, ImageLockMode.ReadWrite, bmp.PixelFormat);
+            IntPtr ptr = data.Scan0;
+            int bytes  = Math.Abs(data.Stride) * bmp.Height;
+            byte[] rgbValues = new byte[bytes];
+            Marshal.Copy(ptr, rgbValues, 0, bytes);
+
+            // Perform the requested filter by passing it the byte array and arguments
+            doApplyFilter(filter, rgbValues, args);
+            
+            // Copy the RGB values back to the bitmap and unlock the image's bits
+            Marshal.Copy(rgbValues, 0, ptr, bytes);
+            bmp.UnlockBits(data);
+            ImageWrapper result = (args.SaveUnfiltered ? new ImageWrapper(newPath) : this);
             _doWorkEventArgs.Result = result;
 
             _worker = null;
@@ -68,10 +94,8 @@ namespace Kernel {
                 return;
 
             // BackgroundWorker and DoWorkEventArgs must be both null or both non-null
-            if ((worker != null) ^ (e != null)) {
-                throw new ArgumentException(
-                    String.Format("{0} and {1} must be either both null or both non-null", "worker", "e"));
-            }
+            if ((worker != null) ^ (e != null))
+                throw new ArgumentException($"{nameof(worker)} and {nameof(e)} must be either both null or both non-null");
 
             // Set a flag for whether the filter operation will be able to adjust/report its status
             _statusAdjustable = (worker != null && e != null);
@@ -97,27 +121,21 @@ namespace Kernel {
         }
 
         // ALGORITHMS
-        private ImageWrapper filterResult(Filter filter, object args) {
+        private void doApplyFilter(Filter filter, byte[] rgbValues, FilterArgs args) {
             // Perform the requested filter by passing it the provided arguments
-            ImageWrapper result = null;
             switch (filter) {
                 case Filter.Watercolor:
-                    WatercolorArgs wa = (WatercolorArgs)args;
-                    result = watercolorFilter(wa.WindowSize, wa.SaveUnfiltered);
+                    WatercolorArgs wa = args as WatercolorArgs;
+                    watercolorFilter(wa.WindowSize, wa.SaveUnfiltered);
                     break;
 
                 default:
                     throw new NotImplementedException();
             }
-
-            // Return the result of that filter, where applicable
-            return result;
         }
         private object operationResult(Operation op, object args) {
             // Perform the requested operation by passing it the provided arguments
             object result = null;
-            int width = this.BitmapImage.Width;
-            int height = this.BitmapImage.Height;
             switch (op) {
                 case Operation.RollingBall:
                     RollingBallArgs rba = (RollingBallArgs)args;
@@ -131,26 +149,12 @@ namespace Kernel {
             // Return the result of that operation, where applicable
             return result;
         }
-        private ImageWrapper watercolorFilter(int winSize, bool saveUnfiltered) {
-            // Define the Bitmap to be manipulated (either the current image or a copy)
-            string newPath = newFilePath(_filePath, Resources.WatercolorFileAppend);
-            if (saveUnfiltered)
-                File.Copy(_filePath, newPath);
-            Bitmap bitmap = (saveUnfiltered ? Bitmap.FromFile(newPath) as Bitmap : this.BitmapImage);
-
-            int width = bitmap.Width;
-            int height = bitmap.Height;
-            Rectangle bounds = new Rectangle(0,0,width,height);
-            BitmapData data = bitmap.LockBits(bounds, ImageLockMode.ReadWrite, PixelFormat.DontCare);
-            
+        private void watercolorFilter(int winSize, bool saveUnfiltered) {
+            // Process
             for (int s = 0; s < winSize; ++s) {
                 System.Threading.Thread.Sleep(500);
                 adjustStatus(s + 1, winSize);
             }
-
-            bitmap.UnlockBits(data);
-            ImageWrapper result = (saveUnfiltered ? new ImageWrapper(newPath) : this);
-            return result;
         }
         private Rectangle rollingBall(int winSize) {
             for (int s = 0; s < winSize; ++s) {

@@ -36,7 +36,7 @@ namespace GuiShell.Forms {
         private void WatercolorBgw_DoWork(object sender, DoWorkEventArgs e) {
             BackgroundWorker worker = sender as BackgroundWorker;
             _img.ApplyFilter(
-                Filter.Watercolor, e.Argument, worker, e);
+                Filter.Watercolor, e.Argument as FilterArgs, worker, e);
         }
         private void WatercolorBgw_ProgressChanged(object sender, ProgressChangedEventArgs e) {
             MainProgress.Value = e.ProgressPercentage;

@@ -91,7 +91,7 @@ namespace GuiShell.Forms {
             Binding picBinding = new Binding(
                 "Image",
                 _imageBS,
-                Util.GetPropertyName((ImageWrapper i) => i.BitmapImage),
+                Util.GetPropertyName((ImageWrapper i) => i.Bitmap),
                 true,
                 DataSourceUpdateMode.Never,
                 new Bitmap(1, 1));
