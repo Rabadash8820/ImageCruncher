@@ -1,6 +1,6 @@
 ﻿namespace Kernel.Args {
 
-    public class WatercolorArgs : FilterArgs{
+    public class WatercolorArgs : ImageArgs {
         public int WindowSize;
     }
 

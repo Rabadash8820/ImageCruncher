@@ -29,11 +29,14 @@ namespace GuiShell.Forms {
         // EVENT HANDLERS
         private void ApplyBtn_Click(object sender, EventArgs e) {
             toggleControls(true);
+
+            // Define the arguments to pass the operation
             int winSize = (int)WinSizeUpDown.Value;
             RollingBallArgs args = new RollingBallArgs() {
-                Bitmap = Util.BitmapFromFile(_imgFile.FullName, false),
+                Bitmap = Image.FromFile(_imgFile.FullName) as Bitmap,
                 WindowSize = winSize
             };
+
             RollingBallBgw.RunWorkerAsync(args);
         }
         private void CancelBtn_Click(object sender, EventArgs e) {
@@ -42,7 +45,7 @@ namespace GuiShell.Forms {
         private void RollingBallBgw_DoWork(object sender, DoWorkEventArgs e) {
             BackgroundWorker worker = sender as BackgroundWorker;
             ImageWrapper.PerformOperation(
-                Operation.RollingBall, e.Argument, worker, e);
+                Operation.RollingBall, e.Argument as RollingBallArgs, worker, e);
         }
         private void RollingBallBgw_ProgressChanged(object sender, ProgressChangedEventArgs e) {
             MainProgress.Value = e.ProgressPercentage;

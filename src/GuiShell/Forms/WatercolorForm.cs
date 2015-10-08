@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Drawing;
 using System.Windows.Forms;
 using System.ComponentModel;
 
@@ -24,13 +25,14 @@ namespace GuiShell.Forms {
         // EVENT HANDLERS
         private void ApplyBtn_Click(object sender, EventArgs e) {
             toggleControls(true);
+
+            // Define the arguments to pass the filter function
             int winSize = (int)WinSizeUpDown.Value;
-            bool save = CopyChk.Checked;
             WatercolorArgs args = new WatercolorArgs() {
-                Bitmap = Util.BitmapFromFile(_imgFile.FullName, false),
-                WindowSize = winSize,
-                SaveUnfiltered = save
+                Bitmap = Image.FromFile(_imgFile.FullName) as Bitmap,
+                WindowSize = winSize
             };
+
             WatercolorBgw.RunWorkerAsync(args);
         }
         private void CancelBtn_Click(object sender, EventArgs e) {
@@ -39,7 +41,7 @@ namespace GuiShell.Forms {
         private void WatercolorBgw_DoWork(object sender, DoWorkEventArgs e) {
             BackgroundWorker worker = sender as BackgroundWorker;
             ImageWrapper.ApplyFilter(
-                Filter.Watercolor, e.Argument as FilterArgs, worker, e);
+                Filter.Watercolor, e.Argument as WatercolorArgs, worker, e);
         }
         private void WatercolorBgw_ProgressChanged(object sender, ProgressChangedEventArgs e) {
             MainProgress.Value = e.ProgressPercentage;
@@ -51,8 +53,10 @@ namespace GuiShell.Forms {
                 toggleControls(false);
             else {
                 toggleControls(false);
-                FileInfo img = e.Result as FileInfo;
-                OnCompleted(img);
+                Bitmap bmp = e.Result as Bitmap;
+                string newPath = Util.newFilePath(_imgFile.FullName, nameof(Filter.Watercolor));
+                bmp.Save(newPath);
+                OnCompleted(new FileInfo(newPath));
 
                 this.Close();
             }
@@ -76,8 +80,6 @@ namespace GuiShell.Forms {
         private void toggleControls(bool running) {
             WinSizeLbl.Enabled = !running;
             WinSizeUpDown.Enabled = !running;
-            CopyLbl.Enabled = !running;
-            CopyChk.Enabled = !running;
             ApplyBtn.Enabled = !running;
             CancelBtn.Enabled = running;
         }
