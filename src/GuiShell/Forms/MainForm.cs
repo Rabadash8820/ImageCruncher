@@ -46,7 +46,9 @@ namespace GuiShell.Forms {
             }
         }
         private void WatercolorBtn_Click(object sender, EventArgs e) {
-            applyFilter(Filter.Watercolor);
+            WatercolorForm form = new WatercolorForm(_imageBS.DataSource as FileInfo);
+            form.WatercolorCompleted += WatercolorForm_WatercolorCompleted;
+            form.ShowDialog();
         }
         private void WatercolorForm_WatercolorCompleted(object sender, WatercolorCompletedEventArgs e) {
             clearOrnaments();
@@ -118,25 +120,6 @@ namespace GuiShell.Forms {
             ImgPicBox.Image.Dispose();
             ImgPicBox.Image = null;
             ImgTxt.Text = "";
-        }
-        private void applyFilter(Filter filter) {
-            // Release the handle on the currently open image
-            //changeImage(null);
-
-            // Define the appropriate form and subscribe to any events
-            Form form;
-            switch (filter) {
-                case Filter.Watercolor:
-                    form = new WatercolorForm(_imageBS.DataSource as FileInfo);
-                    (form as WatercolorForm).WatercolorCompleted += WatercolorForm_WatercolorCompleted;
-                    break;
-
-                default:
-                    throw new NotImplementedException();
-            }
-
-            // Show the form
-            form.ShowDialog();
         }
         private void clearOrnaments() {
             _rollingBallRegion = null;

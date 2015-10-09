@@ -12,12 +12,14 @@ namespace Kernel {
 
     public static class ImageCruncher {
         // ENCAPSULATED FIELDS
+        private static Random _rand;
         private static bool _statusAdjustable;
         private static BackgroundWorker _worker;
         private static DoWorkEventArgs _doWorkEventArgs;
 
         // CONSTRUCTORS
         static ImageCruncher() {
+            _rand = new Random();
         }
 
         // INTERFACE
@@ -42,10 +44,10 @@ namespace Kernel {
             byte[] bytes = new byte[numBytes];
             Marshal.Copy(ptr, bytes, 0, numBytes);
             bmp.UnlockBits(data);
-            List<RgbPixel> pixels = pixelsFromBytes(bytes, bmp.Width, bmp.Height);
+            RgbPixel[,] pixels = pixelsFromBytes(bytes, bmp.Width, bmp.Height);
 
             // Perform the requested filter by passing it the pixels and provided arguments
-            doApplyFilter(filter, pixels, args);
+            doApplyFilter(filter, ref pixels, args);
 
             // Copy this List of pixel values back into the Bitmap and make it the result
             bytes = bytesFromPixels(pixels);
@@ -76,7 +78,7 @@ namespace Kernel {
             byte[] bytes = new byte[numBytes];
             Marshal.Copy(ptr, bytes, 0, numBytes);
             bmp.UnlockBits(data);
-            List<RgbPixel> pixels = pixelsFromBytes(bytes, bmp.Width, bmp.Height);
+            RgbPixel[,] pixels = pixelsFromBytes(bytes, bmp.Width, bmp.Height);
 
             // Perform the requested operation by passing it the pixels and provided arguments
             object result = operationResult(op, pixels, args);
@@ -87,19 +89,46 @@ namespace Kernel {
         }
 
         // ALGORITHMS
-        private static void watercolorFilter(List<RgbPixel> pixels, int winSize) {
-            // Process
-            int length = pixels.Count;
-            for (int p = 0; p < length; ++p) {
-                if (p % 1000 == 0) {
-                    bool keepGoing = adjustStatus(p, length);
+        private static void watercolorFilter(ref RgbPixel[,] pixels, int winSize) {
+            // Make a new array to hold the filtered pixels
+            int numRows = pixels.GetLength(0);
+            int numCols = pixels.GetLength(1);
+            RgbPixel[,] fPixels = new RgbPixel[numRows, numCols];
+
+            // Loop over each pixel
+            for (int row = 0; row < numRows; ++row) {
+                for (int col = 0; col < numCols; ++col) {
+                    // Create a window around this pixel
+                    int numWinPixels = 0;
+                    int bound = winSize / 2;
+                    RgbPixel[] window = new RgbPixel[winSize * winSize];
+                    for (int rOffset = -bound; rOffset <= bound; ++rOffset) {
+                        for (int cOffset = -bound; cOffset <= bound; ++cOffset) {
+                            int r = row + rOffset;
+                            int c = col + cOffset;
+                            if ((0 <= r && r < numRows) && (0 <= c && c < numCols))
+                                window[numWinPixels++] = pixels[r, c];
+                        }
+                    }
+
+                    // Set the value of the filtered pixel at this position to the median values of the window
+                    RgbPixel med = median(window, numWinPixels);
+                    fPixels[row, col] = med;
+                }
+
+                // Report status after every couple rows
+                if (row % 100 == 0) {
+                    bool keepGoing = adjustStatus(row, numRows);
                     if (!keepGoing)
                         return;
                 }
             }
+
+            // Store the array of filtered pixels back into the original array and delete the former
+            pixels = fPixels;
         }
-        private static Rectangle rollingBall(List<RgbPixel> pixels, int winSize) {
-            int length = pixels.Count;
+        private static Rectangle rollingBall(RgbPixel[,] pixels, int winSize) {
+            int length = pixels.GetLength(0) * pixels.GetLength(1);
             for (long b = 0; b < length; ++b) {
                 if (b % 10000 == 0) {
                     bool keepGoing = adjustStatus(b, length);
@@ -117,19 +146,19 @@ namespace Kernel {
         private static string createPgm(string filePath, int width, int height, int maxGrey, int[][] pixels) {
             return "";
         }
-        private static void doApplyFilter(Filter filter, List<RgbPixel> pixels, ImageArgs args) {
+        private static void doApplyFilter(Filter filter, ref RgbPixel[,] pixels, ImageArgs args) {
             // Perform the requested filter by passing it the provided arguments
             switch (filter) {
                 case Filter.Watercolor:
                     WatercolorArgs wa = args as WatercolorArgs;
-                    watercolorFilter(pixels, wa.WindowSize);
+                    watercolorFilter(ref pixels, wa.WindowSize);
                     break;
 
                 default:
                     throw new NotImplementedException();
             }
         }
-        private static object operationResult(Operation op, List<RgbPixel> pixels, object args) {
+        private static object operationResult(Operation op, RgbPixel[,] pixels, object args) {
             // Perform the requested operation by passing it the provided arguments
             object result = null;
             switch (op) {
@@ -160,78 +189,77 @@ namespace Kernel {
             _worker.ReportProgress((int)percent);
             return true;
         }
-        private static List<RgbPixel> pixelsFromBytes(byte[] bytes, int imgWidth, int imgHeight) {
-            List<RgbPixel> pixels = new List<RgbPixel>();
+        private static RgbPixel[,] pixelsFromBytes(byte[] bytes, int imgWidth, int imgHeight) {
+            RgbPixel[,] pixels = new RgbPixel[imgHeight, imgWidth];
 
             // Calculate the number of bytes per pixel
             int numBytes = bytes.Length;
             int bytesPerPixel = numBytes / (imgWidth * imgHeight);
+            bool hasAlpha = (bytesPerPixel == 4);
 
-            // 3 bytes per pixel = RGB
-            if (bytesPerPixel == 3) {
-                RgbPixel pixel = default(RgbPixel);
-                for (long b = 0; b < numBytes; ++b) {
-                    int offset = (int)(b % bytesPerPixel);
-                    if (offset == 0) {
-                        pixel = new RgbPixel();
-                        pixel.Red = bytes[b];
-                    }
-                    else if (offset == 1)
-                        pixel.Green = bytes[b];
-                    else {
-                        pixel.Blue = bytes[b];
-                        pixels.Add(pixel);
-                    }
-                }
-            }
-
-            // 4 bytes per pixel = RGBA
-            else if (bytesPerPixel == 4) {
-                RgbaPixel pixel = default(RgbaPixel);
-                for (long b = 0; b < numBytes; ++b) {
-                    int offset = (int)(b % bytesPerPixel);
-                    if (offset == 0) {
-                        pixel = new RgbaPixel();
-                        pixel.Red = bytes[b];
-                    }
-                    else if (offset == 1)
-                        pixel.Green = bytes[b];
-                    else if (offset == 2)
-                        pixel.Blue = bytes[b];
-                    else {
-                        pixel.Alpha = bytes[b];
-                        pixels.Add(pixel);
-                    }
-                }
-            }
-
-            // Otherwise, throw an exception
-            else
+            // We can only handle 3 bytes per pixel (RGB) or 4 bytes per pixel (RGBA)
+            if (bytesPerPixel != 3 && bytesPerPixel != 4)
                 throw new PixelDataException($"ImageWrapper only understands PixelFormats with 3 or 4 bytes per pixel, not {bytesPerPixel}.");
+
+            // Loop over each byte to create a 2D array of pixel data
+            bool pixelMade = false;
+            RgbPixel pixel = default(RgbPixel);
+            for (int b = 0; b < numBytes; ++b) {
+                // Define the RGB(A) members of this pixel
+                int offset = (int)(b % bytesPerPixel);
+                if (offset == 0) {
+                    pixel = (hasAlpha ? new RgbaPixel() : new RgbPixel());
+                    pixel.Red = bytes[b];
+                }
+                else if (offset == 1)
+                    pixel.Green = bytes[b];
+                else if (offset == 2) {
+                    pixel.Blue = bytes[b];
+                    pixelMade = !hasAlpha;
+                }
+                else {
+                    (pixel as RgbaPixel).Alpha = bytes[b];
+                    pixelMade = true;
+                }
+
+                // Add the pixel to the matrix
+                if (pixelMade) {
+                    int p = b / bytesPerPixel;
+                    int row = p / imgWidth;
+                    int col = p % imgWidth;
+                    pixels[row, col] = pixel;
+                }
+            }
 
             return pixels;
         }
-        private static byte[] bytesFromPixels(List<RgbPixel> pixels) {
+        private static byte[] bytesFromPixels(RgbPixel[,] pixels) {
             // Determine whether these are RGB or RGBA pixels
-            int numPixels = pixels.Count;
-            bool hasAlpha = (pixels[0] is RgbaPixel);
+            int numRows = pixels.GetLength(0);
+            int numCols = pixels.GetLength(1);
+            bool hasAlpha = (pixels[0, 0] is RgbaPixel);
             int bytesPerPixel = (hasAlpha ? 4 : 3);
 
             // Populate an array of bytes from these pixels
             int b=-1;
-            byte[] bytes = new byte[numPixels * bytesPerPixel];
-            for (int p = 0; p < numPixels; ++p) {
-                bytes[++b] = pixels[p].Red;
-                bytes[++b] = pixels[p].Green;
-                bytes[++b] = pixels[p].Blue;
-                if (hasAlpha)
-                    bytes[++b] = (pixels[p] as RgbaPixel).Alpha;
+            byte[] bytes = new byte[numRows * numCols * bytesPerPixel];
+            for (int r = 0; r < numRows; ++r) {
+                for (int c=0; c < numCols; ++c) {
+                    bytes[++b] = pixels[r, c].Red;
+                    bytes[++b] = pixels[r, c].Green;
+                    bytes[++b] = pixels[r, c].Blue;
+                    if (hasAlpha)
+                        bytes[++b] = (pixels[r, c] as RgbaPixel).Alpha;
+                }
             }
 
             return bytes;
         }
-        private static int median(int[] window, int size) {
-            return 0;
+        private static RgbPixel median(RgbPixel[] window, int size) {
+            bool hasAlpha = (window[0] is RgbaPixel);
+            RgbPixel pixel = (hasAlpha ? new RgbaPixel() : new RgbPixel());
+
+            return pixel;
         }
 
     }
