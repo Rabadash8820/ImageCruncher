@@ -40,15 +40,17 @@ namespace GuiShell.Forms {
         }
         private void WatercolorBgw_DoWork(object sender, DoWorkEventArgs e) {
             BackgroundWorker worker = sender as BackgroundWorker;
-            ImageWrapper.ApplyFilter(
+            ImageCruncher.ApplyFilter(
                 Filter.Watercolor, e.Argument as WatercolorArgs, worker, e);
         }
         private void WatercolorBgw_ProgressChanged(object sender, ProgressChangedEventArgs e) {
             MainProgress.Value = e.ProgressPercentage;
         }
         private void WatercolorBgw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
-            if (e.Error != null)
+            if (e.Error != null) {
                 MessageBox.Show(e.Error.Message);
+                toggleControls(false);
+            }
             else if (e.Cancelled)
                 toggleControls(false);
             else {

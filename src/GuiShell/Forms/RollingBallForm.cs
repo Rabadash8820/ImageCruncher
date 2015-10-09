@@ -44,7 +44,7 @@ namespace GuiShell.Forms {
         }
         private void RollingBallBgw_DoWork(object sender, DoWorkEventArgs e) {
             BackgroundWorker worker = sender as BackgroundWorker;
-            ImageWrapper.PerformOperation(
+            ImageCruncher.PerformOperation(
                 Operation.RollingBall, e.Argument as RollingBallArgs, worker, e);
         }
         private void RollingBallBgw_ProgressChanged(object sender, ProgressChangedEventArgs e) {
