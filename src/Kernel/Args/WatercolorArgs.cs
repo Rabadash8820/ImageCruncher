@@ -1,7 +1,7 @@
 ﻿namespace Kernel.Args {
 
     public class WatercolorArgs : ImageArgs {
-        public int WindowSize;
+        public int WindowSize { get; set; }
     }
 
 }

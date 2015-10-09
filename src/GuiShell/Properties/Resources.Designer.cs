@@ -61,6 +61,15 @@ namespace GuiShell.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to hours.
+        /// </summary>
+        internal static string HoursStr {
+            get {
+                return ResourceManager.GetString("HoursStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Image cleared..
         /// </summary>
         internal static string ImgClearedMsg {
@@ -88,6 +97,24 @@ namespace GuiShell.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to milliseconds.
+        /// </summary>
+        internal static string MillisecondsStr {
+            get {
+                return ResourceManager.GetString("MillisecondsStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to minutes.
+        /// </summary>
+        internal static string MinutesStr {
+            get {
+                return ResourceManager.GetString("MinutesStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap rolling_ball {
@@ -98,11 +125,38 @@ namespace GuiShell.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rolling ball operation completed! (only took {0} {1}).
+        /// </summary>
+        internal static string RollingBallEndMsg {
+            get {
+                return ResourceManager.GetString("RollingBallEndMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Optimal region is the rectangle {0}..
         /// </summary>
         internal static string RollingBallOutputMsg {
             get {
                 return ResourceManager.GetString("RollingBallOutputMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Let&apos;s get the ball rolling (with a window size of {0})....
+        /// </summary>
+        internal static string RollingBallStartMsg {
+            get {
+                return ResourceManager.GetString("RollingBallStartMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to seconds.
+        /// </summary>
+        internal static string SecondsStr {
+            get {
+                return ResourceManager.GetString("SecondsStr", resourceCulture);
             }
         }
         
@@ -117,11 +171,20 @@ namespace GuiShell.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to watercolor.
+        ///   Looks up a localized string similar to Watercolor filter completed! (only took {0} {1}).
         /// </summary>
-        internal static string WatercolorFileAppend {
+        internal static string WatercolorEndMsg {
             get {
-                return ResourceManager.GetString("WatercolorFileAppend", resourceCulture);
+                return ResourceManager.GetString("WatercolorEndMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Beginning watercolor filter with a window size of {0}....
+        /// </summary>
+        internal static string WatercolorStartMsg {
+            get {
+                return ResourceManager.GetString("WatercolorStartMsg", resourceCulture);
             }
         }
     }

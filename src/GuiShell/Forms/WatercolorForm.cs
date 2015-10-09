@@ -10,8 +10,10 @@ using GuiShell.Events;
 
 namespace GuiShell.Forms {
 
-    public partial class WatercolorForm : Form {
+    public partial class WatercolorForm : Form, IFilterForm {
         private FileInfo _imgFile;
+        private DateTime _start;
+        private DateTime _end;
 
         public WatercolorForm(FileInfo file) {
             InitializeComponent();
@@ -20,7 +22,8 @@ namespace GuiShell.Forms {
         }
 
         // INTERFACE
-        public event WatercolorCompletedEventHandler WatercolorCompleted;
+        public event FilterEventHandler FilterStarted;
+        public event FilterCompletedEventHandler FilterCompleted;
 
         // EVENT HANDLERS
         private void ApplyBtn_Click(object sender, EventArgs e) {
@@ -33,10 +36,12 @@ namespace GuiShell.Forms {
                 WindowSize = winSize
             };
 
-            WatercolorBgw.RunWorkerAsync(args);
+            _start = DateTime.Now;
+            FilterWorker.RunWorkerAsync(args);
+            OnStarted(winSize);
         }
         private void CancelBtn_Click(object sender, EventArgs e) {
-            WatercolorBgw.CancelAsync();
+            FilterWorker.CancelAsync();
         }
         private void WatercolorBgw_DoWork(object sender, DoWorkEventArgs e) {
             BackgroundWorker worker = sender as BackgroundWorker;
@@ -47,6 +52,8 @@ namespace GuiShell.Forms {
             MainProgress.Value = e.ProgressPercentage;
         }
         private void WatercolorBgw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
+            _end = DateTime.Now;
+
             if (e.Error != null) {
                 MessageBox.Show(e.Error.Message);
                 toggleControls(false);
@@ -65,14 +72,35 @@ namespace GuiShell.Forms {
         }
 
         // HELPER FUNCTIONS
-        private void OnCompleted(FileInfo file) {
-            if (this.WatercolorCompleted == null)
+        private void OnStarted(int winSize) {
+            if (this.FilterStarted == null)
                 return;
 
-            Delegate[] subscribers = this.WatercolorCompleted.GetInvocationList();
+            Delegate[] subscribers = this.FilterStarted.GetInvocationList();
             foreach (Delegate subscriber in subscribers) {
                 Control c = subscriber.Target as Control;
-                WatercolorCompletedEventArgs args = new WatercolorCompletedEventArgs() { FileInfo = file };
+                FilterEventArgs args = new FilterEventArgs() {
+                    Filter = Filter.Watercolor,
+                    Args = new WatercolorArgs() { WindowSize = winSize }
+                };
+                if (c != null && c.InvokeRequired)
+                    c.BeginInvoke(subscriber, this, args);
+                else
+                    subscriber.DynamicInvoke(this, args);
+            }
+        }
+        private void OnCompleted(FileInfo file) {
+            if (this.FilterCompleted == null)
+                return;
+
+            Delegate[] subscribers = this.FilterCompleted.GetInvocationList();
+            foreach (Delegate subscriber in subscribers) {
+                Control c = subscriber.Target as Control;
+                FilterCompletedEventArgs args = new FilterCompletedEventArgs() {
+                    Duration = _end.Subtract(_start),
+                    Filter = Filter.Watercolor,
+                    FileInfo = file
+                };
                 if (c != null && c.InvokeRequired)
                     c.BeginInvoke(subscriber, this, args);
                 else
@@ -80,7 +108,6 @@ namespace GuiShell.Forms {
             }
         }
         private void toggleControls(bool running) {
-            WinSizeLbl.Enabled = !running;
             WinSizeUpDown.Enabled = !running;
             ApplyBtn.Enabled = !running;
             CancelBtn.Enabled = running;

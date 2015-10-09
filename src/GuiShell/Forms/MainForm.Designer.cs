@@ -39,7 +39,7 @@
             this.ClearImgBtn = new System.Windows.Forms.Button();
             this.CloseFileBtn = new System.Windows.Forms.Button();
             this.MainSplit = new System.Windows.Forms.SplitContainer();
-            this.OutputListbox = new System.Windows.Forms.ListBox();
+            this.LogListbox = new System.Windows.Forms.ListBox();
             this.MainToolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImgPicBox)).BeginInit();
             this.MainTblLayout.SuspendLayout();
@@ -223,21 +223,21 @@
             // 
             // MainSplit.Panel2
             // 
-            this.MainSplit.Panel2.Controls.Add(this.OutputListbox);
+            this.MainSplit.Panel2.Controls.Add(this.LogListbox);
             this.MainSplit.Panel2MinSize = 30;
             this.MainSplit.Size = new System.Drawing.Size(855, 336);
             this.MainSplit.SplitterDistance = 243;
             this.MainSplit.TabIndex = 7;
             // 
-            // OutputListbox
+            // LogListbox
             // 
-            this.OutputListbox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.OutputListbox.FormattingEnabled = true;
-            this.OutputListbox.Location = new System.Drawing.Point(0, 0);
-            this.OutputListbox.Name = "OutputListbox";
-            this.OutputListbox.ScrollAlwaysVisible = true;
-            this.OutputListbox.Size = new System.Drawing.Size(851, 85);
-            this.OutputListbox.TabIndex = 0;
+            this.LogListbox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LogListbox.FormattingEnabled = true;
+            this.LogListbox.Location = new System.Drawing.Point(0, 0);
+            this.LogListbox.Name = "LogListbox";
+            this.LogListbox.ScrollAlwaysVisible = true;
+            this.LogListbox.Size = new System.Drawing.Size(851, 85);
+            this.LogListbox.TabIndex = 0;
             // 
             // MainForm
             // 
@@ -282,7 +282,7 @@
         private System.Windows.Forms.Button CloseFileBtn;
         private System.Windows.Forms.Button ClearImgBtn;
         private System.Windows.Forms.SplitContainer MainSplit;
-        private System.Windows.Forms.ListBox OutputListbox;
+        private System.Windows.Forms.ListBox LogListbox;
         private System.Windows.Forms.ToolStripLabel FiltersLbl;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripLabel OperationsLbl;

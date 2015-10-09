@@ -30,7 +30,7 @@
             this.BtnPanel = new System.Windows.Forms.Panel();
             this.ApplyBtn = new System.Windows.Forms.Button();
             this.CancelBtn = new System.Windows.Forms.Button();
-            this.WatercolorBgw = new System.ComponentModel.BackgroundWorker();
+            this.FilterWorker = new System.ComponentModel.BackgroundWorker();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.WinSizeUpDown)).BeginInit();
             this.BtnPanel.SuspendLayout();
@@ -135,13 +135,13 @@
             this.CancelBtn.UseVisualStyleBackColor = true;
             this.CancelBtn.Click += new System.EventHandler(this.CancelBtn_Click);
             // 
-            // WatercolorBgw
+            // FilterWorker
             // 
-            this.WatercolorBgw.WorkerReportsProgress = true;
-            this.WatercolorBgw.WorkerSupportsCancellation = true;
-            this.WatercolorBgw.DoWork += new System.ComponentModel.DoWorkEventHandler(this.WatercolorBgw_DoWork);
-            this.WatercolorBgw.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.WatercolorBgw_ProgressChanged);
-            this.WatercolorBgw.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.WatercolorBgw_RunWorkerCompleted);
+            this.FilterWorker.WorkerReportsProgress = true;
+            this.FilterWorker.WorkerSupportsCancellation = true;
+            this.FilterWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.WatercolorBgw_DoWork);
+            this.FilterWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.WatercolorBgw_ProgressChanged);
+            this.FilterWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.WatercolorBgw_RunWorkerCompleted);
             // 
             // WatercolorForm
             // 
@@ -176,6 +176,6 @@
         private System.Windows.Forms.Panel BtnPanel;
         private System.Windows.Forms.Button ApplyBtn;
         private System.Windows.Forms.Button CancelBtn;
-        private System.ComponentModel.BackgroundWorker WatercolorBgw;
+        private System.ComponentModel.BackgroundWorker FilterWorker;
     }
 }

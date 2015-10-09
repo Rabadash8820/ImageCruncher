@@ -124,9 +124,6 @@
   <data name="watercolor" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\watercolor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WatercolorFileAppend" xml:space="preserve">
-    <value>watercolor</value>
-  </data>
   <data name="ImgClearedMsg" xml:space="preserve">
     <value>Image cleared.</value>
   </data>
@@ -138,5 +135,29 @@
   </data>
   <data name="RollingBallOutputMsg" xml:space="preserve">
     <value>Optimal region is the rectangle {0}.</value>
+  </data>
+  <data name="RollingBallStartMsg" xml:space="preserve">
+    <value>Let's get the ball rolling (with a window size of {0})...</value>
+  </data>
+  <data name="WatercolorEndMsg" xml:space="preserve">
+    <value>Watercolor filter completed! (only took {0} {1})</value>
+  </data>
+  <data name="WatercolorStartMsg" xml:space="preserve">
+    <value>Beginning watercolor filter with a window size of {0}...</value>
+  </data>
+  <data name="RollingBallEndMsg" xml:space="preserve">
+    <value>Rolling ball operation completed! (only took {0} {1})</value>
+  </data>
+  <data name="HoursStr" xml:space="preserve">
+    <value>hours</value>
+  </data>
+  <data name="MillisecondsStr" xml:space="preserve">
+    <value>milliseconds</value>
+  </data>
+  <data name="MinutesStr" xml:space="preserve">
+    <value>minutes</value>
+  </data>
+  <data name="SecondsStr" xml:space="preserve">
+    <value>seconds</value>
   </data>
 </root>

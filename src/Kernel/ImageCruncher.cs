@@ -1,9 +1,8 @@
 ﻿using System;
-using System.IO;
+using System.Linq;
 using System.Drawing;
 using System.ComponentModel;
 using System.Drawing.Imaging;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 using Kernel.Args;
@@ -96,6 +95,7 @@ namespace Kernel {
             RgbPixel[,] fPixels = new RgbPixel[numRows, numCols];
 
             // Loop over each pixel
+            int checkRows = numRows / 100;
             for (int row = 0; row < numRows; ++row) {
                 for (int col = 0; col < numCols; ++col) {
                     // Create a window around this pixel
@@ -112,12 +112,13 @@ namespace Kernel {
                     }
 
                     // Set the value of the filtered pixel at this position to the median values of the window
+                    window = window.Take(numWinPixels).ToArray();
                     RgbPixel med = median(window, numWinPixels);
                     fPixels[row, col] = med;
                 }
 
                 // Report status after every couple rows
-                if (row % 100 == 0) {
+                if (row % checkRows == 0) {
                     bool keepGoing = adjustStatus(row, numRows);
                     if (!keepGoing)
                         return;
@@ -256,8 +257,25 @@ namespace Kernel {
             return bytes;
         }
         private static RgbPixel median(RgbPixel[] window, int size) {
+            // Check whether the window size is odd and whether we're using RGB or RGBA pixels
             bool hasAlpha = (window[0] is RgbaPixel);
             RgbPixel pixel = (hasAlpha ? new RgbaPixel() : new RgbPixel());
+            bool odd = (size % 2 == 1);
+
+            // Set this pixel's values as the median of all values in the window
+            RgbPixel[] temp;
+            int first = size / 2;
+            int second = size / 2 + 1;
+            temp = window.OrderBy(p => p.Red).ToArray();
+            pixel.Red = (byte)(odd ? temp[first].Red : (temp[first].Red + temp[second].Red) / 2);
+            temp = window.OrderBy(p => p.Green).ToArray();
+            pixel.Green = (byte)(odd ? temp[first].Green : (temp[first].Green + temp[second].Green) / 2);
+            temp = window.OrderBy(p => p.Blue).ToArray();
+            pixel.Blue = (byte)(odd ? temp[first].Blue : (temp[first].Blue + temp[second].Blue) / 2);
+            if (hasAlpha) {
+                RgbaPixel[] tempA = window.Select(p => p as RgbaPixel).OrderBy(pa => pa.Alpha).ToArray();
+                (pixel as RgbaPixel).Alpha = (byte)(odd ? tempA[first].Alpha : (tempA[first].Alpha + tempA[second].Alpha) / 2);
+            }
 
             return pixel;
         }

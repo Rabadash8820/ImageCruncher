@@ -30,7 +30,7 @@
             this.ExecuteBtn = new System.Windows.Forms.Button();
             this.CancelBtn = new System.Windows.Forms.Button();
             this.MainProgress = new System.Windows.Forms.ProgressBar();
-            this.RollingBallBgw = new System.ComponentModel.BackgroundWorker();
+            this.OperationWorker = new System.ComponentModel.BackgroundWorker();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.WinSizeUpDown)).BeginInit();
             this.BtnPanel.SuspendLayout();
@@ -134,13 +134,13 @@
             this.MainProgress.Size = new System.Drawing.Size(284, 24);
             this.MainProgress.TabIndex = 3;
             // 
-            // RollingBallBgw
+            // OperationWorker
             // 
-            this.RollingBallBgw.WorkerReportsProgress = true;
-            this.RollingBallBgw.WorkerSupportsCancellation = true;
-            this.RollingBallBgw.DoWork += new System.ComponentModel.DoWorkEventHandler(this.RollingBallBgw_DoWork);
-            this.RollingBallBgw.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.RollingBallBgw_ProgressChanged);
-            this.RollingBallBgw.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.RollingBallBgw_RunWorkerCompleted);
+            this.OperationWorker.WorkerReportsProgress = true;
+            this.OperationWorker.WorkerSupportsCancellation = true;
+            this.OperationWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.OperationWorker_DoWork);
+            this.OperationWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.OperationWorker_ProgressChanged);
+            this.OperationWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.OperationWorker_RunWorkerCompleted);
             // 
             // RollingBallForm
             // 
@@ -175,6 +175,6 @@
         private System.Windows.Forms.Button CancelBtn;
         private System.Windows.Forms.Panel BtnPanel;
         private System.Windows.Forms.ProgressBar MainProgress;
-        private System.ComponentModel.BackgroundWorker RollingBallBgw;
+        private System.ComponentModel.BackgroundWorker OperationWorker;
     }
 }
