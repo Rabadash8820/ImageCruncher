@@ -127,4 +127,16 @@
   <data name="WatercolorFileAppend" xml:space="preserve">
     <value>watercolor</value>
   </data>
+  <data name="ImgClearedMsg" xml:space="preserve">
+    <value>Image cleared.</value>
+  </data>
+  <data name="ImgClosedMsg" xml:space="preserve">
+    <value>Image closed.</value>
+  </data>
+  <data name="ImgSetMsg" xml:space="preserve">
+    <value>Image set to {0}.</value>
+  </data>
+  <data name="RollingBallOutputMsg" xml:space="preserve">
+    <value>Optimal region is the rectangle {0}.</value>
+  </data>
 </root>

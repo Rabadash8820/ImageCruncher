@@ -61,12 +61,48 @@ namespace GuiShell.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Image cleared..
+        /// </summary>
+        internal static string ImgClearedMsg {
+            get {
+                return ResourceManager.GetString("ImgClearedMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image closed..
+        /// </summary>
+        internal static string ImgClosedMsg {
+            get {
+                return ResourceManager.GetString("ImgClosedMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image set to {0}..
+        /// </summary>
+        internal static string ImgSetMsg {
+            get {
+                return ResourceManager.GetString("ImgSetMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap rolling_ball {
             get {
                 object obj = ResourceManager.GetObject("rolling_ball", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Optimal region is the rectangle {0}..
+        /// </summary>
+        internal static string RollingBallOutputMsg {
+            get {
+                return ResourceManager.GetString("RollingBallOutputMsg", resourceCulture);
             }
         }
         

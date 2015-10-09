@@ -6,6 +6,7 @@ using System.Windows.Forms;
 
 using Kernel;
 using GuiShell.Events;
+using GuiShell.Properties;
 
 namespace GuiShell.Forms {
 
@@ -59,7 +60,7 @@ namespace GuiShell.Forms {
         private void RollingBallForm_RollingBallCompleted(object sender, RollingBallCompletedEventArgs e) {
             _rollingBallRegion = e.OptimalRegion;
             ImgPicBox.Refresh();
-            string msg = $"Optimal region is the rectangle {e.OptimalRegion}.";
+            string msg = String.Format(Resources.RollingBallOutputMsg, e.OptimalRegion);
             log(msg);
         }
         private void ClearImgBtn_Click(object sender, EventArgs e) {
@@ -114,6 +115,7 @@ namespace GuiShell.Forms {
             CloseFileBtn.Enabled = doIt;
         }
         private void tearDownImage() {
+            ImgPicBox.Image.Dispose();
             ImgPicBox.Image = null;
             ImgTxt.Text = "";
         }
@@ -139,19 +141,19 @@ namespace GuiShell.Forms {
         private void clearOrnaments() {
             _rollingBallRegion = null;
 
-            log("Image cleared.");
+            log(String.Format(Resources.ImgClearedMsg));
         }
         private void changeImage(FileInfo imageFile) {
             if (imageFile != null) {
                 enableControls(true);
                 addDataBindings(imageFile);
-                log($"Image set to {imageFile.FullName}");
+                log(String.Format(Resources.ImgSetMsg, imageFile.FullName));
             }
             else {
                 enableControls(false);
                 removeDataBindings();
                 tearDownImage();
-                log("Image closed.");
+                log(String.Format(Resources.ImgClosedMsg));
             }
         }
         private Rectangle adjustedOrnament(Rectangle region) {
