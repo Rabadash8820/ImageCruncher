@@ -31,6 +31,9 @@
             this.CancelBtn = new System.Windows.Forms.Button();
             this.MainProgress = new System.Windows.Forms.ProgressBar();
             this.OperationWorker = new System.ComponentModel.BackgroundWorker();
+            this.ColorLbl = new System.Windows.Forms.Label();
+            this.ColorDialog = new System.Windows.Forms.ColorDialog();
+            this.ColorBtn = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.WinSizeUpDown)).BeginInit();
             this.BtnPanel.SuspendLayout();
@@ -41,18 +44,21 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 206F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.ColorLbl, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.WinSizeLbl, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.WinSizeUpDown, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.BtnPanel, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.MainProgress, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.MainProgress, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.BtnPanel, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.ColorBtn, 1, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowCount = 4;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(290, 97);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(284, 131);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // WinSizeLbl
@@ -67,7 +73,6 @@
             // 
             // WinSizeUpDown
             // 
-            this.WinSizeUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
             this.WinSizeUpDown.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.WinSizeUpDown.Increment = new decimal(new int[] {
             2,
@@ -81,7 +86,7 @@
             0,
             0});
             this.WinSizeUpDown.Name = "WinSizeUpDown";
-            this.WinSizeUpDown.Size = new System.Drawing.Size(78, 22);
+            this.WinSizeUpDown.Size = new System.Drawing.Size(72, 22);
             this.WinSizeUpDown.TabIndex = 2;
             this.WinSizeUpDown.Value = new decimal(new int[] {
             1,
@@ -95,16 +100,16 @@
             this.BtnPanel.Controls.Add(this.ExecuteBtn);
             this.BtnPanel.Controls.Add(this.CancelBtn);
             this.BtnPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BtnPanel.Location = new System.Drawing.Point(3, 33);
+            this.BtnPanel.Location = new System.Drawing.Point(3, 64);
             this.BtnPanel.Name = "BtnPanel";
-            this.BtnPanel.Size = new System.Drawing.Size(284, 31);
+            this.BtnPanel.Size = new System.Drawing.Size(278, 34);
             this.BtnPanel.TabIndex = 1;
             // 
             // ExecuteBtn
             // 
             this.ExecuteBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ExecuteBtn.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ExecuteBtn.Location = new System.Drawing.Point(125, 4);
+            this.ExecuteBtn.Location = new System.Drawing.Point(119, 4);
             this.ExecuteBtn.Name = "ExecuteBtn";
             this.ExecuteBtn.Size = new System.Drawing.Size(75, 23);
             this.ExecuteBtn.TabIndex = 4;
@@ -117,7 +122,7 @@
             this.CancelBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.CancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.CancelBtn.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CancelBtn.Location = new System.Drawing.Point(206, 4);
+            this.CancelBtn.Location = new System.Drawing.Point(200, 4);
             this.CancelBtn.Name = "CancelBtn";
             this.CancelBtn.Size = new System.Drawing.Size(75, 23);
             this.CancelBtn.TabIndex = 5;
@@ -129,9 +134,9 @@
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.MainProgress, 2);
             this.MainProgress.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MainProgress.Location = new System.Drawing.Point(3, 70);
+            this.MainProgress.Location = new System.Drawing.Point(3, 104);
             this.MainProgress.Name = "MainProgress";
-            this.MainProgress.Size = new System.Drawing.Size(284, 24);
+            this.MainProgress.Size = new System.Drawing.Size(278, 24);
             this.MainProgress.TabIndex = 3;
             // 
             // OperationWorker
@@ -142,18 +147,42 @@
             this.OperationWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.OperationWorker_ProgressChanged);
             this.OperationWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.OperationWorker_RunWorkerCompleted);
             // 
+            // ColorLbl
+            // 
+            this.ColorLbl.AutoSize = true;
+            this.ColorLbl.Location = new System.Drawing.Point(3, 30);
+            this.ColorLbl.Name = "ColorLbl";
+            this.ColorLbl.Size = new System.Drawing.Size(77, 13);
+            this.ColorLbl.TabIndex = 1;
+            this.ColorLbl.Text = "Optimal color";
+            // 
+            // ColorDialog
+            // 
+            this.ColorDialog.Color = System.Drawing.Color.Red;
+            // 
+            // ColorBtn
+            // 
+            this.ColorBtn.Location = new System.Drawing.Point(209, 33);
+            this.ColorBtn.Name = "ColorBtn";
+            this.ColorBtn.Size = new System.Drawing.Size(72, 23);
+            this.ColorBtn.TabIndex = 4;
+            this.ColorBtn.Text = "Choose";
+            this.ColorBtn.UseVisualStyleBackColor = true;
+            this.ColorBtn.Click += new System.EventHandler(this.ColorBtn_Click);
+            // 
             // RollingBallForm
             // 
             this.AcceptButton = this.ExecuteBtn;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.CancelBtn;
-            this.ClientSize = new System.Drawing.Size(290, 97);
+            this.ClientSize = new System.Drawing.Size(284, 131);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(300, 170);
             this.Name = "RollingBallForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
@@ -176,5 +205,8 @@
         private System.Windows.Forms.Panel BtnPanel;
         private System.Windows.Forms.ProgressBar MainProgress;
         private System.ComponentModel.BackgroundWorker OperationWorker;
+        private System.Windows.Forms.Label ColorLbl;
+        private System.Windows.Forms.Button ColorBtn;
+        private System.Windows.Forms.ColorDialog ColorDialog;
     }
 }

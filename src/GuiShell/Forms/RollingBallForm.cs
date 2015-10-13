@@ -112,7 +112,10 @@ namespace GuiShell.Forms {
             ExecuteBtn.Enabled = !running;
             CancelBtn.Enabled = running;
         }
-        
+
+        private void ColorBtn_Click(object sender, EventArgs e) {
+            ColorDialog.ShowDialog();
+        }
     }
 
 }
