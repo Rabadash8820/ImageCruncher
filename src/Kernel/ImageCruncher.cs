@@ -128,8 +128,27 @@ namespace Kernel {
             // Store the array of filtered pixels back into the original array and delete the former
             pixels = fPixels;
         }
-        private static Rectangle rollingBall(RgbPixel[,] pixels, int winSize) {
-            int length = pixels.GetLength(0) * pixels.GetLength(1);
+        private static Rectangle rollingBall(RgbPixel[,] pixels, int winSize, Color optimalColor) {
+            // Set the number of rows/columns/windows
+            int numRows = pixels.GetLength(0);
+            int numCols = pixels.GetLength(1);
+            int winRows = numRows - winSize + 1;
+            int winCols = numCols - winSize + 1;
+            int numWindows = winRows * winCols;
+            
+            // Cache the RGB sums of each window row
+            Color[,] rowSums = new Color[numRows, winCols];
+            for (int r = 0; r < numRows; ++r) {
+                for (int c = 0; c < numCols; ++c) {
+
+
+                }
+            }
+
+            // Use these sums to calculate the RGB sums 
+
+
+                    int length = pixels.GetLength(0) * pixels.GetLength(1);
             for (long b = 0; b < length; ++b) {
                 if (b % 10000 == 0) {
                     bool keepGoing = adjustStatus(b, length);
@@ -165,7 +184,7 @@ namespace Kernel {
             switch (op) {
                 case Operation.RollingBall:
                     RollingBallArgs rba = (RollingBallArgs)args;
-                    result = rollingBall(pixels, rba.WindowSize);
+                    result = rollingBall(pixels, rba.WindowSize, rba.OptimalColor);
                     break;
 
                 default:
@@ -246,9 +265,9 @@ namespace Kernel {
             byte[] bytes = new byte[numRows * numCols * bytesPerPixel];
             for (int r = 0; r < numRows; ++r) {
                 for (int c=0; c < numCols; ++c) {
-                    bytes[++b] = pixels[r, c].Red;
-                    bytes[++b] = pixels[r, c].Green;
-                    bytes[++b] = pixels[r, c].Blue;
+                    bytes[++b] = (byte)pixels[r, c].Red;
+                    bytes[++b] = (byte)pixels[r, c].Green;
+                    bytes[++b] = (byte)pixels[r, c].Blue;
                     if (hasAlpha)
                         bytes[++b] = (pixels[r, c] as RgbaPixel).Alpha;
                 }
