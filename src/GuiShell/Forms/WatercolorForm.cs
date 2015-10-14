@@ -129,7 +129,6 @@ namespace GuiShell.Forms {
         private void toggleControls(bool running) {
             WinSizeUpDown.Enabled = !running;
             ApplyBtn.Enabled = !running;
-            CancelBtn.Enabled = running;
         }
     }
 

@@ -170,7 +170,7 @@ namespace GuiShell.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Optimal region is the rectangle {0}..
+        ///   Looks up a localized string similar to The region {0} had the average color closest to {1}..
         /// </summary>
         internal static string RollingBallOutputMsg {
             get {

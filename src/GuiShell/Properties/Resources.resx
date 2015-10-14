@@ -131,7 +131,7 @@
     <value>Image set to {0} ({1} x {2} pixels).</value>
   </data>
   <data name="RollingBallOutputMsg" xml:space="preserve">
-    <value>Optimal region is the rectangle {0}.</value>
+    <value>The region {0} had the average color closest to {1}.</value>
   </data>
   <data name="RollingBallStartMsg" xml:space="preserve">
     <value>Let's get the ball rolling (with a window size of {0})...</value>

@@ -14,6 +14,7 @@ namespace GuiShell.Forms {
         private FileInfo _imgFile;
         private DateTime _start;
         private DateTime _end;
+        private const int DEFAULT_WIN_FACTOR = 10;
 
         public RollingBallForm(FileInfo f) {
             InitializeComponent();
@@ -23,6 +24,9 @@ namespace GuiShell.Forms {
             // Configure progress bar to report percent progress
             MainProgress.Minimum = 0;
             MainProgress.Maximum = 100;
+
+            setCurrentColor();
+            WinSizeUpDown.Value = (decimal)nearestOdd(defaultWindowSize(f));
         }
 
         // INTERFACE
@@ -38,7 +42,7 @@ namespace GuiShell.Forms {
             RollingBallArgs args = new RollingBallArgs() {
                 Bitmap = Image.FromFile(_imgFile.FullName) as Bitmap,
                 WindowSize = winSize,
-                OptimalColor = Color.Red
+                OptimalColor = ColorDrawLbl.BackColor
             };
 
             _start = DateTime.Now;
@@ -81,6 +85,15 @@ namespace GuiShell.Forms {
                 this.Close();
             }
         }
+        private void RedUpDown_ValueChanged(object sender, EventArgs e) {
+            setCurrentColor();
+        }
+        private void GreenUpDown_ValueChanged(object sender, EventArgs e) {
+            setCurrentColor();
+        }
+        private void BlueUpDown_ValueChanged(object sender, EventArgs e) {
+            setCurrentColor();
+        }
 
         // HELPER FUNCTIONS
         private void OnStarted(int winSize) {
@@ -114,7 +127,7 @@ namespace GuiShell.Forms {
                 Result = region,
                 State = state,
                 Args = new RollingBallArgs() {
-                    OptimalColor = ColorDialog.Color,
+                    OptimalColor = ColorDrawLbl.BackColor,
                     WindowSize = (int)WinSizeUpDown.Value,
                     Bitmap = Image.FromFile(_imgFile.FullName) as Bitmap
                 }
@@ -133,12 +146,25 @@ namespace GuiShell.Forms {
         private void toggleControls(bool running) {
             WinSizeUpDown.Enabled = !running;
             ExecuteBtn.Enabled = !running;
-            CancelBtn.Enabled = running;
+            ColorGroup.Enabled = !running;
+        }
+        private void setCurrentColor() {
+            int r = (int)RedUpDown.Value;
+            int g = (int)GreenUpDown.Value;
+            int b = (int)BlueUpDown.Value;
+            ColorDrawLbl.BackColor = Color.FromArgb(r, g, b);
+        }
+        private int defaultWindowSize(FileInfo f) {
+            Bitmap bmp = Image.FromFile(f.FullName) as Bitmap;
+            int minDim = Math.Min(bmp.Width, bmp.Height);
+            return minDim / DEFAULT_WIN_FACTOR;
+        }
+        private double nearestOdd(double value) {
+            double multiplier = Math.Pow(10.0, 1);
+            double truncated = Math.Truncate(value * multiplier) / multiplier;
+            return Math.Round(truncated, 0, MidpointRounding.ToEven) - 1;
         }
 
-        private void ColorBtn_Click(object sender, EventArgs e) {
-            ColorDialog.ShowDialog();
-        }
     }
 
 }
