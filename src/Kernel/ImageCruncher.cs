@@ -129,7 +129,6 @@ namespace Kernel {
             pixels = fPixels;
         }
         private static Rectangle rollingBall(RgbPixel[,] pixels, int winSize, Color optimalColor) {
-            export(pixels);
             // Set some important counts
             int numRows = pixels.GetLength(0);
             int numCols = pixels.GetLength(1);
@@ -140,6 +139,7 @@ namespace Kernel {
             long totalSteps = numRows + winRows;    // (Row sum steps) + (window sum steps)
 
             // Loop over each row of every possible window
+            int checkRows = numRows / 50;
             long[,] sumsR = new long[numRows, winCols];
             long[,] sumsG = new long[numRows, winCols];
             long[,] sumsB = new long[numRows, winCols];
@@ -160,7 +160,7 @@ namespace Kernel {
                 }
 
                 // Report status after every couple rows
-                if (row % 1000 == 0)
+                if (row % checkRows == 0)
                     reportProgress(row + 1, totalSteps);
             }
 
@@ -192,7 +192,7 @@ namespace Kernel {
                 }
 
                 // Report status after every couple rows
-                if (row % 1000 == 0)
+                if (row % checkRows == 0)
                     reportProgress(numRows + row + 1, totalSteps);
             }
 
@@ -201,15 +201,6 @@ namespace Kernel {
         }
 
         // HELPER FUNCTIONS
-        private static void export(RgbPixel[,] pixels) {
-            using (System.IO.StreamWriter sw = new System.IO.StreamWriter(@"C:\Users\Owner\Desktop\derp.txt")) {
-                for (int row = 0; row < pixels.GetLength(0); ++row) {
-                    for (int col = 0; col < pixels.GetLength(1); ++col)
-                        sw.Write($"{{{pixels[row, col].ToString()}}}\t");
-                    sw.Write("\n");
-                }
-            }
-        }
         private static void loadPgmData(string filePath, ref int width, ref int height, ref int maxGrey, int[][] pixels) {
 
         }

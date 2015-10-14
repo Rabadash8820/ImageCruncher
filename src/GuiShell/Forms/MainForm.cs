@@ -197,9 +197,6 @@ namespace GuiShell.Forms {
                 DataSourceUpdateMode.Never);
             picBinding.Format += PicBinding_Format;
             ImgPicBox.DataBindings.Add(picBinding);
-
-            // Now we've added bindings...
-            bound = true;
         }
         private void removeDataBindings() {
             ImgTxt.DataBindings.Clear();

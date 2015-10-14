@@ -62,7 +62,7 @@ namespace GuiShell.Forms {
         }
         private void OperationWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
             _end = DateTime.Now;
-
+            
             // If there was an error...
             if (e.Error != null) {
                 MessageBox.Show(e.Error.Message);
@@ -81,7 +81,7 @@ namespace GuiShell.Forms {
                 toggleControls(false);
                 Rectangle region = (Rectangle)e.Result;
                 OnCompleted(region, CompletionState.Finished);
-
+                
                 this.Close();
             }
         }
