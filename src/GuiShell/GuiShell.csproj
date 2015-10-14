@@ -70,6 +70,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -84,6 +85,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompletionState.cs" />
     <Compile Include="Events\OperationEvent.cs" />
     <Compile Include="Events\FilterEvent.cs" />
     <Compile Include="Events\FilterCompletedEvent.cs" />
@@ -154,6 +156,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\watercolor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TestImage.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

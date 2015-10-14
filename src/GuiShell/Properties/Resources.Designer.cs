@@ -61,6 +61,24 @@ namespace GuiShell.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter cancelled after {0} {1}.
+        /// </summary>
+        internal static string FilterCancelledMsg {
+            get {
+                return ResourceManager.GetString("FilterCancelledMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter ended with an error after {0} {1}, sorry....
+        /// </summary>
+        internal static string FilterErrorMsg {
+            get {
+                return ResourceManager.GetString("FilterErrorMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to hours.
         /// </summary>
         internal static string HoursStr {
@@ -88,7 +106,7 @@ namespace GuiShell.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Image set to {0}..
+        ///   Looks up a localized string similar to Image set to {0} ({1} x {2} pixels)..
         /// </summary>
         internal static string ImgSetMsg {
             get {
@@ -111,6 +129,24 @@ namespace GuiShell.Properties {
         internal static string MinutesStr {
             get {
                 return ResourceManager.GetString("MinutesStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operation cancelled after {0} {1}.
+        /// </summary>
+        internal static string OperationCancelledMsg {
+            get {
+                return ResourceManager.GetString("OperationCancelledMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operation ended with an error after {0} {1}, sorry....
+        /// </summary>
+        internal static string OperationErrorMsg {
+            get {
+                return ResourceManager.GetString("OperationErrorMsg", resourceCulture);
             }
         }
         

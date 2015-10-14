@@ -52,9 +52,9 @@
             // 
             // ImgFileDialog
             // 
-            this.ImgFileDialog.Filter = "Bitmap images|*.bmp|GIF images|*.gif|JPEG images|*.jpg; *.jpeg; *.jpe; *.jif; *.j" +
-    "fif; *.jfi|PNG images|*.png|TIFF images|*.tiff; *.tif|All files|*.*";
-            this.ImgFileDialog.FilterIndex = 4;
+            this.ImgFileDialog.Filter = "GIF images|*.gif|JPEG images|*.jpg; *.jpeg; *.jpe; *.jif; *.jfif; *.jfi|PNG image" +
+    "s|*.png|TIFF images|*.tiff; *.tif|All files|*.*";
+            this.ImgFileDialog.FilterIndex = 3;
             this.ImgFileDialog.InitialDirectory = "C:\\";
             this.ImgFileDialog.Title = "Select an Image File";
             this.ImgFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.ImgFileDialog_FileOk);

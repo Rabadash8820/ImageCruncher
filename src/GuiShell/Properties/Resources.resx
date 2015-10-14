@@ -121,9 +121,6 @@
   <data name="rolling_ball" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\rolling_ball.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="watercolor" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\watercolor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ImgClearedMsg" xml:space="preserve">
     <value>Image cleared.</value>
   </data>
@@ -131,7 +128,7 @@
     <value>Image closed.</value>
   </data>
   <data name="ImgSetMsg" xml:space="preserve">
-    <value>Image set to {0}.</value>
+    <value>Image set to {0} ({1} x {2} pixels).</value>
   </data>
   <data name="RollingBallOutputMsg" xml:space="preserve">
     <value>Optimal region is the rectangle {0}.</value>
@@ -159,5 +156,20 @@
   </data>
   <data name="SecondsStr" xml:space="preserve">
     <value>seconds</value>
+  </data>
+  <data name="watercolor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\watercolor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FilterCancelledMsg" xml:space="preserve">
+    <value>Filter cancelled after {0} {1}</value>
+  </data>
+  <data name="FilterErrorMsg" xml:space="preserve">
+    <value>Filter ended with an error after {0} {1}, sorry...</value>
+  </data>
+  <data name="OperationCancelledMsg" xml:space="preserve">
+    <value>Operation cancelled after {0} {1}</value>
+  </data>
+  <data name="OperationErrorMsg" xml:space="preserve">
+    <value>Operation ended with an error after {0} {1}, sorry...</value>
   </data>
 </root>

@@ -54,18 +54,26 @@ namespace GuiShell.Forms {
         private void WatercolorBgw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
             _end = DateTime.Now;
 
+            // If an error occurred...
             if (e.Error != null) {
                 MessageBox.Show(e.Error.Message);
                 toggleControls(false);
+                OnCompleted(null, CompletionState.Error);
             }
-            else if (e.Cancelled)
+
+            // If the filter was cancelled...
+            else if (e.Cancelled) {
                 toggleControls(false);
+                OnCompleted(null, CompletionState.Cancelled);
+            }
+
+            // Otherwise, the filter was successful...
             else {
                 toggleControls(false);
                 Bitmap bmp = e.Result as Bitmap;
                 string newPath = Util.newFilePath(_imgFile.FullName, nameof(Filter.Watercolor));
                 bmp.Save(newPath);
-                OnCompleted(new FileInfo(newPath));
+                OnCompleted(new FileInfo(newPath), CompletionState.Finished);
 
                 this.Close();
             }
@@ -89,7 +97,7 @@ namespace GuiShell.Forms {
                     subscriber.DynamicInvoke(this, args);
             }
         }
-        private void OnCompleted(FileInfo file) {
+        private void OnCompleted(FileInfo file, CompletionState state) {
             if (this.FilterCompleted == null)
                 return;
 
@@ -99,7 +107,8 @@ namespace GuiShell.Forms {
                 FilterCompletedEventArgs args = new FilterCompletedEventArgs() {
                     Duration = _end.Subtract(_start),
                     Filter = Filter.Watercolor,
-                    FileInfo = file
+                    FileInfo = file,
+                    State = state
                 };
                 if (c != null && c.InvokeRequired)
                     c.BeginInvoke(subscriber, this, args);

@@ -37,7 +37,8 @@ namespace GuiShell.Forms {
             int winSize = (int)WinSizeUpDown.Value;
             RollingBallArgs args = new RollingBallArgs() {
                 Bitmap = Image.FromFile(_imgFile.FullName) as Bitmap,
-                WindowSize = winSize
+                WindowSize = winSize,
+                OptimalColor = Color.Red
             };
 
             _start = DateTime.Now;
@@ -58,14 +59,24 @@ namespace GuiShell.Forms {
         private void OperationWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
             _end = DateTime.Now;
 
-            if (e.Error != null)
+            // If there was an error...
+            if (e.Error != null) {
                 MessageBox.Show(e.Error.Message);
-            else if (e.Cancelled)
                 toggleControls(false);
+                OnCompleted(default(Rectangle), CompletionState.Error);
+            }
+
+            // If the operation was cancelled
+            else if (e.Cancelled) {
+                toggleControls(false);
+                OnCompleted(default(Rectangle), CompletionState.Cancelled);
+            }
+
+            // Otherwise, the operation was successful...
             else {
                 toggleControls(false);
                 Rectangle region = (Rectangle)e.Result;
-                OnCompleted(region);
+                OnCompleted(region, CompletionState.Finished);
 
                 this.Close();
             }
@@ -89,7 +100,7 @@ namespace GuiShell.Forms {
                     subscriber.DynamicInvoke(this, args);
             }
         }
-        private void OnCompleted(Rectangle region) {
+        private void OnCompleted(Rectangle region, CompletionState state) {
             if (this.OperationCompleted == null)
                 return;
 
@@ -99,7 +110,8 @@ namespace GuiShell.Forms {
                 OperationCompletedEventArgs args = new OperationCompletedEventArgs() {
                     Duration = _end.Subtract(_start),
                     Operation = Operation.RollingBall,
-                    Result = region
+                    Result = region,
+                    State = state
                 };
                 if (c != null && c.InvokeRequired)
                     c.BeginInvoke(subscriber, this, args);
