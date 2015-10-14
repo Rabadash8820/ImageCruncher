@@ -15,6 +15,8 @@ namespace GuiShell.Forms {
         // ENCAPSULATED FIELDS
         private BindingSource _imageBS;
         private Rectangle? _rollingBallRegion;
+        private Color _rollingBallColor;
+        private const float PEN_WIDTH = 5f;
 
         // CONSTRUCTOR
         public MainForm() {
@@ -43,7 +45,9 @@ namespace GuiShell.Forms {
         private void ImgPicBox_Paint(object sender, PaintEventArgs e) {
             if (_rollingBallRegion.HasValue) {
                 Rectangle region = adjustedOrnament(_rollingBallRegion.Value);
-                e.Graphics.DrawRectangle(Pens.Red, region);
+                using (Pen p = new Pen(_rollingBallColor, PEN_WIDTH)) {
+                    e.Graphics.DrawRectangle(p, region);
+                }
             }
         }
         private void ClearImgBtn_Click(object sender, EventArgs e) {
@@ -139,7 +143,7 @@ namespace GuiShell.Forms {
 
             // If there was an error...
             if (state == CompletionState.Error)
-                log(Resources.OperationErrorMsg);
+                log(String.Format(Resources.OperationErrorMsg, dur, Resources.SecondsStr));
 
             // If filter was cancelled...
             else if (state == CompletionState.Cancelled)
@@ -153,6 +157,7 @@ namespace GuiShell.Forms {
                     case Operation.RollingBall:
                         Rectangle region = (Rectangle)e.Result;
                         _rollingBallRegion = region;
+                        _rollingBallColor = (e.Args as RollingBallArgs).OptimalColor;
                         string outputMsg = String.Format(Resources.RollingBallOutputMsg, region);
                         log(outputMsg);
                         ImgPicBox.Refresh();
@@ -266,6 +271,9 @@ namespace GuiShell.Forms {
             LogListbox.TopIndex = LogListbox.Items.Count - 1;
         }
 
+        private void ImgPicBox_MouseMove(object sender, MouseEventArgs e) {
+            MouseCoordsLbl.Text = $"({e.X}, {e.Y})";
+        }
     }
 
 }

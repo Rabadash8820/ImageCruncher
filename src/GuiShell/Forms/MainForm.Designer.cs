@@ -40,6 +40,7 @@
             this.CloseFileBtn = new System.Windows.Forms.Button();
             this.MainSplit = new System.Windows.Forms.SplitContainer();
             this.LogListbox = new System.Windows.Forms.ListBox();
+            this.MouseCoordsLbl = new System.Windows.Forms.Label();
             this.MainToolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImgPicBox)).BeginInit();
             this.MainTblLayout.SuspendLayout();
@@ -152,6 +153,7 @@
             this.ImgPicBox.TabIndex = 5;
             this.ImgPicBox.TabStop = false;
             this.ImgPicBox.Paint += new System.Windows.Forms.PaintEventHandler(this.ImgPicBox_Paint);
+            this.ImgPicBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ImgPicBox_MouseMove);
             // 
             // MainTblLayout
             // 
@@ -171,6 +173,7 @@
             // 
             // MainPanel
             // 
+            this.MainPanel.Controls.Add(this.MouseCoordsLbl);
             this.MainPanel.Controls.Add(this.ClearImgBtn);
             this.MainPanel.Controls.Add(this.CloseFileBtn);
             this.MainPanel.Controls.Add(this.ImgLabel);
@@ -239,6 +242,15 @@
             this.LogListbox.Size = new System.Drawing.Size(851, 85);
             this.LogListbox.TabIndex = 0;
             // 
+            // MouseCoordsLbl
+            // 
+            this.MouseCoordsLbl.AutoSize = true;
+            this.MouseCoordsLbl.Location = new System.Drawing.Point(640, 10);
+            this.MouseCoordsLbl.Name = "MouseCoordsLbl";
+            this.MouseCoordsLbl.Size = new System.Drawing.Size(38, 13);
+            this.MouseCoordsLbl.TabIndex = 6;
+            this.MouseCoordsLbl.Text = "label1";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -286,6 +298,7 @@
         private System.Windows.Forms.ToolStripLabel FiltersLbl;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripLabel OperationsLbl;
+        private System.Windows.Forms.Label MouseCoordsLbl;
     }
 }
 

@@ -35,6 +35,9 @@ namespace GuiShell {
             newPath = Path.Combine(dirName, $"{newFileName}{extension}");
             return newPath;
         }
+        public static Color GetNegativeColor(Color original) {
+            return Color.FromArgb(255 - original.R, 255 - original.G, 255 - original.B);
+        }
     }
 
 }

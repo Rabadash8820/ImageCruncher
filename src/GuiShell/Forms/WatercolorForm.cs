@@ -84,13 +84,16 @@ namespace GuiShell.Forms {
             if (this.FilterStarted == null)
                 return;
 
+            // Define EventArgs
+            FilterEventArgs args = new FilterEventArgs() {
+                Filter = Filter.Watercolor,
+                Args = new WatercolorArgs() { WindowSize = winSize }
+            };
+
+            // Invoke all currently subscribed event handlers
             Delegate[] subscribers = this.FilterStarted.GetInvocationList();
             foreach (Delegate subscriber in subscribers) {
                 Control c = subscriber.Target as Control;
-                FilterEventArgs args = new FilterEventArgs() {
-                    Filter = Filter.Watercolor,
-                    Args = new WatercolorArgs() { WindowSize = winSize }
-                };
                 if (c != null && c.InvokeRequired)
                     c.BeginInvoke(subscriber, this, args);
                 else
@@ -101,15 +104,22 @@ namespace GuiShell.Forms {
             if (this.FilterCompleted == null)
                 return;
 
+            // Define EventArgs
+            FilterCompletedEventArgs args = new FilterCompletedEventArgs() {
+                Duration = _end.Subtract(_start),
+                Filter = Filter.Watercolor,
+                FileInfo = file,
+                State = state,
+                Args = new WatercolorArgs() {
+                    Bitmap = Image.FromFile(_imgFile.FullName) as Bitmap,
+                    WindowSize = (int)WinSizeUpDown.Value
+                }
+            };
+            
+            // Invoke all currently subscribed event handlers
             Delegate[] subscribers = this.FilterCompleted.GetInvocationList();
             foreach (Delegate subscriber in subscribers) {
                 Control c = subscriber.Target as Control;
-                FilterCompletedEventArgs args = new FilterCompletedEventArgs() {
-                    Duration = _end.Subtract(_start),
-                    Filter = Filter.Watercolor,
-                    FileInfo = file,
-                    State = state
-                };
                 if (c != null && c.InvokeRequired)
                     c.BeginInvoke(subscriber, this, args);
                 else

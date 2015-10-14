@@ -87,13 +87,16 @@ namespace GuiShell.Forms {
             if (this.OperationStarted == null)
                 return;
 
+            // Define EventArgs
+            OperationEventArgs args = new OperationEventArgs() {
+                Operation = Operation.RollingBall,
+                Args = new RollingBallArgs() { WindowSize = winSize }
+            };
+
+            // Invoke all currently subscribed event handlers
             Delegate[] subscribers = this.OperationStarted.GetInvocationList();
             foreach (Delegate subscriber in subscribers) {
                 Control c = subscriber.Target as Control;
-                OperationEventArgs args = new OperationEventArgs() {
-                    Operation = Operation.RollingBall,
-                    Args = new RollingBallArgs() { WindowSize = winSize }
-                };
                 if (c != null && c.InvokeRequired)
                     c.BeginInvoke(subscriber, this, args);
                 else
@@ -104,15 +107,23 @@ namespace GuiShell.Forms {
             if (this.OperationCompleted == null)
                 return;
 
+            // Define EventArgs
+            OperationCompletedEventArgs args = new OperationCompletedEventArgs() {
+                Duration = _end.Subtract(_start),
+                Operation = Operation.RollingBall,
+                Result = region,
+                State = state,
+                Args = new RollingBallArgs() {
+                    OptimalColor = ColorDialog.Color,
+                    WindowSize = (int)WinSizeUpDown.Value,
+                    Bitmap = Image.FromFile(_imgFile.FullName) as Bitmap
+                }
+            };
+
+            // Invoke all currently subscribed event handlers
             Delegate[] subscribers = this.OperationCompleted.GetInvocationList();
             foreach (Delegate subscriber in subscribers) {
                 Control c = subscriber.Target as Control;
-                OperationCompletedEventArgs args = new OperationCompletedEventArgs() {
-                    Duration = _end.Subtract(_start),
-                    Operation = Operation.RollingBall,
-                    Result = region,
-                    State = state
-                };
                 if (c != null && c.InvokeRequired)
                     c.BeginInvoke(subscriber, this, args);
                 else

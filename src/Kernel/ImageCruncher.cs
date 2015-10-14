@@ -129,6 +129,7 @@ namespace Kernel {
             pixels = fPixels;
         }
         private static Rectangle rollingBall(RgbPixel[,] pixels, int winSize, Color optimalColor) {
+            export(pixels);
             // Set some important counts
             int numRows = pixels.GetLength(0);
             int numCols = pixels.GetLength(1);
@@ -166,7 +167,6 @@ namespace Kernel {
             // Use these sums to calculate the window RGB sums
             double minDistance = double.MaxValue;
             Rectangle minRect = new Rectangle(0, 0, winSize, winSize);
-            RgbPixel[,] winPixels = new RgbPixel[winRows, winCols];
             for (int row = 0; row < winRows; ++row) {
                 for (int col = 0; col < winCols; ++col) {
                     if (isCancelled())
@@ -201,6 +201,15 @@ namespace Kernel {
         }
 
         // HELPER FUNCTIONS
+        private static void export(RgbPixel[,] pixels) {
+            using (System.IO.StreamWriter sw = new System.IO.StreamWriter(@"C:\Users\Owner\Desktop\derp.txt")) {
+                for (int row = 0; row < pixels.GetLength(0); ++row) {
+                    for (int col = 0; col < pixels.GetLength(1); ++col)
+                        sw.Write($"{{{pixels[row, col].ToString()}}}\t");
+                    sw.Write("\n");
+                }
+            }
+        }
         private static void loadPgmData(string filePath, ref int width, ref int height, ref int maxGrey, int[][] pixels) {
 
         }
@@ -275,12 +284,12 @@ namespace Kernel {
                 int offset = (int)(b % bytesPerPixel);
                 if (offset == 0) {
                     pixel = (hasAlpha ? new RgbaPixel() : new RgbPixel());
-                    pixel.Red = bytes[b];
+                    pixel.Blue = bytes[b];
                 }
                 else if (offset == 1)
                     pixel.Green = bytes[b];
                 else if (offset == 2) {
-                    pixel.Blue = bytes[b];
+                    pixel.Red = bytes[b];
                     pixelMade = !hasAlpha;
                 }
                 else {
@@ -311,9 +320,9 @@ namespace Kernel {
             byte[] bytes = new byte[numRows * numCols * bytesPerPixel];
             for (int r = 0; r < numRows; ++r) {
                 for (int c=0; c < numCols; ++c) {
-                    bytes[++b] = pixels[r, c].Red;
-                    bytes[++b] = pixels[r, c].Green;
                     bytes[++b] = pixels[r, c].Blue;
+                    bytes[++b] = pixels[r, c].Green;
+                    bytes[++b] = pixels[r, c].Red;
                     if (hasAlpha)
                         bytes[++b] = (pixels[r, c] as RgbaPixel).Alpha;
                 }

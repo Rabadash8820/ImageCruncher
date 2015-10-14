@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Linq;
+using System.Drawing;
 using System.Linq.Expressions;
-using System.Text.RegularExpressions;
 
 namespace Kernel {
 
@@ -17,6 +16,7 @@ namespace Kernel {
                 throw new ArgumentException();
             return me.Member.Name;
         }
+
     }
 
 }
