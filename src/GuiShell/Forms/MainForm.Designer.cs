@@ -54,8 +54,7 @@
             // 
             this.ImgFileDialog.Filter = "GIF images|*.gif|JPEG images|*.jpg; *.jpeg; *.jpe; *.jif; *.jfif; *.jfi|PNG image" +
     "s|*.png|TIFF images|*.tiff; *.tif|All files|*.*";
-            this.ImgFileDialog.FilterIndex = 3;
-            this.ImgFileDialog.InitialDirectory = "C:\\";
+            this.ImgFileDialog.FilterIndex = 4;
             this.ImgFileDialog.Title = "Select an Image File";
             this.ImgFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.ImgFileDialog_FileOk);
             // 
@@ -147,7 +146,7 @@
             this.ImgPicBox.Location = new System.Drawing.Point(0, 0);
             this.ImgPicBox.Name = "ImgPicBox";
             this.ImgPicBox.Padding = new System.Windows.Forms.Padding(75, 50, 20, 33);
-            this.ImgPicBox.Size = new System.Drawing.Size(851, 239);
+            this.ImgPicBox.Size = new System.Drawing.Size(851, 180);
             this.ImgPicBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ImgPicBox.TabIndex = 5;
             this.ImgPicBox.TabStop = false;
@@ -226,7 +225,7 @@
             this.MainSplit.Panel2.Controls.Add(this.LogListbox);
             this.MainSplit.Panel2MinSize = 30;
             this.MainSplit.Size = new System.Drawing.Size(855, 336);
-            this.MainSplit.SplitterDistance = 243;
+            this.MainSplit.SplitterDistance = 184;
             this.MainSplit.TabIndex = 7;
             // 
             // LogListbox
@@ -236,7 +235,7 @@
             this.LogListbox.Location = new System.Drawing.Point(0, 0);
             this.LogListbox.Name = "LogListbox";
             this.LogListbox.ScrollAlwaysVisible = true;
-            this.LogListbox.Size = new System.Drawing.Size(851, 85);
+            this.LogListbox.Size = new System.Drawing.Size(851, 144);
             this.LogListbox.TabIndex = 0;
             // 
             // MainForm

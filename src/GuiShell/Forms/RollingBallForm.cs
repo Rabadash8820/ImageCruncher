@@ -25,8 +25,16 @@ namespace GuiShell.Forms {
             MainProgress.Minimum = 0;
             MainProgress.Maximum = 100;
 
-            setCurrentColor();
-            WinSizeUpDown.Value = (decimal)nearestOdd(defaultWindowSize(f));
+            // Initialize window size controls
+            int defaultOddSize = nearestOdd(defaultWindowSize(f));
+            WinSizeUpDown.Maximum = 2 * defaultOddSize - 1;     // 2 * odd - 1 = odd
+            WinSizeUpDown.Value = defaultOddSize;
+
+            // Initialize color controls
+            adjustCurrentColor();
+            RedValueLbl.DataBindings.Add("Text", RedTrack, "Value");
+            GreenValueLbl.DataBindings.Add("Text", GreenTrack, "Value");
+            BlueValueLbl.DataBindings.Add("Text", BlueTrack, "Value");
         }
 
         // INTERFACE
@@ -85,14 +93,14 @@ namespace GuiShell.Forms {
                 this.Close();
             }
         }
-        private void RedUpDown_ValueChanged(object sender, EventArgs e) {
-            setCurrentColor();
+        private void RedTrack_Scroll(object sender, EventArgs e) {
+            adjustCurrentColor();
         }
-        private void GreenUpDown_ValueChanged(object sender, EventArgs e) {
-            setCurrentColor();
+        private void GreenTrack_Scroll(object sender, EventArgs e) {
+            adjustCurrentColor();
         }
-        private void BlueUpDown_ValueChanged(object sender, EventArgs e) {
-            setCurrentColor();
+        private void BlueTrack_Scroll(object sender, EventArgs e) {
+            adjustCurrentColor();
         }
 
         // HELPER FUNCTIONS
@@ -148,10 +156,10 @@ namespace GuiShell.Forms {
             ExecuteBtn.Enabled = !running;
             ColorGroup.Enabled = !running;
         }
-        private void setCurrentColor() {
-            int r = (int)RedUpDown.Value;
-            int g = (int)GreenUpDown.Value;
-            int b = (int)BlueUpDown.Value;
+        private void adjustCurrentColor() {
+            int r = (int)RedTrack.Value;
+            int g = (int)GreenTrack.Value;
+            int b = (int)BlueTrack.Value;
             ColorDrawLbl.BackColor = Color.FromArgb(r, g, b);
         }
         private int defaultWindowSize(FileInfo f) {
@@ -159,10 +167,16 @@ namespace GuiShell.Forms {
             int minDim = Math.Min(bmp.Width, bmp.Height);
             return minDim / DEFAULT_WIN_FACTOR;
         }
-        private double nearestOdd(double value) {
-            double multiplier = Math.Pow(10.0, 1);
-            double truncated = Math.Truncate(value * multiplier) / multiplier;
-            return Math.Round(truncated, 0, MidpointRounding.ToEven) - 1;
+        private int nearestOdd(double value) {
+            double truncated = Math.Truncate(value * 10.0) / 10.0;
+            return (int)Math.Round(truncated, 0, MidpointRounding.ToEven) - 1;
+        }
+        private decimal clamp(decimal value, decimal min, decimal max) {
+            if (value < min)
+                return min;
+            if (value > max)
+                return max;
+            return value;
         }
 
     }

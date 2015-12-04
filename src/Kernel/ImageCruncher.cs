@@ -3,6 +3,7 @@ using System.Linq;
 using System.Drawing;
 using System.ComponentModel;
 using System.Drawing.Imaging;
+using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
 using Kernel.Args;
@@ -10,11 +11,26 @@ using Kernel.Args;
 namespace Kernel {
 
     public static class ImageCruncher {
-        // ENCAPSULATED FIELDS
+        // HIDDEN FIELDS
         private static Random _rand;
         private static bool _statusAdjustable;
         private static BackgroundWorker _worker;
         private static DoWorkEventArgs _doWorkEventArgs;
+        private static long _totalSteps;
+
+        // ABSTRACT DATA TYPES
+        private struct RollingBallContext {
+            public RgbPixel[,] Pixels { get; set; }
+            public int NumRows { get; set; }
+            public int NumColumns { get; set; }
+            public int NumWindowRows { get; set; }
+            public int NumWindowColumns { get; set; }
+            public int NumWindows { get; set; }
+            public int NumWindowPixels { get; set; }
+            public int WindowSideLength { get; set; }
+            public int ReportIncrement { get; set; }
+            public Color OptimalColor { get; set; }
+        }
 
         // CONSTRUCTORS
         static ImageCruncher() {
@@ -93,6 +109,7 @@ namespace Kernel {
             int numRows = pixels.GetLength(0);
             int numCols = pixels.GetLength(1);
             RgbPixel[,] fPixels = new RgbPixel[numRows, numCols];
+            _totalSteps = numRows;
 
             // Loop over each pixel
             int checkRows = numRows / 100;
@@ -122,84 +139,42 @@ namespace Kernel {
 
                 // Report status after every couple rows
                 if (row % checkRows == 0)
-                    reportProgress(row, numRows);
+                    reportProgress(row);
             }
 
             // Store the array of filtered pixels back into the original array and delete the former
             pixels = fPixels;
         }
         private static Rectangle rollingBall(RgbPixel[,] pixels, int winSize, Color optimalColor) {
-            // Set some important counts
-            int numRows = pixels.GetLength(0);
-            int numCols = pixels.GetLength(1);
-            int winRows = numRows - winSize + 1;
-            int winCols = numCols - winSize + 1;
-            int numWindows = winRows * winCols;
-            int winCount = winSize * winSize;
-            long totalSteps = numRows + winRows;    // (Row sum steps) + (window sum steps)
+            // Initialize the context for this run of the RollingBall operation
+            RollingBallContext context = new RollingBallContext() {
+                Pixels = pixels,
+                NumRows = pixels.GetLength(0),
+                NumColumns = pixels.GetLength(1),
+                NumWindowPixels = winSize * winSize,
+                WindowSideLength = winSize,
+                OptimalColor = optimalColor,
+            };
+            int numRows = context.NumRows;
+            context.NumWindowRows = numRows - winSize + 1;
+            context.NumWindowColumns = context.NumColumns - winSize + 1;
+            context.NumWindows = context.NumWindowRows * context.NumWindowColumns;
+            context.ReportIncrement = numRows / 50;
+            _totalSteps = numRows + context.NumWindowRows;    // (Row sum steps) + (window sum steps)
 
-            // Loop over each row of every possible window
-            int checkRows = numRows / 50;
-            long[,] sumsR = new long[numRows, winCols];
-            long[,] sumsG = new long[numRows, winCols];
-            long[,] sumsB = new long[numRows, winCols];
-            for (int row = 0; row < numRows; ++row) {
-                for (int col = 0; col < winCols; ++col) {
-                    if (isCancelled())
-                        return default(Rectangle);
-
-                    // Cache the pixel RGB sums of that row
-                    sumsR[row, col] = sumsG[row, col] = sumsB[row, col] = 0;
-                    for (int c= 0; c < winSize; ++c) {
-                        RgbPixel p = pixels[row, col + c];
-                        sumsR[row, col] += p.Red;
-                        sumsG[row, col] += p.Green;
-                        sumsB[row, col] += p.Blue;
-                    }
-
-                }
-
-                // Report status after every couple rows
-                if (row % checkRows == 0)
-                    reportProgress(row + 1, totalSteps);
-            }
-
-            // Use these sums to calculate the window RGB sums
-            double minDistance = double.MaxValue;
-            Rectangle minRect = new Rectangle(0, 0, winSize, winSize);
-            for (int row = 0; row < winRows; ++row) {
-                for (int col = 0; col < winCols; ++col) {
-                    if (isCancelled())
-                        return default(Rectangle);
-
-                    // Define a pixel with RGB values that are averages of the whole window
-                    long red=0, green=0, blue=0;
-                    for (int r = 0; r < winSize; ++r) {
-                        red   += sumsR[row + r, col];
-                        green += sumsG[row + r, col];
-                        blue  += sumsB[row + r, col];
-                    }
-                    Color avgColor = Color.FromArgb((int)(red / winCount), (int)(green / winCount), (int)(blue / winCount));
-
-                    // Determine if this window's average color is the new minimum distance from the optimal color, in color space
-                    int colorDist = colorDistanceSqr(avgColor, optimalColor);
-                    if (colorDist >= minDistance)
-                        continue;
-                    minDistance = colorDist;
-                    minRect.Y = row + 1;
-                    minRect.X = col + 1;
-
-                }
-
-                // Report status after every couple rows
-                if (row % checkRows == 0)
-                    reportProgress(numRows + row + 1, totalSteps);
-            }
-
-            // Return the window whose average color was the minimum distance from the optimal color, in color space
+            // Get the pixel sums for each row of every possible window
+            // Use those sums to calculate the pixel sums for each entire window
+            // Return the window whose average color was the minimum distance from the optimal color in color space
+            long[,] rowSumsR;
+            long[,] rowSumsG;
+            long[,] rowSumsB;
+            bool stillGoing = getWindowRowSumsAsync(context, out rowSumsR, out rowSumsG, out rowSumsB);
+            if (!stillGoing)
+                return default(Rectangle);
+            Rectangle minRect = getMinWindow(context, rowSumsR, rowSumsG, rowSumsB);
             return minRect;
         }
-
+        
         // HELPER FUNCTIONS
         private static void loadPgmData(string filePath, ref int width, ref int height, ref int maxGrey, int[][] pixels) {
 
@@ -235,24 +210,90 @@ namespace Kernel {
             // Return the result of that operation, where applicable
             return result;
         }
-        private static bool isCancelled() {
-            if (!_statusAdjustable)
-                return false;
+        private static bool getWindowRowSumsAsync(RollingBallContext context, out long[,] sumsR, out long[,] sumsG, out long[,] sumsB) {
+            // Initialize color component sums
+            int numRows = context.NumRows;
+            int winCols = context.NumWindowColumns;
+            sumsR = new long[numRows, winCols];
+            sumsG = new long[numRows, winCols];
+            sumsB = new long[numRows, winCols];
 
-            // If a thread-cancelation was requested then cancel the filter
-            if (_worker.CancellationPending) {
-                _doWorkEventArgs.Cancel = true;
-                return true;
+            // Loop over each row of every possible window to get those row sums
+            for (int row = 0; row < numRows; ++row) {
+                for (int col = 0; col < winCols; ++col) {
+                    if (isCancelled())
+                        return false;
+
+                    // Cache the pixel RGB sums of that row
+                    sumsR[row, col] = sumsG[row, col] = sumsB[row, col] = 0;
+                    for (int c = 0; c < context.WindowSideLength; ++c) {
+                        RgbPixel p = context.Pixels[row, col + c];
+                        sumsR[row, col] += p.Red;
+                        sumsG[row, col] += p.Green;
+                        sumsB[row, col] += p.Blue;
+                    }
+
+                }
+
+                // Report status after every couple rows
+                if (row % context.ReportIncrement == 0)
+                    reportProgress(row + 1);
             }
 
-            return false;
+            return true;    // Thread hasn't been cancelled
         }
-        private static void reportProgress(long currentSteps, long totalSteps) {
+        private static Rectangle getMinWindow(RollingBallContext context, long[,] sumsR, long[,] sumsG, long[,] sumsB) {
+            // Loop over each window row sum to get total RGB sums for each possible window
+            Rectangle minRect = new Rectangle(0, 0, context.WindowSideLength, context.WindowSideLength);
+            double minSqrDistance = double.MaxValue;
+            for (int row = 0; row < context.NumWindowRows; ++row) {
+                for (int col = 0; col < context.NumWindowColumns; ++col) {
+                    if (isCancelled())
+                        return default(Rectangle);
+
+                    // Define a pixel with RGB values that are averages of the whole window
+                    long red = 0, green = 0, blue = 0;
+                    for (int r = 0; r < context.WindowSideLength; ++r) {
+                        red += sumsR[row + r, col];
+                        green += sumsG[row + r, col];
+                        blue += sumsB[row + r, col];
+                    }
+                    int winPixels = context.NumWindowPixels;
+                    Color avgColor = Color.FromArgb((int)(red / winPixels), (int)(green / winPixels), (int)(blue / winPixels));
+
+                    // Determine if this window's average color is the new minimum distance from the optimal color, in color space
+                    int colorSqrDist = colorDistanceSqr(avgColor, context.OptimalColor);
+                    if (colorSqrDist < minSqrDistance) {
+                        minSqrDistance = colorSqrDist;
+                        minRect.Y = row + 1;
+                        minRect.X = col + 1;
+                    }
+                }
+
+                // Report status after every couple rows
+                if (row % context.ReportIncrement == 0)
+                    reportProgress(context.NumRows + row + 1);
+            }
+
+            return minRect;
+        }
+        private static bool isCancelled() {
+            bool cancelled = false;
+
+            // If a thread-cancelation was requested then cancel the filter
+            if (_statusAdjustable && _worker.CancellationPending) {
+                _doWorkEventArgs.Cancel = true;
+                cancelled = true;
+            }
+
+            return cancelled;
+        }
+        private static void reportProgress(long currentSteps) {
             if (!_statusAdjustable)
-                return;
+                return;            
 
             // Report the current operation's progress
-            float percent = 100f * (float)currentSteps / (float)totalSteps;
+            float percent = 100f * (float)currentSteps / (float)_totalSteps;
             _worker.ReportProgress((int)percent);
         }
         private static RgbPixel[,] pixelsFromBytes(byte[] bytes, int imgWidth, int imgHeight) {

@@ -66,9 +66,10 @@ namespace GuiShell.Forms {
             form.ShowDialog();
         }
         private void FilterForm_FilterStarted(object sender, FilterEventArgs e) {
-            string msg = "";
+            log("--------------------------------------------------------------------------------------------------------");
 
             // Define a log message based on the type of Operation that's been started
+            string msg = "";
             switch (e.Filter) {
                 case Filter.Watercolor:
                     msg = String.Format(Resources.WatercolorStartMsg, (e.Args as WatercolorArgs).WindowSize);
@@ -121,9 +122,10 @@ namespace GuiShell.Forms {
             form.ShowDialog();
         }
         private void OperationForm_OperationStarted(object sender, OperationEventArgs e) {
-            string msg = "";
+            log("--------------------------------------------------------------------------------------------------------");
 
             // Define a log message based on the type of Operation that's been started
+            string msg = "";
             switch (e.Operation) {
                 case Operation.RollingBall:
                     msg = String.Format(Resources.RollingBallStartMsg, (e.Args as RollingBallArgs).WindowSize);
@@ -204,10 +206,10 @@ namespace GuiShell.Forms {
 
             _imageBS.DataSource = null;
         }
-        private void enableControls(bool doIt) {
-            MainToolStrip.Enabled = doIt;
-            ClearImgBtn.Enabled = doIt;
-            CloseFileBtn.Enabled = doIt;
+        private void enableImageControls(bool imageOpen) {
+            MainToolStrip.Enabled = imageOpen;
+            ClearImgBtn.Enabled = imageOpen;
+            CloseFileBtn.Enabled = imageOpen;
         }
         private void tearDownImage() {
             ImgPicBox.Image.Dispose();
@@ -221,13 +223,14 @@ namespace GuiShell.Forms {
         }
         private void changeImage(FileInfo imageFile) {
             if (imageFile != null) {
-                enableControls(true);
+                enableImageControls(true);
                 addDataBindings(imageFile);
+                clearOrnaments();
                 Bitmap bmp = Image.FromStream(imageFile.OpenRead()) as Bitmap;
                 log(String.Format(Resources.ImgSetMsg, imageFile.FullName, bmp.Width, bmp.Height));
             }
             else {
-                enableControls(false);
+                enableImageControls(false);
                 removeDataBindings();
                 tearDownImage();
                 log(String.Format(Resources.ImgClosedMsg));
