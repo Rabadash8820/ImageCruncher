@@ -210,7 +210,7 @@
             this.ExecuteBtn.TabIndex = 4;
             this.ExecuteBtn.Text = "Execute";
             this.ExecuteBtn.UseVisualStyleBackColor = true;
-            this.ExecuteBtn.Click += new System.EventHandler(this.ApplyBtn_Click);
+            this.ExecuteBtn.Click += new System.EventHandler(this.ExecuteBtn_Click);
             // 
             // CancelBtn
             // 

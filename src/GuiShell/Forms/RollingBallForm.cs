@@ -27,7 +27,8 @@ namespace GuiShell.Forms {
 
             // Initialize window size controls
             int defaultOddSize = nearestOdd(defaultWindowSize(f));
-            WinSizeUpDown.Maximum = 2 * defaultOddSize - 1;     // 2 * odd - 1 = odd
+            Bitmap bmp = Bitmap.FromFile(f.FullName) as Bitmap;
+            WinSizeUpDown.Maximum = nearestOdd(Math.Min(bmp.Width, bmp.Height));
             WinSizeUpDown.Value = defaultOddSize;
 
             // Initialize color controls
@@ -42,7 +43,7 @@ namespace GuiShell.Forms {
         public event OperationCompletedEventHandler OperationCompleted;
 
         // EVENT HANDLERS
-        private void ApplyBtn_Click(object sender, EventArgs e) {
+        private void ExecuteBtn_Click(object sender, EventArgs e) {
             toggleControls(true);
 
             // Define the arguments to pass the operation

@@ -187,6 +187,8 @@ namespace Kernel {
             switch (filter) {
                 case Filter.Watercolor:
                     WatercolorArgs wa = args as WatercolorArgs;
+                    if (wa == null)
+                        throw new ArgumentException("The correct ImageArgs for the Watercolor Filter were not provided", nameof(args));
                     watercolorFilter(ref pixels, wa.WindowSize);
                     break;
 
@@ -200,6 +202,8 @@ namespace Kernel {
             switch (op) {
                 case Operation.RollingBall:
                     RollingBallArgs rba = (RollingBallArgs)args;
+                    if (rba == null)
+                        throw new ArgumentException("The correct ImageArgs for the RollingBall Operation were not provided", nameof(args));
                     result = rollingBall(pixels, rba.WindowSize, rba.OptimalColor);
                     break;
 
